@@ -1,0 +1,31 @@
+{
+  "name": "@universal-design-tokens/udt",
+  "version": "0.1.0",
+  "description": "Library for parsing and creating UDT data",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/universal-design-tokens/udt-js.git"
+  },
+  "keywords": [
+    "udt",
+    "design",
+    "tokens",
+    "styleguide",
+    "design-systems"
+  ],
+  "author": "James Nash (http://cirrus.twiddles.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/universal-design-tokens/udt-js/issues"
+  },
+  "homepage": "https://github.com/universal-design-tokens/udt-js#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
