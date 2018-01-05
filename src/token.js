@@ -1,22 +1,19 @@
 
 class Token {
-
-  constructor (name, value) {
+  constructor(name, value) {
     this.name = name;
     this.value = value;
   }
 
 
-  get handle () {
+  get handle() {
     if (this._customHandle !== undefined) {
       return this._customHandle;
     }
-    else {
-      return this.name;
-    }
+    return this.name;
   }
 
-  set handle (customHandle) {
+  set handle(customHandle) {
     if (typeof customHandle !== 'string') {
       throw new TypeError('Token handle is not a string.');
     }
@@ -24,11 +21,11 @@ class Token {
   }
 
 
-  get name () {
+  get name() {
     return this._name;
   }
 
-  set name (name) {
+  set name(name) {
     if (typeof name !== 'string') {
       throw new TypeError('Token name is not a string.');
     }
@@ -36,21 +33,18 @@ class Token {
   }
 
 
-  get value () {
+  get value() {
     return this._value;
   }
 
-  set value (value) {
+  set value(value) {
     this._checkValueType(value); // should throw error for invalid types
     this._value = value;
   }
 
-
-  _checkValueType (value) {
-    return;
-  }
-
-
+  /* eslint-disable class-methods-use-this */
+  _checkValueType() {}
+  /* eslint-enable class-methods-use-this */
 }
 
-export { Token };
+export default Token;

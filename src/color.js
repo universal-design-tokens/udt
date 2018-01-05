@@ -1,13 +1,13 @@
-import {Token} from './token';
+import { Token } from './token';
 
 class Color extends Token {
-
-  _checkValueType (value) {
-    if ( typeof value !== 'string' ) {
+  /* eslint-disable class-methods-use-this */
+  _checkValueType(value) {
+    if (typeof value !== 'string') {
       throw new TypeError('Color value must be a string');
     }
   }
-
+  /* eslint-enable class-methods-use-this */
 }
 
-export { Color };
+export default Color;
