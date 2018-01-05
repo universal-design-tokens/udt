@@ -1,3 +1,10 @@
 {
-  "presets": ["env"]
+  "presets": ["env"],
+  "env": {
+    "development": {
+      "ignore": [
+        "**/*.test.js"
+      ]
+    }
+  }
 }

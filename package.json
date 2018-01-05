@@ -4,8 +4,10 @@
   "description": "Library for parsing and creating UDT data",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -d lib",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rimraf lib/*",
+    "build": "npm run clean && babel src -d lib",
+    "watch": "npm run build -- --watch",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,8 @@
   "homepage": "https://github.com/universal-design-tokens/udt-js#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.0.4",
+    "rimraf": "^2.6.2"
   }
 }
