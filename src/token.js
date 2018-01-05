@@ -26,7 +26,9 @@ class Token {
   }
 
   set name(name) {
-    if (typeof name !== 'string') {
+    if (name === undefined) {
+      throw new Error('Token name is undefined');
+    } else if (typeof name !== 'string') {
       throw new TypeError('Token name is not a string.');
     }
     this._name = name;
@@ -38,6 +40,9 @@ class Token {
   }
 
   set value(value) {
+    if (value === undefined) {
+      throw new Error('Token value is undefined');
+    }
     this._checkValueType(value); // should throw error for invalid types
     this._value = value;
   }
