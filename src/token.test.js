@@ -1,10 +1,9 @@
 import Token from './token';
 
 const tokenName = 'name';
+const token = new Token(tokenName);
 
 describe('Core Token properties', () => {
-  const token = new Token(tokenName);
-
   test('token\'s name is accessible', () => {
     expect(token.name).toBe(tokenName);
   });
@@ -50,11 +49,8 @@ describe('Core Token properties', () => {
 });
 
 
-const tokenDescription = 'test description';
-
 describe('Core Token properties', () => {
-  const token = new Token(tokenName);
-
+  const tokenDescription = 'test description';
   const token2name = 'token2';
   const token2 = new Token(token2name);
 
@@ -78,7 +74,6 @@ describe('Core Token properties', () => {
   test('setting another token as the description references that token\'s description', () => {
     token.description = tokenDescription;
     token2.description = token;
-
     expect(token2.description).toBe(tokenDescription);
   });
 });
