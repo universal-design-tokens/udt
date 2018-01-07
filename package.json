@@ -8,7 +8,7 @@
     "build": "npm run clean && babel src -d lib",
     "watch": "npm run build -- --watch",
     "lint": "eslint src/",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
