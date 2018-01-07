@@ -1,86 +1,101 @@
 
-import PropertyRef from './property-ref';
+import Property from './property';
 
+function isValidName(name) {
+  return (typeof name === 'string') && (name.length > 0);
+}
 
-function addProperty(token, referencableType, propName, validateFn) {
-  let propValue;
+function isString(value) {
+  return typeof value === 'string';
+}
 
-  Object.defineProperty(token, propName, {
-    configurable: false,
-    enumerable: true,
-    get: () => {
-      if (propValue instanceof PropertyRef) {
-        return propValue.getValue();
-      }
-      return propValue;
+function addPrivateProp(obj, propName, value) {
+  Object.defineProperty(
+    obj,
+    propName,
+    {
+      enumerable: false,
+      configurable: false,
+      writable: true,
+      value,
     },
-    set: (value) => {
-      if (value instanceof referencableType) {
-        // Other tokens being passed in are
-        // interpreted as a reference to the
-        // same property of that token
-        propValue = new PropertyRef(value, propName);
-      } else {
-        propValue = validateFn(value);
-      }
+  );
+}
+
+function addPublicProp(obj, propName, getterFn, setterFn) {
+  Object.defineProperty(
+    obj,
+    propName,
+    {
+      enumerable: true,
+      configurable: false,
+      get: getterFn,
+      set: setterFn,
     },
-  });
+  );
+}
+
+function addTokenProp(token, name, valueCheckerFn, refCheckFn) {
+  // eslint-disable-next-line no-param-reassign
+  token._props[name] = new Property(name, valueCheckerFn, refCheckFn);
+  addPublicProp(
+    token,
+    name,
+    () => token._props[name].getValue(),
+    (value) => {
+      token._props[name].setValue(value);
+    },
+  );
 }
 
 
 class Token {
-  constructor(name, value) {
+  constructor(name) {
+    // Non-enumerable "_props" member
+    // for storing Property objects
+    addPrivateProp(this, '_props', {});
+
+    // Enumerable "name" prop with get & set
+    // function to validate names.
+    addPrivateProp(this, '_name', undefined);
+    addPublicProp(
+      this,
+      'name',
+      () => this._name,
+      (n) => {
+        if (!isValidName(n)) {
+          throw new TypeError(`"${n}" is not a valid Token name.`);
+        }
+        this._name = n;
+      },
+    );
     this.name = name;
-    this.value = value;
 
-    addProperty(this, Token, 'foo', val => val);
+    // Enumerable "handle" prop for setting custom handle
+    // that take precedence over name
+    addPrivateProp(this, '_customHandle', undefined);
+    addPublicProp(
+      this,
+      'handle',
+      () => {
+        if (this._customHandle !== undefined) {
+          return this._customHandle;
+        }
+        return this.name;
+      },
+      (customHandle) => {
+        if (!isValidName(customHandle)) {
+          throw new TypeError(`"${customHandle}" is not a valid Token custom handle.`);
+        }
+        this._customHandle = customHandle;
+      },
+    );
+
+    // Standard "description" property that is common to all Token
+    // types.
+    addTokenProp(this, 'description', isString);
   }
-
-
-  get handle() {
-    if (this._customHandle !== undefined) {
-      return this._customHandle;
-    }
-    return this.name;
-  }
-
-  set handle(customHandle) {
-    if (typeof customHandle !== 'string') {
-      throw new TypeError('Token handle is not a string.');
-    }
-    this._customHandle = customHandle;
-  }
-
-
-  get name() {
-    return this._name;
-  }
-
-  set name(name) {
-    if (name === undefined) {
-      throw new Error('Token name is undefined');
-    } else if (typeof name !== 'string') {
-      throw new TypeError('Token name is not a string.');
-    }
-    this._name = name;
-  }
-
-
-  get value() {
-    return this._value;
-  }
-
-  set value(value) {
-    if (value === undefined) {
-      throw new Error('Token value is undefined');
-    }
-    this._checkValueType(value); // should throw error for invalid types
-    this._value = value;
-  }
-
-  /* eslint-disable class-methods-use-this */
-  _checkValueType() {}
-  /* eslint-enable class-methods-use-this */
 }
 
 export default Token;
+export { addTokenProp };
