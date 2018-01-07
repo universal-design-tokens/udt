@@ -95,6 +95,14 @@ class Token {
     // types.
     addTokenProp(this, 'description', isString);
   }
+
+  isReferencedValue(propName) {
+    return this._props[propName].isReferencedValue();
+  }
+
+  getReferencedToken(propName) {
+    return this._props[propName].getReference();
+  }
 }
 
 export default Token;

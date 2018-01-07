@@ -49,7 +49,7 @@ describe('Core Token properties', () => {
 });
 
 
-describe('Core Token properties', () => {
+describe('Token description', () => {
   const tokenDescription = 'test description';
   const token2name = 'token2';
   const token2 = new Token(token2name);
@@ -57,6 +57,16 @@ describe('Core Token properties', () => {
   test('token\'s description is accessible', () => {
     token.description = tokenDescription;
     expect(token.description).toBe(tokenDescription);
+  });
+
+  test('token\'s description is not a referenced value', () => {
+    token.description = tokenDescription;
+    expect(token2.isReferencedValue('description')).toBe(false);
+  });
+
+  test('token\'s description\'s referenced token is undefined', () => {
+    token.description = tokenDescription;
+    expect(token2.getReferencedToken('description')).toBeUndefined();
   });
 
   test('setting a non-string description throws a TypeError', () => {
@@ -75,5 +85,17 @@ describe('Core Token properties', () => {
     token.description = tokenDescription;
     token2.description = token;
     expect(token2.description).toBe(tokenDescription);
+  });
+
+  test('referenced value is identified as such', () => {
+    token.description = tokenDescription;
+    token2.description = token;
+    expect(token2.isReferencedValue('description')).toBe(true);
+  });
+
+  test('referenced value\'s referenced token', () => {
+    token.description = tokenDescription;
+    token2.description = token;
+    expect(token2.getReferencedToken('description')).toBe(token);
   });
 });
