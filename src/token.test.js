@@ -30,3 +30,15 @@ test('creating token without a name throws an Error', () => {
 test('creating token without a value throws an Error', () => {
   expect(() => new Token(tokenName)).toThrow(Error);
 });
+
+test('setting a non-string name throws a TypeError', () => {
+  expect(() => {
+    token.name = 42;
+  }).toThrow(TypeError);
+});
+
+test('setting a non-string handle throws a TypeError', () => {
+  expect(() => {
+    token.handle = 42;
+  }).toThrow(TypeError);
+});

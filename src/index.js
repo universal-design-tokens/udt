@@ -1,3 +1,5 @@
 
-export { Token } from './token';
-export { Color } from './color';
+import Token from './token';
+import Color from './color';
+
+export { Token, Color };

@@ -1,8 +1,39 @@
 
+import PropertyRef from './property-ref';
+
+
+function addProperty(token, referencableType, propName, validateFn) {
+  let propValue;
+
+  Object.defineProperty(token, propName, {
+    configurable: false,
+    enumerable: true,
+    get: () => {
+      if (propValue instanceof PropertyRef) {
+        return propValue.getValue();
+      }
+      return propValue;
+    },
+    set: (value) => {
+      if (value instanceof referencableType) {
+        // Other tokens being passed in are
+        // interpreted as a reference to the
+        // same property of that token
+        propValue = new PropertyRef(value, propName);
+      } else {
+        propValue = validateFn(value);
+      }
+    },
+  });
+}
+
+
 class Token {
   constructor(name, value) {
     this.name = name;
     this.value = value;
+
+    addProperty(this, Token, 'foo', val => val);
   }
 
 
