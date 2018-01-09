@@ -57,6 +57,10 @@ typings/
 # dotenv environment variables file
 .env
 
+### VisualStudioCode ###
+.vscode/*
+.history
+
 
 #### Project-specific ignores ####
 
