@@ -53,6 +53,8 @@ describe('Token description', () => {
   const tokenDescription = 'test description';
   const token2name = 'token2';
   const token2 = new Token(token2name);
+  const token3name = 'token3';
+  const token3 = new Token(token3name);
 
   test('token\'s description is accessible', () => {
     token.description = tokenDescription;
@@ -61,12 +63,12 @@ describe('Token description', () => {
 
   test('token\'s description is not a referenced value', () => {
     token.description = tokenDescription;
-    expect(token2.isReferencedValue('description')).toBe(false);
+    expect(token.isReferencedValue('description')).toBe(false);
   });
 
   test('token\'s description\'s referenced token is undefined', () => {
     token.description = tokenDescription;
-    expect(token2.getReferencedToken('description')).toBeUndefined();
+    expect(token.getReferencedToken('description')).toBeUndefined();
   });
 
   test('setting a non-string description throws a TypeError', () => {
@@ -97,5 +99,37 @@ describe('Token description', () => {
     token.description = tokenDescription;
     token2.description = token;
     expect(token2.getReferencedToken('description')).toBe(token);
+  });
+
+  test('checking if one token references another works', () => {
+    token.description = tokenDescription;
+    token2.description = token;
+    expect(token2.referencesToken('description', token)).toBe(true);
+  });
+
+  test('following a chain of references works', () => {
+    token.description = tokenDescription;
+    token2.description = token;
+    token3.description = token2;
+    expect(token3.referencesToken('description', token)).toBe(true);
+  });
+
+  test('checking if one token does not reference another works', () => {
+    token2.description = tokenDescription;
+    expect(token2.referencesToken('description', token)).toBe(false);
+  });
+
+  test('setting self as referenced token throws an Error', () => {
+    expect(() => {
+      token.description = token;
+    }).toThrow(Error);
+  });
+
+  test('setting cyclical token references throws an Error', () => {
+    token.description = tokenDescription;
+    token2.description = token;
+    expect(() => {
+      token.description = token2;
+    }).toThrow(Error);
   });
 });

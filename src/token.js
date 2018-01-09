@@ -35,20 +35,6 @@ function addPublicProp(obj, propName, getterFn, setterFn) {
   );
 }
 
-function addTokenProp(token, name, valueCheckerFn, refCheckFn) {
-  // eslint-disable-next-line no-param-reassign
-  token._props[name] = new Property(name, valueCheckerFn, refCheckFn);
-  addPublicProp(
-    token,
-    name,
-    () => token._props[name].getValue(),
-    (value) => {
-      token._props[name].setValue(value);
-    },
-  );
-}
-
-
 class Token {
   constructor(name) {
     // Non-enumerable "_props" member
@@ -93,8 +79,34 @@ class Token {
 
     // Standard "description" property that is common to all Token
     // types.
-    addTokenProp(this, 'description', isString);
+    this._addTokenProp('description', isString);
   }
+
+
+  static isToken(token) {
+    return token instanceof Token;
+  }
+
+
+  _addTokenProp(propName, valueCheckerFn, refCheckFn) {
+    this._props[propName] = new Property(propName, valueCheckerFn, refCheckFn);
+    addPublicProp(
+      this,
+      propName,
+      () => this._props[propName].getValue(),
+      (value) => {
+        if (!Token.isToken(value)) {
+          this._props[propName].setValue(value);
+        } else {
+          if (value === this || value.referencesToken(propName, this)) {
+            throw new Error(`Cyclical value reference detected for "${value}".`);
+          }
+          this._props[propName].setRefValue(value);
+        }
+      },
+    );
+  }
+
 
   isReferencedValue(propName) {
     return this._props[propName].isReferencedValue();
@@ -103,7 +115,17 @@ class Token {
   getReferencedToken(propName) {
     return this._props[propName].getReference();
   }
+
+  referencesToken(propName, token) {
+    if (this.isReferencedValue(propName)) {
+      const refToken = this.getReferencedToken(propName);
+      if (refToken === token) {
+        return true;
+      }
+      return refToken.referencesToken(propName, token);
+    }
+    return false;
+  }
 }
 
 export default Token;
-export { addTokenProp };

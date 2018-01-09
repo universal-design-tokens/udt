@@ -1,40 +1,33 @@
 import Property from './property';
-import Token from './token';
 
 const propName = 'testProp';
 const testVal = 'testVal';
 
-class TestToken extends Token {
-  constructor(name, propVal) {
-    super(name);
-    this[propName] = propVal;
-  }
-}
-
-const testTokenVal = 'testTokenVal';
-const testToken = new TestToken('test token', testTokenVal);
+const refVal = 'refVal';
+const refObj = {};
+refObj[propName] = refVal;
 
 describe('Basic Property with no custom checkers', () => {
   const prop = new Property(propName);
 
-  test('a new Property has an undefined value', () => {
+  test('initial value is undefined', () => {
     expect(prop.getValue()).toBeUndefined();
   });
 
-  test('a new Property has an undefined reference', () => {
+  test('initial reference object is undefined', () => {
     expect(prop.getReference()).toBeUndefined();
   });
 
-  test('a new Property does not have a referenced value', () => {
+  test('does not reference a value initially', () => {
     expect(prop.isReferencedValue()).toBe(false);
   });
 
-  test('a value that was set can be retrieved', () => {
+  test('setting a value works', () => {
     prop.setValue(testVal);
     expect(prop.getValue()).toBe(testVal);
   });
 
-  test('a Property with a value set does not have a reference value', () => {
+  test('setting a value make isReferencedValue() return false', () => {
     prop.setValue(testVal);
     expect(prop.isReferencedValue()).toBe(false);
   });
@@ -42,17 +35,16 @@ describe('Basic Property with no custom checkers', () => {
   test('setting an undefined value works', () => {
     prop.setValue(undefined);
     expect(prop.getValue()).toBeUndefined();
-    expect(prop.isReferencedValue()).toBe(false);
   });
 
-  test('setting a Token object as a value makes a reference value', () => {
-    prop.setValue(testToken);
+  test('setting a referenced value make isReferencedValue() return true', () => {
+    prop.setRefValue(refObj);
     expect(prop.isReferencedValue()).toBe(true);
   });
 
-  test('a reference value that was set can be retrieved', () => {
-    prop.setValue(testToken);
-    expect(prop.getValue()).toBe(testTokenVal);
+  test('setting a referenced value works', () => {
+    prop.setRefValue(refObj);
+    expect(prop.getValue()).toBe(refVal);
   });
 });
 
@@ -78,25 +70,23 @@ describe('Property with custom value checker', () => {
 });
 
 
-function isTestToken(value) {
-  return value instanceof TestToken;
+function isOriginalRefObj(value) {
+  return value === refObj;
 }
 
-class OtherTestToken extends Token {}
-
-const otherTestToken = new OtherTestToken('test token');
+const otherRefObj = {};
 
 describe('Property with custom reference checker', () => {
-  const prop = new Property(propName, isTestValText, isTestToken);
+  const prop = new Property(propName, isTestValText, isOriginalRefObj);
 
   test('setting a valid reference value works', () => {
-    prop.setValue(testToken);
-    expect(prop.getValue()).toBe(testTokenVal);
+    prop.setRefValue(refObj);
+    expect(prop.getValue()).toBe(refVal);
   });
 
   test('setting an invalid reference value throws a TypeError', () => {
     expect(() => {
-      prop.setValue(otherTestToken);
+      prop.setRefValue(otherRefObj);
     }).toThrow(TypeError);
   });
 });

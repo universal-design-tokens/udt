@@ -1,8 +1,3 @@
-import Token from './token';
-
-function checkIsToken(value) {
-  return value instanceof Token;
-}
 
 function acceptAll() {
   return true;
@@ -22,18 +17,17 @@ class Property {
     return false;
   }
 
+  setRefValue(ref) {
+    if (this._refCheckFn(ref)) {
+      this._reference = ref;
+      this._value = undefined;
+    } else {
+      throw new TypeError(`"${ref}" is not a valid value reference for property ${this._propName}.`);
+    }
+  }
+
   setValue(value) {
-    // Passing in a Token type results in a reference to the
-    // corresponding property of that token.
-    if (checkIsToken(value)) {
-      if (this._refCheckFn(value)) {
-        this._reference = value;
-        this._value = undefined;
-      } else {
-        throw new TypeError(`Cannot reference token "${value}" for property ${this._propName}.`);
-      }
-    // Any non-Token type is stored as a value
-    } else if (this._valueCheckerFn(value)) {
+    if (this._valueCheckerFn(value)) {
       this._value = value;
       this._reference = undefined;
     } else {
