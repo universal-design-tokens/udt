@@ -1,7 +1,7 @@
 {
   "name": "@universal-design-tokens/udt",
   "version": "0.1.0",
-  "description": "Library for parsing and creating UDT data",
+  "description": "Library for parsing, manipulating and serialising design token data in the UDT (Universal Design Tokens) format",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib/*",
