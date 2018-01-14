@@ -1,5 +1,5 @@
 
-import Token from './token';
-import Color from './color';
+import Color from './tokens/color';
 
-export { Token, Color };
+// eslint-disable-next-line import/prefer-default-export
+export { Color };
