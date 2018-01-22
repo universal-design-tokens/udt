@@ -19,6 +19,16 @@ describe('Core Token properties', () => {
     expect(token.handle).toBe(customHandle);
   });
 
+  test('custom token handle can be cleared by setting it to undefined', () => {
+    // Set a custom handle
+    const customHandle = 'customHandle';
+    token.handle = customHandle;
+    // Now clear it
+    token.handle = undefined;
+    // Without the custom handle, .handle should fall back to the .name
+    expect(token.handle).toBe(tokenName);
+  });
+
   test('creating token without a name throws an Error', () => {
     expect(() => new Token()).toThrow(TypeError);
   });
@@ -69,6 +79,11 @@ describe('Token description', () => {
   test('token\'s description\'s referenced token is undefined', () => {
     token.description = tokenDescription;
     expect(token.getReferencedToken('description')).toBeUndefined();
+  });
+
+  test('token\'s descirption can be cleared by setting it to undefined', () => {
+    token.description = undefined;
+    expect(token.description).toBeUndefined();
   });
 
   test('setting a non-string description throws a TypeError', () => {
@@ -131,5 +146,50 @@ describe('Token description', () => {
     expect(() => {
       token.description = token2;
     }).toThrow(Error);
+  });
+});
+
+
+describe('JSON serialisation', () => {
+  const tokenDescription = 'test description';
+  const token2name = 'token2';
+  const token2 = new Token(token2name);
+
+  test('name is output by toJSON()', () => {
+    const jsonObj = token.toJSON();
+    expect(jsonObj.name).toBe(tokenName);
+  });
+
+  test('custom handle is output by toJSON(), if set', () => {
+    const customHandle = 'handle';
+    token.handle = customHandle;
+    const jsonObj = token.toJSON();
+    expect(jsonObj.handle).toBe(customHandle);
+  });
+
+  test('handle is ommitted by toJSON(), if no custom handle is set', () => {
+    token.handle = undefined;
+    const jsonObj = token.toJSON();
+    expect(jsonObj).not.toHaveProperty('handle');
+  });
+
+  test('description is output by toJSON()', () => {
+    token.description = tokenDescription;
+    const jsonObj = token.toJSON();
+    expect(jsonObj.description).toBe(tokenDescription);
+  });
+
+  test('description is ommitted by toJSON() if it was not set', () => {
+    token.description = undefined;
+    const jsonObj = token.toJSON();
+    expect(jsonObj).not.toHaveProperty('description');
+  });
+
+  test('token reference is output toJSON() if description references another token', () => {
+    const token2Description = 'another description';
+    token2.description = token2Description;
+    token.description = token2;
+    const jsonObj = token.toJSON();
+    expect(jsonObj).not.toBe('@foobar');
   });
 });

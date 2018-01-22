@@ -5,8 +5,8 @@ function isValidName(name) {
   return (typeof name === 'string') && (name.length > 0);
 }
 
-function isString(value) {
-  return typeof value === 'string';
+function isValidDescription(value) {
+  return value === undefined || typeof value === 'string';
 }
 
 function addPrivateProp(obj, propName, value) {
@@ -35,6 +35,9 @@ function addPublicProp(obj, propName, getterFn, setterFn) {
   );
 }
 
+const nameProp = 'name';
+const handleProp = 'handle';
+
 class Token {
   constructor(name) {
     // Non-enumerable "_props" member
@@ -46,7 +49,7 @@ class Token {
     addPrivateProp(this, '_name', undefined);
     addPublicProp(
       this,
-      'name',
+      nameProp,
       () => this._name,
       (n) => {
         if (!isValidName(n)) {
@@ -62,7 +65,7 @@ class Token {
     addPrivateProp(this, '_customHandle', undefined);
     addPublicProp(
       this,
-      'handle',
+      handleProp,
       () => {
         if (this._customHandle !== undefined) {
           return this._customHandle;
@@ -70,7 +73,7 @@ class Token {
         return this.name;
       },
       (customHandle) => {
-        if (!isValidName(customHandle)) {
+        if (customHandle !== undefined && !isValidName(customHandle)) {
           throw new TypeError(`"${customHandle}" is not a valid Token custom handle.`);
         }
         this._customHandle = customHandle;
@@ -79,14 +82,12 @@ class Token {
 
     // Standard "description" property that is common to all Token
     // types.
-    this._addTokenProp('description', isString);
+    this._addTokenProp('description', isValidDescription);
   }
-
 
   static isToken(token) {
     return token instanceof Token;
   }
-
 
   _addTokenProp(propName, valueCheckerFn, refCheckFn) {
     this._props[propName] = new Property(propName, valueCheckerFn, refCheckFn);
@@ -107,7 +108,6 @@ class Token {
     );
   }
 
-
   isReferencedValue(propName) {
     return this._props[propName].isReferencedValue();
   }
@@ -125,6 +125,36 @@ class Token {
       return refToken.referencesToken(propName, token);
     }
     return false;
+  }
+
+  toJSON() {
+    const output = {};
+    Object.keys(this).forEach((propName) => {
+      // Must check for .name or .handle first, since neither is stored
+      // in this._props and therefore calling isReferencedValue() with
+      // those prop names would throw an error
+      if (propName === nameProp) {
+        output[propName] = this[propName];
+        return;
+      }
+      if (propName === handleProp) {
+        if (this._customHandle !== undefined) {
+          output[propName] = this[propName];
+        }
+        return;
+      }
+
+      let value;
+      if (this.isReferencedValue(propName)) {
+        output[propName] = '@foobar';
+      } else {
+        value = this[propName];
+        if (value !== undefined) {
+          output[propName] = value;
+        }
+      }
+    });
+    return output;
   }
 }
 
