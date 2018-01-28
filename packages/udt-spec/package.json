@@ -1,0 +1,32 @@
+{
+  "name": "udt-spec",
+  "version": "0.1.0",
+  "description": "The Universal Design Tokens (UDT) specification",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/universal-design-tokens/udt-spec.git"
+  },
+  "keywords": [
+    "udt",
+    "json-schema",
+    "standard",
+    "specification",
+    "design-tokens",
+    "design-systems"
+  ],
+  "author": "James Nash (http://cirrus.twiddles.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/universal-design-tokens/udt-spec/issues"
+  },
+  "homepage": "https://github.com/universal-design-tokens/udt-spec#readme",
+  "engines": {
+    "node": ">= 8.9.4",
+    "npm": ">= 5.6.0"
+  }
+}

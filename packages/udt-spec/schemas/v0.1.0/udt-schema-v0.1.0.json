@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "http://udt.design/schemas/udt-schema-v0.1.0.json",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object"
+    },
+    "colors": {
+      "type": "array"
+    }
+  },
+  "required": ["meta"]
+}
