@@ -1,5 +1,6 @@
 
 import Property from './property';
+import { addPrivateProp, addPublicProp } from './utils';
 
 function isValidName(name) {
   return (typeof name === 'string') && (name.length > 0);
@@ -7,32 +8,6 @@ function isValidName(name) {
 
 function isValidDescription(value) {
   return value === undefined || typeof value === 'string';
-}
-
-function addPrivateProp(obj, propName, value) {
-  Object.defineProperty(
-    obj,
-    propName,
-    {
-      enumerable: false,
-      configurable: false,
-      writable: true,
-      value,
-    },
-  );
-}
-
-function addPublicProp(obj, propName, getterFn, setterFn) {
-  Object.defineProperty(
-    obj,
-    propName,
-    {
-      enumerable: true,
-      configurable: false,
-      get: getterFn,
-      set: setterFn,
-    },
-  );
 }
 
 const nameProp = 'name';
