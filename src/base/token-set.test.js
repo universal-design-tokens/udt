@@ -16,52 +16,52 @@ describe('Core TokenSet functionality', () => {
 
   test('Adding a token increments the size', () => {
     const initialSize = tokenSet.size;
-    tokenSet.add(new Token('test'));
+    tokenSet.add(new Token({ name: 'test' }));
     expect(tokenSet.size).toBe(initialSize + 1);
   });
 
   test('Adding the same token multiple times only increments the size once', () => {
     const initialSize = tokenSet.size;
-    const token = new Token('test 2');
+    const token = new Token({ name: 'test 2' });
     tokenSet.add(token);
     tokenSet.add(token);
     expect(tokenSet.size).toBe(initialSize + 1);
   });
 
   test('add() returns the token set', () => {
-    const returnVal = tokenSet.add(new Token('test 3'));
+    const returnVal = tokenSet.add(new Token({ name: 'test 3' }));
     expect(returnVal).toBe(tokenSet);
   });
 
   test('Presence of a token in the set can be checked', () => {
-    const token = new Token('foo');
+    const token = new Token({ name: 'foo' });
     expect(tokenSet.has(token)).toBe(false);
     tokenSet.add(token);
     expect(tokenSet.has(token)).toBe(true);
   });
 
   test('Tokens can be deleted', () => {
-    const token = new Token('bar');
+    const token = new Token({ name: 'bar' });
     tokenSet.add(token);
     tokenSet.delete(token);
     expect(tokenSet.has(token)).toBe(false);
   });
 
   test('Deleting a token in the set returns true', () => {
-    const token = new Token('barfoo');
+    const token = new Token({ name: 'barfoo' });
     tokenSet.add(token);
     const returnVal = tokenSet.delete(token);
     expect(returnVal).toBe(true);
   });
 
   test('Deleting a token not in the set returns false', () => {
-    const returnVal = tokenSet.delete(new Token('barfoo'));
+    const returnVal = tokenSet.delete(new Token({ name: 'barfoo' }));
     expect(returnVal).toBe(false);
   });
 
   test('Token set can be cleared', () => {
-    tokenSet.add(new Token('test 1'));
-    tokenSet.add(new Token('test 2'));
+    tokenSet.add(new Token({ name: 'test 1' }));
+    tokenSet.add(new Token({ name: 'test 2' }));
     tokenSet.clear();
     expect(tokenSet.size).toBe(0);
   });
@@ -70,9 +70,9 @@ describe('Core TokenSet functionality', () => {
     tokenSet.clear();
 
     const testTokens = [
-      new Token('t1'),
-      new Token('t2'),
-      new Token('t3'),
+      new Token({ name: 't1' }),
+      new Token({ name: 't2' }),
+      new Token({ name: 't3' }),
     ];
 
     for (const token of testTokens) {
@@ -96,9 +96,9 @@ describe('Core TokenSet functionality', () => {
     tokenSet.clear();
 
     const testTokens = [
-      new Token('t1'),
-      new Token('t2'),
-      new Token('t3'),
+      new Token({ name: 't1' }),
+      new Token({ name: 't2' }),
+      new Token({ name: 't3' }),
     ];
 
     for (const token of testTokens) {
@@ -129,9 +129,9 @@ describe('Core TokenSet functionality', () => {
     tokenSet.clear();
 
     const testTokens = [
-      new Token('t1'),
-      new Token('t2'),
-      new Token('t3'),
+      new Token({ name: 't1' }),
+      new Token({ name: 't2' }),
+      new Token({ name: 't3' }),
     ];
 
     for (const token of testTokens) {
@@ -159,14 +159,14 @@ describe('TokenSet with custom type checking', () => {
   const tokenSet = new TokenSet(isTestToken);
 
   test('Adding a valid token works', () => {
-    const token = new TestToken('test');
+    const token = new TestToken({ name: 'test' });
     tokenSet.add(token);
     expect(tokenSet.has(token)).toBe(true);
   });
 
   test('Adding an invalid token throws a TypeError', () => {
     expect(() => {
-      tokenSet.add(new OtherToken('fail'));
+      tokenSet.add(new OtherToken({ name: 'fail' }));
     }).toThrow(TypeError);
   });
 });

@@ -3,8 +3,8 @@ import Token from '../base/token';
 const rbgHexRegex = /^#([a-fA-F\d]{6})$/;
 
 class Color extends Token {
-  constructor(name, color) {
-    super(name);
+  constructor({ color, ...rest }) {
+    super(rest);
     this._addTokenProp('color', Color.isValidColor, Color.isColorToken);
 
     this.color = color;

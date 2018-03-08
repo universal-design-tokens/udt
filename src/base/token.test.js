@@ -1,7 +1,8 @@
 import Token from './token';
+import { UdtParseError } from './errors';
 
 const tokenName = 'name';
-const token = new Token(tokenName);
+const token = new Token({ name: tokenName });
 
 describe('Core Token properties', () => {
   test('token\'s name is accessible', () => {
@@ -29,8 +30,12 @@ describe('Core Token properties', () => {
     expect(token.handle).toBe(tokenName);
   });
 
-  test('creating token without a name throws an Error', () => {
-    expect(() => new Token()).toThrow(TypeError);
+  test('creating token without a name throws an TypeError', () => {
+    expect(() => new Token({})).toThrow(TypeError);
+  });
+
+  test('creating token with no args throws a UdtParseError', () => {
+    expect(() => new Token()).toThrow(UdtParseError);
   });
 
   test('setting a non-string name throws a TypeError', () => {
@@ -62,9 +67,9 @@ describe('Core Token properties', () => {
 describe('Token description', () => {
   const tokenDescription = 'test description';
   const token2name = 'token2';
-  const token2 = new Token(token2name);
+  const token2 = new Token({ name: token2name });
   const token3name = 'token3';
-  const token3 = new Token(token3name);
+  const token3 = new Token({ name: token3name });
 
   test('token\'s description is accessible', () => {
     token.description = tokenDescription;
@@ -153,7 +158,7 @@ describe('Token description', () => {
 describe('JSON serialisation', () => {
   const tokenDescription = 'test description';
   const token2name = 'token2';
-  const token2 = new Token(token2name);
+  const token2 = new Token({ name: token2name });
 
   test('name is output by toJSON()', () => {
     const jsonObj = token.toJSON();
@@ -191,5 +196,53 @@ describe('JSON serialisation', () => {
     token.description = token2;
     const jsonObj = token.toJSON();
     expect(jsonObj).not.toBe('@foobar');
+  });
+});
+
+describe('Parsing from JSON objects', () => {
+  const goodObj = {
+    name: 'testName',
+    handle: 'testHandle',
+    description: 'testDescription',
+  };
+
+  const badObj = {
+    name: 'validName',
+    foo: 42,
+  };
+
+  const badNoNameObj = {
+    foo: 42,
+  };
+
+  test('parsing valid JSON object works', () => {
+    const t = new Token(goodObj);
+    expect(t.name).toBe(goodObj.name);
+    expect(t.handle).toBe(goodObj.handle);
+    expect(t.description).toBe(goodObj.description);
+  });
+
+  test('parsing JSON object with invalid property throws UdtParseError', () => {
+    expect(() => {
+      new Token(badObj); // eslint-disable-line no-new
+    }).toThrow(UdtParseError);
+  });
+
+  test('parsing JSON object with no name throws TypeError', () => {
+    expect(() => {
+      new Token(badNoNameObj); // eslint-disable-line no-new
+    }).toThrow(UdtParseError);
+  });
+
+  test('parsing array throws UdtParseError', () => {
+    expect(() => {
+      new Token([]); // eslint-disable-line no-new
+    }).toThrow(UdtParseError);
+  });
+
+  test('parsing string throws UdtParseError', () => {
+    expect(() => {
+      new Token('test'); // eslint-disable-line no-new
+    }).toThrow(UdtParseError);
   });
 });

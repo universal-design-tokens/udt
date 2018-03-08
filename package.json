@@ -29,6 +29,7 @@
   "homepage": "https://github.com/universal-design-tokens/udt-js#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.14.0",
     "eslint-config-airbnb-base": "^12.1.0",

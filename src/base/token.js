@@ -1,6 +1,7 @@
 
 import Property from './property';
 import { addPrivateProp, addPublicProp } from './utils';
+import { UdtParseError } from './errors';
 
 function isValidName(name) {
   return (typeof name === 'string') && (name.length > 0);
@@ -14,7 +15,22 @@ const nameProp = 'name';
 const handleProp = 'handle';
 
 class Token {
-  constructor(name) {
+  constructor(jsonData) {
+    if (typeof jsonData !== 'object' || Array.isArray(jsonData)) {
+      throw new UdtParseError('Cannot parse token from non-object.');
+    }
+
+    const {
+      name,
+      handle = undefined,
+      description = undefined,
+      ...rest
+    } = jsonData;
+
+    if (Object.keys(rest).length > 0) {
+      throw new UdtParseError(`Unexpected properties in input data: ${Object.keys(rest).join(', ')}`);
+    }
+
     // Non-enumerable "_props" member
     // for storing Property objects
     addPrivateProp(this, '_props', {});
@@ -54,10 +70,12 @@ class Token {
         this._customHandle = customHandle;
       },
     );
+    this.handle = handle;
 
     // Standard "description" property that is common to all Token
     // types.
     this._addTokenProp('description', isValidDescription);
+    this.description = description;
   }
 
   static isToken(token) {
