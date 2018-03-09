@@ -1,5 +1,6 @@
 import TokenSet from './token-set';
 import Token from './token';
+import { UdtParseError } from './errors';
 
 describe('Core TokenSet functionality', () => {
   const tokenSet = new TokenSet();
@@ -168,5 +169,40 @@ describe('TokenSet with custom type checking', () => {
     expect(() => {
       tokenSet.add(new OtherToken({ name: 'fail' }));
     }).toThrow(TypeError);
+  });
+});
+
+describe('Parsing token sets', () => {
+  function acceptAll() {
+    return true;
+  }
+
+  const goodSetData = [
+    {
+      name: 'token1',
+    },
+    {
+      name: 'token2',
+      description: 'foo bar',
+    },
+  ];
+
+  const tokenParseMockFn = jest.fn();
+  tokenParseMockFn.mockReturnValue(new Token({ name: 'foo' }));
+
+  test('Parsing valid data works', () => {
+    const tokenSet = new TokenSet(acceptAll, goodSetData);
+    expect(tokenSet.size).toBe(goodSetData.length);
+  });
+
+  test('Parsing a non-array throws a UdtParseError', () => {
+    expect(() => {
+      new TokenSet(acceptAll, 'foo'); // eslint-disable-line no-new
+    }).toThrow(UdtParseError);
+  });
+
+  test('Custom tokenFromJsonFn get called when parsing', () => {
+    new TokenSet(acceptAll, goodSetData, tokenParseMockFn); // eslint-disable-line no-new
+    expect(tokenParseMockFn.mock.calls.length).toBe(goodSetData.length);
   });
 });

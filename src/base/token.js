@@ -15,8 +15,8 @@ const nameProp = 'name';
 const handleProp = 'handle';
 
 class Token {
-  constructor(jsonData) {
-    if (typeof jsonData !== 'object' || Array.isArray(jsonData)) {
+  constructor(jsonObj) {
+    if (typeof jsonObj !== 'object' || Array.isArray(jsonObj)) {
       throw new UdtParseError('Cannot parse token from non-object.');
     }
 
@@ -25,7 +25,7 @@ class Token {
       handle = undefined,
       description = undefined,
       ...rest
-    } = jsonData;
+    } = jsonObj;
 
     if (Object.keys(rest).length > 0) {
       throw new UdtParseError(`Unexpected properties in input data: ${Object.keys(rest).join(', ')}`);

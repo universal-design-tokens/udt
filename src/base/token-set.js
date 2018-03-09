@@ -1,14 +1,27 @@
 import Token from './token';
 import { addPrivateProp } from './utils';
+import { UdtParseError } from './errors';
 
 function acceptAll() {
   return true;
 }
 
+function tokenFromJson(jsonObj) {
+  return new Token(jsonObj);
+}
+
 class TokenSet {
-  constructor(typeCheckFn = acceptAll) {
+  constructor(typeCheckFn = acceptAll, jsonArray = [], tokenFromJsonFn = tokenFromJson) {
+    if (typeof jsonArray !== 'object' || !Array.isArray(jsonArray)) {
+      throw new UdtParseError('Cannot parse token set from non-array.');
+    }
+
     addPrivateProp(this, '_tokens', new Set());
     addPrivateProp(this, '_typeCheckerFn', typeCheckFn);
+
+    jsonArray.forEach((jsonObj) => {
+      this.add(tokenFromJsonFn(jsonObj));
+    });
   }
 
   has(token) {
