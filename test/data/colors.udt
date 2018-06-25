@@ -1,18 +1,14 @@
 {
   "colors": [
     {
+      "id": "red",
       "name": "Red",
       "color": "#ff0000"
     },
     {
+      "id": "ocean-blue",
       "name": "Ocean Blue",
-      "handle": "blue",
       "color": "#0000ff"
-    },
-    {
-      "name": "Alt Red",
-      "description": "@colors.Red",
-      "color": "#123456"
     }
   ]
 }

@@ -3,7 +3,7 @@ import Color from '../tokens/color';
 import Token from '../base/token';
 
 const colors = new Colors();
-const colorJson = { name: 'red', color: '#333333' };
+const colorJson = { id: 'red', color: '#333333' };
 const color = new Color(colorJson);
 
 describe('Core Colors functionality', () => {
@@ -13,7 +13,7 @@ describe('Core Colors functionality', () => {
   });
 
   test('Adding other tokens throws a TypeError', () => {
-    const notColor = new Token({ name: 'foo' });
+    const notColor = new Token({ id: 'foo' });
     expect(() => {
       colors.add(notColor);
     }).toThrow(TypeError);

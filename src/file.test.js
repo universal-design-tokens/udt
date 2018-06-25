@@ -5,11 +5,11 @@ import Colors from './sets/colors';
 const okTestData = {
   colors: [
     {
-      name: 'Color 1',
+      id: 'Color-1',
       color: '#123456',
     },
     {
-      name: 'Color 2',
+      id: 'Color-2',
       color: '#654321',
     },
   ],

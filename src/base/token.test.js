@@ -1,41 +1,67 @@
 import Token from './token';
 import { UdtParseError } from './errors';
 
-const tokenName = 'name';
-const token = new Token({ name: tokenName });
+const tokenId = 'testId';
+const token = new Token({ id: tokenId });
 
 describe('Core Token properties', () => {
-  test('token\'s name is accessible', () => {
-    expect(token.name).toBe(tokenName);
+  test('token\'s ID is accessible', () => {
+    expect(token.id).toBe(tokenId);
   });
 
-  test('token\'s handle matches name', () => {
-    expect(token.handle).toBe(tokenName);
+  test('token\'s name matches ID', () => {
+    expect(token.name).toBe(tokenId);
   });
 
-  test('token\'s handle can be customised without altering name', () => {
-    const customHandle = 'customHandle';
-    token.handle = customHandle;
-    expect(token.name).toBe(tokenName);
-    expect(token.handle).toBe(customHandle);
+  test('token\'s name can be customised without altering ID', () => {
+    const customName = 'customName';
+    token.name = customName;
+    expect(token.id).toBe(tokenId);
+    expect(token.name).toBe(customName);
   });
 
-  test('custom token handle can be cleared by setting it to undefined', () => {
+  test('custom token name can be cleared by setting it to undefined', () => {
     // Set a custom handle
-    const customHandle = 'customHandle';
-    token.handle = customHandle;
+    const customName = 'customName';
+    token.name = customName;
     // Now clear it
-    token.handle = undefined;
+    token.name = undefined;
     // Without the custom handle, .handle should fall back to the .name
-    expect(token.handle).toBe(tokenName);
+    expect(token.name).toBe(tokenId);
   });
 
-  test('creating token without a name throws an TypeError', () => {
+  test('creating token without an ID throws a TypeError', () => {
     expect(() => new Token({})).toThrow(TypeError);
   });
 
   test('creating token with no args throws a UdtParseError', () => {
     expect(() => new Token()).toThrow(UdtParseError);
+  });
+
+  test('setting a non-string ID throws a TypeError', () => {
+    expect(() => {
+      token.id = 42;
+    }).toThrow(TypeError);
+  });
+
+  test('setting an empty string ID throws a TypeError', () => {
+    expect(() => {
+      token.id = '';
+    }).toThrow(TypeError);
+  });
+
+  test('setting an invalid ID throws a TypeError', () => {
+    const invalidIds = [
+      'id with spaces',
+      //'1-id-starting-with-number',
+      'id*with.invalid=chars',
+    ];
+
+    invalidIds.forEach((invalidId) => {
+      expect(() => {
+        new Token({ id: invalidId }); // eslint-disable-line no-new
+      }).toThrow(TypeError);
+    });
   });
 
   test('setting a non-string name throws a TypeError', () => {
@@ -49,27 +75,15 @@ describe('Core Token properties', () => {
       token.name = '';
     }).toThrow(TypeError);
   });
-
-  test('setting a non-string handle throws a TypeError', () => {
-    expect(() => {
-      token.handle = 42;
-    }).toThrow(TypeError);
-  });
-
-  test('setting an empty string handle throws a TypeError', () => {
-    expect(() => {
-      token.handle = '';
-    }).toThrow(TypeError);
-  });
 });
 
 
 describe('Token description', () => {
   const tokenDescription = 'test description';
-  const token2name = 'token2';
-  const token2 = new Token({ name: token2name });
-  const token3name = 'token3';
-  const token3 = new Token({ name: token3name });
+  const token2id = 'token2';
+  const token2 = new Token({ id: token2id });
+  const token3id = 'token3';
+  const token3 = new Token({ id: token3id });
 
   test('token\'s description is accessible', () => {
     token.description = tokenDescription;
@@ -86,7 +100,7 @@ describe('Token description', () => {
     expect(token.getReferencedToken('description')).toBeUndefined();
   });
 
-  test('token\'s descirption can be cleared by setting it to undefined', () => {
+  test('token\'s description can be cleared by setting it to undefined', () => {
     token.description = undefined;
     expect(token.description).toBeUndefined();
   });
@@ -115,7 +129,7 @@ describe('Token description', () => {
     expect(token2.isReferencedValue('description')).toBe(true);
   });
 
-  test('referenced value\'s referenced token', () => {
+  test('getting referenced value\'s token', () => {
     token.description = tokenDescription;
     token2.description = token;
     expect(token2.getReferencedToken('description')).toBe(token);
@@ -157,25 +171,25 @@ describe('Token description', () => {
 
 describe('JSON serialisation', () => {
   const tokenDescription = 'test description';
-  const token2name = 'token2';
-  const token2 = new Token({ name: token2name });
+  const token2id = 'token2';
+  const token2 = new Token({ id: token2id });
 
-  test('name is output by toJSON()', () => {
+  test('ID is output by toJSON()', () => {
     const jsonObj = token.toJSON();
-    expect(jsonObj.name).toBe(tokenName);
+    expect(jsonObj.id).toBe(tokenId);
   });
 
-  test('custom handle is output by toJSON(), if set', () => {
-    const customHandle = 'handle';
-    token.handle = customHandle;
+  test('custom name is output by toJSON(), if set', () => {
+    const customName = 'Test name';
+    token.name = customName;
     const jsonObj = token.toJSON();
-    expect(jsonObj.handle).toBe(customHandle);
+    expect(jsonObj.name).toBe(customName);
   });
 
-  test('handle is ommitted by toJSON(), if no custom handle is set', () => {
-    token.handle = undefined;
+  test('name is ommitted by toJSON(), if no custom name is set', () => {
+    token.name = undefined;
     const jsonObj = token.toJSON();
-    expect(jsonObj).not.toHaveProperty('handle');
+    expect(jsonObj).not.toHaveProperty('name');
   });
 
   test('description is output by toJSON()', () => {
@@ -195,14 +209,14 @@ describe('JSON serialisation', () => {
     token2.description = token2Description;
     token.description = token2;
     const jsonObj = token.toJSON();
-    expect(jsonObj).not.toBe('@foobar');
+    expect(jsonObj.description).toBe(token2.toReference());
   });
 });
 
 describe('Parsing from JSON objects', () => {
   const goodObj = {
+    id: 'testId',
     name: 'testName',
-    handle: 'testHandle',
     description: 'testDescription',
   };
 
@@ -211,14 +225,14 @@ describe('Parsing from JSON objects', () => {
     foo: 42,
   };
 
-  const badNoNameObj = {
+  const badNoIdObj = {
     foo: 42,
   };
 
   test('parsing valid JSON object works', () => {
     const t = new Token(goodObj);
+    expect(t.id).toBe(goodObj.id);
     expect(t.name).toBe(goodObj.name);
-    expect(t.handle).toBe(goodObj.handle);
     expect(t.description).toBe(goodObj.description);
   });
 
@@ -230,7 +244,7 @@ describe('Parsing from JSON objects', () => {
 
   test('parsing JSON object with no name throws TypeError', () => {
     expect(() => {
-      new Token(badNoNameObj); // eslint-disable-line no-new
+      new Token(badNoIdObj); // eslint-disable-line no-new
     }).toThrow(UdtParseError);
   });
 

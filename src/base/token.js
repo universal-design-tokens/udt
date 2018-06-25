@@ -3,6 +3,12 @@ import Property from './property';
 import { addPrivateProp, addPublicProp } from './utils';
 import { UdtParseError } from './errors';
 
+const idRegex = /^\w[-_\w\d]*$/;
+
+function isValidId(id) {
+  return (typeof id === 'string') && idRegex.test(id);
+}
+
 function isValidName(name) {
   return (typeof name === 'string') && (name.length > 0);
 }
@@ -12,7 +18,7 @@ function isValidDescription(value) {
 }
 
 const nameProp = 'name';
-const handleProp = 'handle';
+const idProp = 'id';
 
 class Token {
   constructor(jsonObj) {
@@ -21,8 +27,8 @@ class Token {
     }
 
     const {
-      name,
-      handle = undefined,
+      id,
+      name = undefined,
       description = undefined,
       ...rest
     } = jsonObj;
@@ -37,40 +43,40 @@ class Token {
 
     // Enumerable "name" prop with get & set
     // function to validate names.
-    addPrivateProp(this, '_name', undefined);
+    addPrivateProp(this, '_id', undefined);
+    addPublicProp(
+      this,
+      idProp,
+      () => this._id,
+      (newId) => {
+        if (!isValidId(newId)) {
+          throw new TypeError(`"${newId}" is not a valid Token ID.`);
+        }
+        this._id = newId;
+      },
+    );
+    this.id = id;
+
+    // Enumerable "name" prop for setting custom display name
+    // that take precedence over ID
+    addPrivateProp(this, '_customName', undefined);
     addPublicProp(
       this,
       nameProp,
-      () => this._name,
-      (n) => {
-        if (!isValidName(n)) {
-          throw new TypeError(`"${n}" is not a valid Token name.`);
+      () => {
+        if (this._customName !== undefined) {
+          return this._customName;
         }
-        this._name = n;
+        return this.id;
+      },
+      (newName) => {
+        if (newName !== undefined && !isValidName(newName)) {
+          throw new TypeError(`"${newName}" is not a valid Token name.`);
+        }
+        this._customName = newName;
       },
     );
     this.name = name;
-
-    // Enumerable "handle" prop for setting custom handle
-    // that take precedence over name
-    addPrivateProp(this, '_customHandle', undefined);
-    addPublicProp(
-      this,
-      handleProp,
-      () => {
-        if (this._customHandle !== undefined) {
-          return this._customHandle;
-        }
-        return this.name;
-      },
-      (customHandle) => {
-        if (customHandle !== undefined && !isValidName(customHandle)) {
-          throw new TypeError(`"${customHandle}" is not a valid Token custom handle.`);
-        }
-        this._customHandle = customHandle;
-      },
-    );
-    this.handle = handle;
 
     // Standard "description" property that is common to all Token
     // types.
@@ -120,18 +126,22 @@ class Token {
     return false;
   }
 
+  toReference() {
+    return `@${this.id}`;
+  }
+
   toJSON() {
     const output = {};
     Object.keys(this).forEach((propName) => {
-      // Must check for .name or .handle first, since neither is stored
+      // Must check for .id or .name first, since neither is stored
       // in this._props and therefore calling isReferencedValue() with
       // those prop names would throw an error
-      if (propName === nameProp) {
+      if (propName === idProp) {
         output[propName] = this[propName];
         return;
       }
-      if (propName === handleProp) {
-        if (this._customHandle !== undefined) {
+      if (propName === nameProp) {
+        if (this._customName !== undefined) {
           output[propName] = this[propName];
         }
         return;
@@ -139,7 +149,7 @@ class Token {
 
       let value;
       if (this.isReferencedValue(propName)) {
-        output[propName] = '@foobar';
+        output[propName] = this.getReferencedToken(propName).toReference();
       } else {
         value = this[propName];
         if (value !== undefined) {

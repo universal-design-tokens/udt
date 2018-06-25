@@ -17,52 +17,52 @@ describe('Core TokenSet functionality', () => {
 
   test('Adding a token increments the size', () => {
     const initialSize = tokenSet.size;
-    tokenSet.add(new Token({ name: 'test' }));
+    tokenSet.add(new Token({ id: 'test' }));
     expect(tokenSet.size).toBe(initialSize + 1);
   });
 
   test('Adding the same token multiple times only increments the size once', () => {
     const initialSize = tokenSet.size;
-    const token = new Token({ name: 'test 2' });
+    const token = new Token({ id: 'test-2' });
     tokenSet.add(token);
     tokenSet.add(token);
     expect(tokenSet.size).toBe(initialSize + 1);
   });
 
   test('add() returns the token set', () => {
-    const returnVal = tokenSet.add(new Token({ name: 'test 3' }));
+    const returnVal = tokenSet.add(new Token({ id: 'test-3' }));
     expect(returnVal).toBe(tokenSet);
   });
 
   test('Presence of a token in the set can be checked', () => {
-    const token = new Token({ name: 'foo' });
+    const token = new Token({ id: 'foo' });
     expect(tokenSet.has(token)).toBe(false);
     tokenSet.add(token);
     expect(tokenSet.has(token)).toBe(true);
   });
 
   test('Tokens can be deleted', () => {
-    const token = new Token({ name: 'bar' });
+    const token = new Token({ id: 'bar' });
     tokenSet.add(token);
     tokenSet.delete(token);
     expect(tokenSet.has(token)).toBe(false);
   });
 
   test('Deleting a token in the set returns true', () => {
-    const token = new Token({ name: 'barfoo' });
+    const token = new Token({ id: 'barfoo' });
     tokenSet.add(token);
     const returnVal = tokenSet.delete(token);
     expect(returnVal).toBe(true);
   });
 
   test('Deleting a token not in the set returns false', () => {
-    const returnVal = tokenSet.delete(new Token({ name: 'barfoo' }));
+    const returnVal = tokenSet.delete(new Token({ id: 'barfoo' }));
     expect(returnVal).toBe(false);
   });
 
   test('Token set can be cleared', () => {
-    tokenSet.add(new Token({ name: 'test 1' }));
-    tokenSet.add(new Token({ name: 'test 2' }));
+    tokenSet.add(new Token({ id: 'test-1' }));
+    tokenSet.add(new Token({ id: 'test-2' }));
     tokenSet.clear();
     expect(tokenSet.size).toBe(0);
   });
@@ -71,9 +71,9 @@ describe('Core TokenSet functionality', () => {
     tokenSet.clear();
 
     const testTokens = [
-      new Token({ name: 't1' }),
-      new Token({ name: 't2' }),
-      new Token({ name: 't3' }),
+      new Token({ id: 't1' }),
+      new Token({ id: 't2' }),
+      new Token({ id: 't3' }),
     ];
 
     for (const token of testTokens) {
@@ -97,9 +97,9 @@ describe('Core TokenSet functionality', () => {
     tokenSet.clear();
 
     const testTokens = [
-      new Token({ name: 't1' }),
-      new Token({ name: 't2' }),
-      new Token({ name: 't3' }),
+      new Token({ id: 't1' }),
+      new Token({ id: 't2' }),
+      new Token({ id: 't3' }),
     ];
 
     for (const token of testTokens) {
@@ -130,9 +130,9 @@ describe('Core TokenSet functionality', () => {
     tokenSet.clear();
 
     const testTokens = [
-      new Token({ name: 't1' }),
-      new Token({ name: 't2' }),
-      new Token({ name: 't3' }),
+      new Token({ id: 't1' }),
+      new Token({ id: 't2' }),
+      new Token({ id: 't3' }),
     ];
 
     for (const token of testTokens) {
@@ -160,14 +160,14 @@ describe('TokenSet with custom type checking', () => {
   const tokenSet = new TokenSet(isTestToken);
 
   test('Adding a valid token works', () => {
-    const token = new TestToken({ name: 'test' });
+    const token = new TestToken({ id: 'test' });
     tokenSet.add(token);
     expect(tokenSet.has(token)).toBe(true);
   });
 
   test('Adding an invalid token throws a TypeError', () => {
     expect(() => {
-      tokenSet.add(new OtherToken({ name: 'fail' }));
+      tokenSet.add(new OtherToken({ id: 'fail' }));
     }).toThrow(TypeError);
   });
 });
@@ -179,16 +179,16 @@ describe('Parsing token sets', () => {
 
   const goodSetData = [
     {
-      name: 'token1',
+      id: 'token1',
     },
     {
-      name: 'token2',
+      id: 'token2',
       description: 'foo bar',
     },
   ];
 
   const tokenParseMockFn = jest.fn();
-  tokenParseMockFn.mockReturnValue(new Token({ name: 'foo' }));
+  tokenParseMockFn.mockReturnValue(new Token({ id: 'foo' }));
 
   test('Parsing valid data works', () => {
     const tokenSet = new TokenSet(acceptAll, goodSetData);
