@@ -72,13 +72,13 @@ describe('Core TokenSet functionality', () => {
     const tokenId = 'search-token';
     const token = new Token({ id: tokenId });
     tokenSet.add(token);
-    expect(tokenSet.findByRef(idToReference(tokenId))).toBe(token);
+    expect(tokenSet.findTokenByRef(idToReference(tokenId))).toBe(token);
   });
 
   test('Searching for a token ref that does not exist returns null', () => {
     tokenSet.clear();
     tokenSet.add(new Token({ id: 'foobar' }));
-    expect(tokenSet.findByRef(idToReference('does-not-exist'))).toBeNull();
+    expect(tokenSet.findTokenByRef(idToReference('does-not-exist'))).toBeNull();
   });
 
   test('values() returns an iterable', () => {
@@ -215,7 +215,7 @@ describe('Parsing token sets', () => {
     }).toThrow(UdtParseError);
   });
 
-  test('Custom tokenFromJsonFn get called when parsing', () => {
+  test('Custom tokenFromDataFn get called when parsing', () => {
     new TokenSet(acceptAll, goodSetData, tokenParseMockFn); // eslint-disable-line no-new
     expect(tokenParseMockFn.mock.calls.length).toBe(goodSetData.length);
   });

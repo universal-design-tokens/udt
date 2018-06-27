@@ -6,25 +6,25 @@ function acceptAll() {
   return true;
 }
 
-function tokenFromJson(jsonObj) {
-  return new Token(jsonObj);
+function tokenFromData(data) {
+  return new Token(data);
 }
 
 class TokenSet {
-  constructor(typeCheckFn = acceptAll, jsonArray = [], tokenFromJsonFn = tokenFromJson) {
-    if (typeof jsonArray !== 'object' || !Array.isArray(jsonArray)) {
+  constructor(typeCheckFn = acceptAll, dataArray = [], tokenFromDataFn = tokenFromData) {
+    if (typeof dataArray !== 'object' || !Array.isArray(dataArray)) {
       throw new UdtParseError('Cannot parse token set from non-array.');
     }
 
     addPrivateProp(this, '_tokens', new Set());
     addPrivateProp(this, '_typeCheckerFn', typeCheckFn);
 
-    jsonArray.forEach((jsonObj) => {
-      this.add(tokenFromJsonFn(jsonObj));
+    dataArray.forEach((data) => {
+      this.add(tokenFromDataFn(data));
     });
   }
 
-  findByRef(tokenRef) {
+  findTokenByRef(tokenRef) {
     let result = null;
     for (const token of this.values()) {
       if (token.toReference() === tokenRef) {

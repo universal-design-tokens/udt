@@ -24,8 +24,8 @@ class File {
     this.colors = new Colors(colors);
   }
 
-  findByRef(tokenRef) {
-    return this.colors.findByRef(tokenRef);
+  findTokenByRef(tokenRef) {
+    return this.colors.findTokenByRef(tokenRef);
   }
 
   static jsonToData(jsonData, file) {
