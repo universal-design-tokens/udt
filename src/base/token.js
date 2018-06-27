@@ -1,6 +1,7 @@
 
 import Property from './property';
 import { addPrivateProp, addPublicProp } from './utils';
+import { idToReference, escapeStringValue } from './reference-utils';
 import { UdtParseError } from './errors';
 
 const idRegex = /^\w[-_\w\d]*$/;
@@ -21,8 +22,8 @@ const nameProp = 'name';
 const idProp = 'id';
 
 class Token {
-  constructor(jsonObj) {
-    if (typeof jsonObj !== 'object' || Array.isArray(jsonObj)) {
+  constructor(data) {
+    if (typeof data !== 'object' || Array.isArray(data)) {
       throw new UdtParseError('Cannot parse token from non-object.');
     }
 
@@ -31,7 +32,7 @@ class Token {
       name = undefined,
       description = undefined,
       ...rest
-    } = jsonObj;
+    } = data;
 
     if (Object.keys(rest).length > 0) {
       throw new UdtParseError(`Unexpected properties in input data: ${Object.keys(rest).join(', ')}`);
@@ -127,7 +128,7 @@ class Token {
   }
 
   toReference() {
-    return `@${this.id}`;
+    return idToReference(this.id);
   }
 
   toJSON() {
@@ -153,6 +154,9 @@ class Token {
       } else {
         value = this[propName];
         if (value !== undefined) {
+          if (typeof value === 'string') {
+            value = escapeStringValue(value);
+          }
           output[propName] = value;
         }
       }

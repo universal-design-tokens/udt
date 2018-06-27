@@ -1,5 +1,6 @@
 import TokenSet from './token-set';
 import Token from './token';
+import { idToReference } from './reference-utils';
 import { UdtParseError } from './errors';
 
 describe('Core TokenSet functionality', () => {
@@ -65,6 +66,19 @@ describe('Core TokenSet functionality', () => {
     tokenSet.add(new Token({ id: 'test-2' }));
     tokenSet.clear();
     expect(tokenSet.size).toBe(0);
+  });
+
+  test('Tokens can be found by ref', () => {
+    const tokenId = 'search-token';
+    const token = new Token({ id: tokenId });
+    tokenSet.add(token);
+    expect(tokenSet.findByRef(idToReference(tokenId))).toBe(token);
+  });
+
+  test('Searching for a token ref that does not exist returns null', () => {
+    tokenSet.clear();
+    tokenSet.add(new Token({ id: 'foobar' }));
+    expect(tokenSet.findByRef(idToReference('does-not-exist'))).toBeNull();
   });
 
   test('values() returns an iterable', () => {

@@ -1,4 +1,5 @@
 import Token from './token';
+import { REFERENCE_PREFIX, ESCAPE_CHAR, escapeStringValue } from './reference-utils';
 import { UdtParseError } from './errors';
 
 const tokenId = 'testId';
@@ -198,6 +199,21 @@ describe('JSON serialisation', () => {
     expect(jsonObj.description).toBe(tokenDescription);
   });
 
+  test('description starting with escape char is correctly escaped by toJSON()', () => {
+    const testDescription = `${ESCAPE_CHAR}${tokenDescription}`;
+    token.description = testDescription;
+    const jsonObj = token.toJSON();
+    expect(jsonObj.description).toBe(escapeStringValue(testDescription));
+  });
+
+
+  test('description starting with reference prefix is correctly escaped by toJSON()', () => {
+    const testDescription = `${REFERENCE_PREFIX}${tokenDescription}`;
+    token.description = testDescription;
+    const jsonObj = token.toJSON();
+    expect(jsonObj.description).toBe(escapeStringValue(testDescription));
+  });
+
   test('description is ommitted by toJSON() if it was not set', () => {
     token.description = undefined;
     const jsonObj = token.toJSON();
@@ -213,7 +229,7 @@ describe('JSON serialisation', () => {
   });
 });
 
-describe('Parsing from JSON objects', () => {
+describe('Constructing from data', () => {
   const goodObj = {
     id: 'testId',
     name: 'testName',
@@ -229,32 +245,32 @@ describe('Parsing from JSON objects', () => {
     foo: 42,
   };
 
-  test('parsing valid JSON object works', () => {
+  test('constructing valid data works', () => {
     const t = new Token(goodObj);
     expect(t.id).toBe(goodObj.id);
     expect(t.name).toBe(goodObj.name);
     expect(t.description).toBe(goodObj.description);
   });
 
-  test('parsing JSON object with invalid property throws UdtParseError', () => {
+  test('data with invalid property throws UdtParseError', () => {
     expect(() => {
       new Token(badObj); // eslint-disable-line no-new
     }).toThrow(UdtParseError);
   });
 
-  test('parsing JSON object with no name throws TypeError', () => {
+  test('data with no ID throws TypeError', () => {
     expect(() => {
       new Token(badNoIdObj); // eslint-disable-line no-new
     }).toThrow(UdtParseError);
   });
 
-  test('parsing array throws UdtParseError', () => {
+  test('array data throws UdtParseError', () => {
     expect(() => {
       new Token([]); // eslint-disable-line no-new
     }).toThrow(UdtParseError);
   });
 
-  test('parsing string throws UdtParseError', () => {
+  test('string data throws UdtParseError', () => {
     expect(() => {
       new Token('test'); // eslint-disable-line no-new
     }).toThrow(UdtParseError);

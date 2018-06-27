@@ -24,6 +24,17 @@ class TokenSet {
     });
   }
 
+  findByRef(tokenRef) {
+    let result = null;
+    for (const token of this.values()) {
+      if (token.toReference() === tokenRef) {
+        result = token;
+        break;
+      }
+    }
+    return result;
+  }
+
   has(token) {
     return this._tokens.has(token);
   }
