@@ -9,6 +9,12 @@
       "id": "ocean-blue",
       "name": "Ocean Blue",
       "color": "#0000ff"
+    },
+    {
+      "id": "red-alt",
+      "name": "Alt Red",
+      "description": "Should be same as colors.Red",
+      "color": "@red"
     }
   ]
 }

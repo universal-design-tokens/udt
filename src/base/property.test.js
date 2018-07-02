@@ -1,4 +1,6 @@
 import Property from './property';
+import DeferredReference from './deferred-reference';
+import { idToReference } from './reference-utils';
 
 const propName = 'testProp';
 const testVal = 'testVal';
@@ -45,6 +47,16 @@ describe('Basic Property with no custom checkers', () => {
   test('setting a referenced value works', () => {
     prop.setRefValue(refObj);
     expect(prop.getValue()).toBe(refVal);
+  });
+
+  test('setting a deferred reference works', () => {
+    const refString = idToReference('foo');
+    const defRef = new DeferredReference(refString);
+    prop.setValue(defRef);
+
+    expect(prop.getValue()).toBeNull();
+    expect(prop.isReferencedValue()).toBe(false);
+    expect(defRef.prop).toBe(prop);
   });
 });
 

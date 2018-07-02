@@ -1,3 +1,4 @@
+import DeferredReference from './deferred-reference';
 
 function acceptAll() {
   return true;
@@ -27,7 +28,13 @@ class Property {
   }
 
   setValue(value) {
-    if (this._valueCheckerFn(value)) {
+    if (value instanceof DeferredReference) {
+      // Register self with def ref object, so that it can later
+      // call setRefValue() once the referenced token exists.
+      value.setProperty(this);
+      this._value = null; // temporary dummy value
+      this._reference = undefined;
+    } else if (this._valueCheckerFn(value)) {
       this._value = value;
       this._reference = undefined;
     } else {

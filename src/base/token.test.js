@@ -227,6 +227,16 @@ describe('JSON serialisation', () => {
     const jsonObj = token.toJSON();
     expect(jsonObj.description).toBe(token2.toReference());
   });
+
+  test('custom property with non-string values is output correctly', () => {
+    const testToken = new Token({ id: 'customPropTest' });
+    const propName = 'testProp';
+    testToken._addTokenProp(propName);
+    const testVal = 42;
+    testToken[propName] = testVal;
+    const jsonObj = testToken.toJSON();
+    expect(jsonObj[propName]).toBe(testVal);
+  });
 });
 
 describe('Constructing from data', () => {
