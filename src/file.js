@@ -30,7 +30,7 @@ class File {
     return this.colors.findTokenByRef(tokenRef);
   }
 
-  static getRefDeferrerFn(deferredRefs) {
+  static _getRefDeferrerFn(deferredRefs) {
     return (key, jsonValue) => {
       let dataValue = jsonValue;
       if (typeof jsonValue === 'string') {
@@ -46,11 +46,10 @@ class File {
     };
   }
 
-  static async load(filename) {
-    const data = await readFile(filename, 'utf8');
+  static parse(udtJsonString) {
     const deferredRefs = [];
-    const refDeferrerFn = File.getRefDeferrerFn(deferredRefs);
-    const file = new File(JSON.parse(data, refDeferrerFn));
+    const refDeferrerFn = File._getRefDeferrerFn(deferredRefs);
+    const file = new File(JSON.parse(udtJsonString, refDeferrerFn));
     deferredRefs.forEach((defRef) => {
       const token = file.findTokenByRef(defRef.refString);
       if (token === null) {
@@ -59,6 +58,11 @@ class File {
       defRef.resolveReference(token);
     });
     return file;
+  }
+
+  static async load(filename) {
+    const udtJsonString = await readFile(filename, 'utf8');
+    return File.parse(udtJsonString);
   }
 }
 
