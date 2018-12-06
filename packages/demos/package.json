@@ -1,0 +1,20 @@
+{
+  "name": "@udt/demos",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Simple demos that use the @udt/core library",
+  "main": "index.ts",
+  "scripts": {},
+  "keywords": [
+    "udt",
+    "design",
+    "tokens",
+    "demo",
+    "example"
+  ],
+  "author": "James Nash (http://cirrus.twiddles.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "@udt/core": "^0.1.0"
+  }
+}
