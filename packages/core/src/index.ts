@@ -1,5 +1,2 @@
-
-import Color from './tokens/color';
-
-// eslint-disable-next-line import/prefer-default-export
-export { Color };
+export { default as File } from './file';
+export { default as Color } from './tokens/color';

@@ -11,9 +11,8 @@
       "color": "#0000ff"
     },
     {
-      "id": "red-alt",
-      "name": "Alt Red",
-      "description": "Should be same as colors.Red",
+      "id": "border-color",
+      "description": "Default color for borders on UI elements",
       "color": "@red"
     }
   ]
