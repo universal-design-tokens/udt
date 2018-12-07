@@ -5,7 +5,10 @@
   "description": "Monorepo for UDT spec, reference JS lib and tools.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "lerna run clean",
+    "lint": "lerna run lint",
+    "build": "lerna run build",
+    "test": "lerna run test"
   },
   "repository": {
     "type": "git",
