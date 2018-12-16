@@ -1,30 +1,37 @@
-import Token from './token';
+import Token, { CheckerFn } from './token';
 import { addPrivateProp } from './utils';
 import { UdtParseError } from './errors';
 
-function acceptAll() {
-  return true;
-}
+/**
+ * A function that can create a `Token`-derived object from
+ * JSON data.
+ */
+export type TokenFromDataFn<T extends Token> = (data: any) => T;
 
-function tokenFromData(data) {
-  return new Token(data);
-}
+/**
+ * Base class for all token sets.
+ */
+export default class TokenSet<T extends Token> {
+  private _tokens: Set<T>;
+  private _typeCheckerFn: CheckerFn<T>;
 
-class TokenSet {
-  constructor(typeCheckFn = acceptAll, dataArray = [], tokenFromDataFn = tokenFromData) {
+  constructor(typeCheckFn: CheckerFn<T>, tokenFromDataFn: TokenFromDataFn<T>, dataArray: any = []) {
     if (typeof dataArray !== 'object' || !Array.isArray(dataArray)) {
       throw new UdtParseError('Cannot parse token set from non-array.');
     }
 
-    addPrivateProp(this, '_tokens', new Set());
-    addPrivateProp(this, '_typeCheckerFn', typeCheckFn);
+    addPrivateProp(this, '_tokens');
+    this._tokens = new Set<T>();
+
+    addPrivateProp(this, '_typeCheckerFn');
+    this._typeCheckerFn = typeCheckFn;
 
     dataArray.forEach((data) => {
       this.add(tokenFromDataFn(data));
     });
   }
 
-  findTokenByRef(tokenRef) {
+  findTokenByRef(tokenRef: string) {
     let result = null;
     for (const token of this.values()) {
       if (token.toReference() === tokenRef) {
@@ -35,11 +42,11 @@ class TokenSet {
     return result;
   }
 
-  has(token) {
+  has(token: T) {
     return this._tokens.has(token);
   }
 
-  add(token) {
+  add(token: T) {
     if (!Token.isToken(token) || !this._typeCheckerFn(token)) {
       throw new TypeError(`${token} is not a valid Token for this set.`);
     }
@@ -47,7 +54,7 @@ class TokenSet {
     return this;
   }
 
-  delete(token) {
+  delete(token: T) {
     return this._tokens.delete(token);
   }
 
@@ -71,5 +78,3 @@ class TokenSet {
     return [...this];
   }
 }
-
-export default TokenSet;

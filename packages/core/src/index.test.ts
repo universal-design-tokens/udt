@@ -1,6 +1,6 @@
 
-import ImportedColor from './tokens/color';
-import { Color as ExportedColor } from './index';
+import ImportedColor from './tokens/color-token';
+import { ColorToken as ExportedColor } from './index';
 
 describe('Exported types', () => {
   test('Color is exported correctly', () => {

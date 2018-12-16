@@ -5,13 +5,13 @@ const value = 42;
 
 describe('addPrivateProp()', () => {
   test('a private prop\'s value can be retrieved', () => {
-    const obj = {};
+    const obj: any = {};
     utils.addPrivateProp(obj, propName, value);
     expect(obj[propName]).toBe(value);
   });
 
   test('a private prop cannot be deleted', () => {
-    const obj = {};
+    const obj: any = {};
     utils.addPrivateProp(obj, propName, value);
     expect(() => {
       delete obj[propName];
@@ -30,21 +30,21 @@ const mockSetter = jest.fn();
 
 describe('addPublicProp()', () => {
   test('reading a public prop calls its getter function', () => {
-    const obj = {};
+    const obj: any = {};
     utils.addPublicProp(obj, propName, mockGetter, mockSetter);
     expect(obj[propName]).toBe(value);
     expect(mockGetter.mock.calls.length).toBe(1);
   });
 
   test('writing a public prop calls its setter function', () => {
-    const obj = {};
+    const obj: any = {};
     utils.addPublicProp(obj, propName, mockGetter, mockSetter);
     obj[propName] = value;
     expect(mockSetter.mock.calls.length).toBe(1);
   });
 
   test('a public prop cannot be deleted', () => {
-    const obj = {};
+    const obj: any = {};
     utils.addPublicProp(obj, propName, mockGetter, mockSetter);
     expect(() => {
       delete obj[propName];

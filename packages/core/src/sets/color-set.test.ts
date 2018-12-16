@@ -1,12 +1,18 @@
-import Colors from './colors';
-import Color from '../tokens/color';
+import ColorSet from './color-set';
+import ColorToken from '../tokens/color-token';
 import Token from '../base/token';
 
-const colors = new Colors();
 const colorJson = { id: 'red', color: '#333333' };
-const color = new Color(colorJson);
 
 describe('Core Colors functionality', () => {
+  let colors: ColorSet;
+  let color: ColorToken;
+
+  beforeEach(() => {
+    colors = new ColorSet();
+    color = new ColorToken(colorJson);
+  });
+
   test('Adding color tokens works', () => {
     colors.add(color);
     expect(colors.has(color)).toBe(true);
@@ -15,13 +21,13 @@ describe('Core Colors functionality', () => {
   test('Adding other tokens throws a TypeError', () => {
     const notColor = new Token({ id: 'foo' });
     expect(() => {
-      colors.add(notColor);
+      colors.add(notColor as ColorToken);
     }).toThrow(TypeError);
   });
 
   test('Parsing an array of color data works', () => {
     const colorArray = [colorJson];
-    const parsedColors = new Colors(colorArray);
+    const parsedColors = new ColorSet(colorArray);
     expect(parsedColors.size).toBe(colorArray.length);
   });
 });

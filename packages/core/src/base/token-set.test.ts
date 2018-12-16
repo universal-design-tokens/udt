@@ -3,8 +3,20 @@ import Token from './token';
 import { idToReference } from './reference-utils';
 import { UdtParseError } from './errors';
 
+function acceptAnyToken(token: any): token is Token {
+  return token instanceof Token;
+}
+
+function tokenFromData(data: any) {
+  return new Token(data);
+}
+
 describe('Core TokenSet functionality', () => {
-  const tokenSet = new TokenSet();
+  let tokenSet: TokenSet<Token>;
+
+  beforeEach(() => {
+    tokenSet = new TokenSet(acceptAnyToken, tokenFromData);
+  });
 
   test('TokenSet is initially empty', () => {
     expect(tokenSet.size).toBe(0);
@@ -12,7 +24,7 @@ describe('Core TokenSet functionality', () => {
 
   test('Adding something other than a token throws a TypeError', () => {
     expect(() => {
-      tokenSet.add(42);
+      tokenSet.add((42 as any) as Token);
     }).toThrow(TypeError);
   });
 
@@ -167,11 +179,19 @@ describe('TokenSet with custom type checking', () => {
   class TestToken extends Token {}
   class OtherToken extends Token {}
 
-  function isTestToken(token) {
+  let tokenSet: TokenSet<TestToken>;
+
+  function isTestToken(token: any): token is TestToken {
     return token instanceof TestToken;
   }
 
-  const tokenSet = new TokenSet(isTestToken);
+  function parseTestToken(data: any): TestToken {
+    return new TestToken(data);
+  }
+
+  beforeEach(() => {
+    tokenSet = new TokenSet(isTestToken, parseTestToken);
+  });
 
   test('Adding a valid token works', () => {
     const token = new TestToken({ id: 'test' });
@@ -187,10 +207,6 @@ describe('TokenSet with custom type checking', () => {
 });
 
 describe('Parsing token sets', () => {
-  function acceptAll() {
-    return true;
-  }
-
   const goodSetData = [
     {
       id: 'token1',
@@ -205,18 +221,18 @@ describe('Parsing token sets', () => {
   tokenParseMockFn.mockReturnValue(new Token({ id: 'foo' }));
 
   test('Parsing valid data works', () => {
-    const tokenSet = new TokenSet(acceptAll, goodSetData);
+    const tokenSet = new TokenSet(acceptAnyToken, tokenFromData, goodSetData);
     expect(tokenSet.size).toBe(goodSetData.length);
   });
 
   test('Parsing a non-array throws a UdtParseError', () => {
     expect(() => {
-      new TokenSet(acceptAll, 'foo'); // eslint-disable-line no-new
+      new TokenSet(acceptAnyToken, tokenFromData, 'foo'); // eslint-disable-line no-new
     }).toThrow(UdtParseError);
   });
 
   test('Custom tokenFromDataFn get called when parsing', () => {
-    new TokenSet(acceptAll, goodSetData, tokenParseMockFn); // eslint-disable-line no-new
+    new TokenSet(acceptAnyToken, tokenParseMockFn, goodSetData); // eslint-disable-line no-new
     expect(tokenParseMockFn.mock.calls.length).toBe(goodSetData.length);
   });
 });

@@ -1,6 +1,6 @@
-import path from 'path';
+import * as path from 'path';
 import File from './file';
-import Colors from './sets/colors';
+import ColorSet from './sets/color-set';
 import Token from './base/token';
 import DeferredReference from './base/deferred-reference';
 import { idToReference, escapeStringValue } from './base/reference-utils';
@@ -22,16 +22,16 @@ const okTestData = {
 describe('Core File functionality', () => {
   test('Can be constructed from empty data', () => {
     const file = new File({});
-    expect(file.colors).toBeInstanceOf(Colors);
+    expect(file.colors).toBeInstanceOf(ColorSet);
   });
 
   test('Can be constructed from valid data', () => {
     const file = new File(okTestData);
-    expect(file.colors).toBeInstanceOf(Colors);
+    expect(file.colors).toBeInstanceOf(ColorSet);
   });
 
   test('Assigning a new Colors set works', () => {
-    const colors = new Colors(okTestData.colors);
+    const colors = new ColorSet(okTestData.colors);
     const file = new File({});
     file.colors = colors;
     expect(file.colors).toBe(colors);

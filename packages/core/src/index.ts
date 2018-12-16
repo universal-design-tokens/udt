@@ -1,2 +1,2 @@
 export { default as File } from './file';
-export { default as Color } from './tokens/color';
+export { default as ColorToken } from './tokens/color-token';

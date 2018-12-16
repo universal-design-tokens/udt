@@ -1,15 +1,21 @@
-import Color from './color';
+import ColorToken from './color-token';
 import Token from '../base/token';
 
 const colorId = 'red';
 const colorValue = '#ff0000';
-const colorToken = new Color({ id: colorId, color: colorValue });
 
 const otherColorId = 'green';
 const otherColorValue = '#00ff00';
-const otherColorToken = new Color({ id: otherColorId, color: otherColorValue });
 
 describe('Core color functionality', () => {
+  let colorToken: ColorToken;
+  let otherColorToken: ColorToken;
+
+  beforeEach(() => {
+    colorToken = new ColorToken({ id: colorId, color: colorValue });
+    otherColorToken = new ColorToken({ id: otherColorId, color: otherColorValue });
+  });
+
   test('color initialises ID correctly', () => {
     expect(colorToken.id).toBe(colorId);
   });
@@ -26,21 +32,21 @@ describe('Core color functionality', () => {
   test('setting other token type as color value throws a TypeError', () => {
     const token = new Token({ id: 'foo' });
     expect(() => {
-      otherColorToken.color = token;
+      otherColorToken.color = token as ColorToken;
     }).toThrow(TypeError);
   });
 
   test('initialising without color value throws a TypeError', () => {
     expect(() => {
       // eslint-disable-next-line no-new
-      new Color({ id: colorId });
+      new ColorToken({ id: colorId });
     }).toThrow(TypeError);
   });
 
-  test('initialising with an invalide colour value throws a TypeError', () => {
+  test('initialising with an invalid colour value throws a TypeError', () => {
     expect(() => {
       // eslint-disable-next-line no-new
-      new Color({ id: colorId, color: 'not a colour' });
+      new ColorToken({ id: colorId, color: 'not a colour' });
     }).toThrow(TypeError);
   });
 });
