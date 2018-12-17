@@ -1,4 +1,4 @@
-const { File, Color } = require('@udt/core');
+const { File, ColorToken } = require('@udt/core');
 
 // Parse an existing UDT file
 File.load('../core/test/data/colors.udt').then((udtFile) => {
@@ -10,7 +10,7 @@ File.load('../core/test/data/colors.udt').then((udtFile) => {
   console.groupEnd();
 
   // Programatically make a new color token
-  const magenta = new Color({
+  const magenta = new ColorToken({
     id: 'magenta',
     name: 'Magnificent Magenta',
     color: '#ffff00',
@@ -26,7 +26,7 @@ File.load('../core/test/data/colors.udt').then((udtFile) => {
 
   // Make a new color token that references magenta
   // for its value (so, an alias or "decision" token)
-  const magentaAlias = new Color({
+  const magentaAlias = new ColorToken({
     id: 'maglias',
     color: magenta,
   });
