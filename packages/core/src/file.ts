@@ -3,6 +3,7 @@ import { promisify } from 'util';
 import ColorSet from './sets/color-set';
 import { addPrivateProp, addPublicProp } from './base/utils';
 import { isReference, unescapeStringValue } from './base/reference-utils';
+import Token from './base/token';
 import DeferredReference from './base/deferred-reference';
 import { UdtParseError } from './base/errors';
 
@@ -46,16 +47,16 @@ class File {
     this.colors = new ColorSet(colors);
   }
 
-  findTokenByRef(tokenRef: string) {
+  findTokenByRef(tokenRef: string): Token | null {
     return this.colors.findTokenByRef(tokenRef);
   }
 
-  static _getRefDeferrerFn(deferredRefs: DeferredReference[]) {
+  static _getRefDeferrerFn(deferredRefs: DeferredReference<Token>[]) {
     return (key: any, jsonValue: any) => {
       let dataValue = jsonValue;
       if (typeof jsonValue === 'string') {
         if (isReference(jsonValue)) {
-          const defRef = new DeferredReference(jsonValue);
+          const defRef = new DeferredReference<Token>(jsonValue);
           deferredRefs.push(defRef);
           dataValue = defRef;
         } else {
@@ -67,7 +68,7 @@ class File {
   }
 
   static parse(udtJsonString: string) {
-    const deferredRefs: DeferredReference[] = [];
+    const deferredRefs: DeferredReference<Token>[] = [];
     const refDeferrerFn = File._getRefDeferrerFn(deferredRefs);
     const file = new File(JSON.parse(udtJsonString, refDeferrerFn));
     deferredRefs.forEach((defRef) => {

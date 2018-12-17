@@ -2,6 +2,7 @@ import Property from './property';
 import { addPrivateProp, addPublicProp } from './utils';
 import { idToReference, escapeStringValue } from './reference-utils';
 import { UdtParseError } from './errors';
+import DeferredReference from './deferred-reference';
 
 const idRegex = /^\w[-_\w\d]*$/;
 
@@ -134,7 +135,7 @@ export default class Token {
    * `undefined`. In the event that it is neither, a `TypeError` will
    * be thrown.
    */
-  public description?: string | Token;
+  public description?: string | Token | DeferredReference<Token>;
 
   /**
    * Constructs a token object from a JSON object.
@@ -251,18 +252,23 @@ export default class Token {
     addPublicProp(
       this,
       propName,
-      (): V | T => this._props[propName].getValue() as V,
-      (value: V | T) => {
+      (): V => this._props[propName].getValue() as V,
+      (value: V | T | DeferredReference<T>) => {
         const prop = this._props[propName];
-        if (refCheckFn(value)) {
-          // Reference to another token
-          prop.setReference(value);
-        }
-        else if (valueCheckerFn(value)) {
-          prop.setValue(value);
+        if (value instanceof DeferredReference) {
+          value.prop = prop;
         }
         else {
-          throw new TypeError(`"${value}" is not a valid value or token reference for property ${propName}.`);
+          if (refCheckFn(value)) {
+            // Reference to another token
+            prop.setReference(value);
+          }
+          else if (valueCheckerFn(value)) {
+            prop.setValue(value);
+          }
+          else {
+            throw new TypeError(`"${value}" is not a valid value or token reference for property ${propName}.`);
+          }
         }
       },
     );
@@ -286,8 +292,12 @@ export default class Token {
    *                  token should be retrieved.
    */
   getReferencedToken(propName: string) {
+    if (!Object.keys(this._props).includes(propName)) {
+      throw new RangeError(`"${propName}" is not a known referencable property of this token type.`);
+    }
+
     const prop = this._props[propName];
-    return prop !== undefined ? prop.getReference() : undefined;
+    return prop.getReference();
   }
 
   /**

@@ -20,14 +20,36 @@ const okTestData = {
 };
 
 describe('Core File functionality', () => {
-  test('Can be constructed from empty data', () => {
-    const file = new File({});
+  test('Can be constructed', () => {
+    const file = new File();
     expect(file.colors).toBeInstanceOf(ColorSet);
   });
 
   test('Can be constructed from valid data', () => {
     const file = new File(okTestData);
     expect(file.colors).toBeInstanceOf(ColorSet);
+  });
+
+  test('Throws a UdtParseError when constructed from an array', () => {
+    expect(() => {
+      new File([]);
+    }).toThrow(UdtParseError);
+  });
+
+  test('Throws a UdtParseError when constructed from non-object data', () => {
+    expect(() => {
+      new File(42);
+    }).toThrow(UdtParseError);
+  });
+
+  test('Throws a UdtParseError when constructed from data with unsupported properties', () => {
+    const brokenData = Object.assign({
+      unsupportedProp: 666
+    }, okTestData);
+
+    expect(() => {
+      new File(brokenData);
+    }).toThrow(UdtParseError);
   });
 
   test('Assigning a new Colors set works', () => {
@@ -40,7 +62,7 @@ describe('Core File functionality', () => {
   test('Assigning non-Colors throws a TypeError', () => {
     const file = new File({});
     expect(() => {
-      file.colors = 'bad';
+      file.colors = ('bad' as any) as ColorSet;
     }).toThrow(TypeError);
   });
 });
@@ -53,7 +75,7 @@ describe('Finding tokens', () => {
     const foundToken = file.findTokenByRef(searchRef);
     expect(foundToken).not.toBeNull();
     expect(foundToken).toBeInstanceOf(Token);
-    expect(foundToken.id).toBe(searchId);
+    expect((foundToken as Token).id).toBe(searchId);
   });
 
   test('Searching for a non-existing token returns null', () => {
@@ -69,13 +91,13 @@ describe('Internal _getRefDeferrerFn() helper', () => {
   const ignoredKey = 'ignored';
 
   test('Returns a function', () => {
-    const defRefs = [];
+    const defRefs: DeferredReference<Token>[] = [];
     const refDefFn = File._getRefDeferrerFn(defRefs);
     expect(typeof refDefFn).toBe('function');
   });
 
   test('Returned reviver function passes through basic values', () => {
-    const defRefs = [];
+    const defRefs: DeferredReference<Token>[] = [];
     const refDefFn = File._getRefDeferrerFn(defRefs);
 
     const testString = 'testString';
@@ -90,7 +112,7 @@ describe('Internal _getRefDeferrerFn() helper', () => {
   });
 
   test('Returned reviver function unescapes escaped strings', () => {
-    const defRefs = [];
+    const defRefs: DeferredReference<Token>[] = [];
     const refDefFn = File._getRefDeferrerFn(defRefs);
 
     const stringThatNeedsEscaping = '\\starts with special escape char';
@@ -102,7 +124,7 @@ describe('Internal _getRefDeferrerFn() helper', () => {
   });
 
   test('Returned reviver function returns and pushes deferred reference', () => {
-    const defRefs = [];
+    const defRefs: DeferredReference<Token>[] = [];
     const refDefFn = File._getRefDeferrerFn(defRefs);
 
     const testId = 'test-id';

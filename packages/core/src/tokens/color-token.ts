@@ -1,4 +1,5 @@
 import Token from '../base/token';
+import DeferredReference from '../base/deferred-reference';
 
 const rbgHexRegex = /^#([a-fA-F\d]{6})$/;
 
@@ -33,7 +34,7 @@ export default class ColorToken extends Token {
    * it is a sutiable color string value or another `ColorToken` instance.
    * In the event that it is neither, a `TypeError` will be thrown.
    */
-  public color: string | ColorToken;
+  public color: string | ColorToken  | DeferredReference<ColorToken>;
 
   /**
    * Constructs a color token from a JSON object.

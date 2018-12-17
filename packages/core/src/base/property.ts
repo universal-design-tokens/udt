@@ -1,3 +1,4 @@
+import Referencer from './referencer';
 
 /**
  * Function that, given an object will retrieve a Property instance
@@ -10,7 +11,7 @@ export type PropertyGetter<V, T> = (object: T) => Property<V, T>;
  * A Property that may either have a value or reference to an object
  * which itself has a Property instance.
  */
-export default class Property<V, T> {
+export default class Property<V, T> implements Referencer<T> {
   private _value?: V;
   private _objRef?: T;
 

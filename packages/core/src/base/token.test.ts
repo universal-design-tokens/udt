@@ -81,6 +81,12 @@ describe('Core Token properties', () => {
       token.name = '';
     }).toThrow(TypeError);
   });
+
+  test('getting the referenced token for an unknown property throws a RangeError', () => {
+    expect(() => {
+      token.getReferencedToken('unknown');
+    }).toThrow(RangeError);
+  });
 });
 
 
@@ -144,6 +150,11 @@ describe('Token description', () => {
     token.description = tokenDescription;
     token2.description = token;
     expect(token2.getReferencedToken(descriptionPropName)).toBe(token);
+  });
+
+  test('getting referenced token when non has been set returns undefined', () => {
+    token.description = tokenDescription;
+    expect(token.getReferencedToken(descriptionPropName)).toBeUndefined();
   });
 
   test('setting self as referenced token throws an Error', () => {
