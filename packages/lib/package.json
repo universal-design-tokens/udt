@@ -1,5 +1,5 @@
 {
-  "name": "@udt/core",
+  "name": "@udt/lib",
   "version": "0.1.0",
   "description": "Library for parsing, manipulating and serialising design token data in the UDT (Universal Design Tokens) format",
   "main": "lib/index.js",

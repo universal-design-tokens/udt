@@ -1,7 +1,7 @@
-const { File, ColorToken } = require('@udt/core');
+const { File, ColorToken } = require('@udt/lib');
 
 // Parse an existing UDT file
-File.load('../core/test/data/colors.udt').then((udtFile) => {
+File.load('../lib/test/data/colors.udt').then((udtFile) => {
   // Print out its color tokens
   console.group('Initial colors:');
   for (const color of udtFile.colors) {
