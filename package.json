@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt-js#readme",
   "devDependencies": {
-    "lerna": "^3.4.3"
+    "lerna": "^3.8.0"
   }
 }
