@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/universal-design-tokens/udt-js.git"
+    "url": "git+https://github.com/universal-design-tokens/udt.git"
   },
   "keywords": [
     "udt",
@@ -25,9 +25,9 @@
   "author": "James Nash (http://cirrus.twiddles.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/universal-design-tokens/udt-js/issues"
+    "url": "https://github.com/universal-design-tokens/udt/issues"
   },
-  "homepage": "https://github.com/universal-design-tokens/udt-js#readme",
+  "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/lib#readme",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
