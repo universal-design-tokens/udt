@@ -1,6 +1,9 @@
 ![UDT logo](http://udt.design/udt-logo.svg)
 
 # Universal Design Tokens (UDT)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/universal-design-tokens/udt.svg)](https://greenkeeper.io/)
+
 Universal Design Tokens (UDT) is an open-standard file format for expressing design token data.
 
 ## Packages
