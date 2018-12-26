@@ -4,9 +4,7 @@
   "description": "The Universal Design Tokens (UDT) specification",
   "main": "index.js",
   "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/universal-design-tokens/udt.git"
