@@ -5,6 +5,7 @@
   "description": "Monorepo for UDT spec, reference JS lib and tools.",
   "main": "index.js",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "build": "lerna run build",
