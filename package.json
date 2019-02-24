@@ -29,6 +29,6 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "devDependencies": {
-    "lerna": "^3.8.0"
+    "lerna": "^3.13.0"
   }
 }
