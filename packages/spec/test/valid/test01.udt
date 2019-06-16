@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schemas/v0.1.0/udt-schema.json",
+  "description": "This is a token set",
+  "type": "color",
+  "tokens": {
+    "color 1": {
+      "value": "#123456"
+    },
+    "color 2": {
+      "value": "#123456",
+      "description": "What a lovely color!"
+    },
+    "color 3": {
+      "id": "color3",
+      "value": "#123456"
+    },
+    "other set": {
+       "nested color 1": {
+        "value": "#654321"
+      },
+       "nested color 2": {
+        "value": "#654321"
+      },
+      "token array": [
+        {
+      "value": "#123abc"
+        }
+      ],
+      "token array object": {
+        "tokens": [
+          {
+            "name": "token",
+              "value": "#123456"
+          }
+        ]
+      }
+    }
+  }
+}

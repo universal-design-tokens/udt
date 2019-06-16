@@ -1,0 +1,279 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://udt.design/schemas/v0.1.0/udt-schema.json",
+
+  "definitions": {
+    "tokenReference": {
+      "$comment": "Some of the other types can reference another token or property of another token (depending on the context).",
+      "type": "string",
+      "pattern": "^@"
+    },
+
+    "valueEscapedString": {
+      "$comment": "For values that can be a token reference or a string, the string may need to be escaped to disambiguate it from a token reference. If the string value begins with an '@' character, then it must be escaped using a backslash ('\\@'). Other '@' characters in the string do not need to be escaped in this way.",
+      "type": "string",
+      "pattern": "^(\\@|[^@])"
+    },
+
+    "valueReferenceOrString": {
+      "$comment": "Token reference or an escaped string",
+      "oneOf": [
+        {
+          "$ref": "#/definitions/tokenReference"
+        },
+        {
+          "$ref": "#/definitions/valueEscapedString"
+        }
+      ]
+    },
+
+    "descriptionProperty": {
+      "description": "A description of this design token, token set or token array.",
+      "$ref": "#/definitions/valueReferenceOrString"
+    },
+
+    "defaultTypeProperty": {
+      "description": "The default type of any nested design tokens.",
+      "type": "string",
+      "enum": ["color"]
+    },
+
+    "commonProperties": {
+      "$comment": "Properties shared by design tokens, token sets and token arrays.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The name of this design token, token set or token array.",
+          "type": "string"
+        },
+
+        "description": {
+          "$ref": "#/definitions/descriptionProperty"
+        }
+      }
+    },
+
+    "commonSetAndArrayProperties": {
+      "$comment": "Additional properties shared token sets and token arrays.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/commonProperties"
+        },
+        {
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/defaultTypeProperty"
+            }
+          }
+        }
+      ]
+    },
+
+    "commonTokenProperties": {
+      "$comment": "Additional properties shared by all design tokens.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/commonProperties"
+        },
+        {
+          "properties": {
+            "id": {
+              "description": "A unique identifier for this design token.",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+
+    "jsonToken": {
+      "title": "A JSON design token",
+      "description": "A design token that can have arbitrary JSON data as its value. Useful for arbitrary, platform-agnostic data. Can also be used as a means of prototyping new types of design tokens for inclusion in future UDT spec versions",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/commonTokenProperties"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "json"
+            },
+            "value": {
+              "oneOf": [
+                {
+                  "$comment": "Intentionally omitting string from this list, as it's covered by valueReferenceOrString below.",
+                  "type": ["object", "array", "number", "boolean", "null"]
+                },
+                {
+                  "$ref": "#/definitions/valueReferenceOrString"
+                },
+                {
+                  "$ref": "#/definitions/tokenReference"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "properties": {
+        "name": {},
+        "description": {},
+        "id": {},
+        "type": {},
+        "value": {}
+      },
+      "required": ["value"],
+      "additionalProperties": false
+    },
+
+    "colorHexValue": {
+      "title": "A hex color value",
+      "description": "A 24bit RGB color value expressed as a hexadecimal triplet, just like in CSS. Note, future versions of UDT may extend this value type to also allow for other color representations.",
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+
+    "colorToken": {
+      "title": "A color design token",
+      "description": "A named color with an optional description text.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/commonTokenProperties"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "color"
+            },
+            "value": {
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/colorHexValue"
+                },
+                {
+                  "$ref": "#/definitions/tokenReference"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "properties": {
+        "name": {},
+        "description": {},
+        "id": {},
+        "type": {},
+        "value": {}
+      },
+      "required": ["value"],
+      "additionalProperties": false
+    },
+
+    "tokenArray": {
+      "description": "An array of design tokens.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/anyTokenOrSetOrArray"
+      }
+    },
+
+    "tokenArrayObject": {
+      "description": "An object containing an array of design tokens.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/commonSetAndArrayProperties"
+        }
+      ],
+      "properties": {
+        "name": {},
+        "description": {},
+        "type": {},
+        "tokens": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/tokenArray"
+            }
+          ]
+        }
+      },
+      "required": [
+        "tokens"
+      ],
+      "additionalProperties": false
+    },
+
+    "tokenSet": {
+      "description": "An unordered set of design tokens.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/commonSetAndArrayProperties"
+        }
+      ],
+      "properties": {
+        "name": {},
+        "description": {},
+        "type": {}
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/anyTokenOrSetOrArray"
+      }
+    },
+
+    "anyToken": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/colorToken"
+        },
+        {
+          "$ref": "#/definitions/jsonToken"
+        }
+      ]
+    },
+
+    "anyTokenOrSetOrArray": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/tokenArray"
+        },
+        {
+          "$ref": "#/definitions/tokenArrayObject"
+        },
+        {
+          "$ref": "#/definitions/tokenSet"
+        },
+        {
+          "$ref": "#/definitions/anyToken"
+        }
+      ]
+    }
+  },
+
+  "title": "UDT file",
+  "description": "A file containing one or more universal design tokens.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "The specific UDT JSON schema version used by this file."
+    },
+    "description": {
+      "$ref": "#/definitions/descriptionProperty"
+    },
+    "type": {
+      "$ref": "#/definitions/defaultTypeProperty"
+    },
+    "tokens": {
+      "$ref": "#/definitions/anyTokenOrSetOrArray"
+    }
+  },
+  "required": [
+    "$schema",
+    "tokens"
+  ],
+  "additionalProperties": false
+}

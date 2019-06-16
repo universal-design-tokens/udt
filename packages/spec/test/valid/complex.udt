@@ -1,0 +1,76 @@
+{
+  "$schema": "../../schemas/v0.1.0/udt-schema.json",
+  "tokens": {
+    "token1": {
+      "value": "token 1 value"
+    },
+    "token2": {
+      "value": "token 2 value"
+    },
+    "token set 1": {
+      "token3": {
+        "value": "token 3 value"
+      },
+      "token4": {
+        "value": "token 4 value"
+      }
+    },
+    "token array 1": [
+      {
+        "name": "token5",
+        "value": "token 5 value"
+      },
+      {
+        "name": "token6",
+        "value": "token 6 value"
+      },
+      {
+        "name": "token7",
+        "value": "token 7 value"
+      }
+    ],
+    "token set 2": {
+      "token set 3": {
+        "token set 4": {
+          "token8": {
+            "value": "token 8 value"
+          },
+          "token9": {
+            "value": "token 9 value"
+          }
+        },
+        "token10": {
+          "value": "token 10 value"
+        },
+        "token11": {
+          "value": "token 11 value"
+        },
+        "token12": {
+          "value": "token 12 value"
+        },
+        "ignored": {
+          "name": "token13",
+          "value": "token 13 value"
+        }
+      }
+    },
+    "token array 2": {
+      "tokens": [
+        {
+          "name": "token14",
+          "value": "token 14 value"
+        },
+        {
+          "name": "token15",
+          "value": "token 15 value"
+        },
+        {
+          "name": "token set 5",
+          "token16": {
+            "value": "token 16 value"
+          }
+        }
+      ]
+    }
+  }
+}
