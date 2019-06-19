@@ -1,0 +1,10 @@
+{
+  "extends": "../../shared-configs/tsconfig-base.json",
+  "compilerOptions": {
+    "declaration": true,
+    "resolveJsonModule": true
+  },
+  "files": [
+    "index.ts"
+  ]
+}

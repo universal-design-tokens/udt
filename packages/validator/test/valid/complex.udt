@@ -1,5 +1,5 @@
 {
-  "$schema": "../../schemas/v0.1.0/udt-schema.json",
+  "$schema": "../../../spec/schemas/dev/udt-schema.json",
   "tokens": {
     "token1": {
       "value": "token 1 value"

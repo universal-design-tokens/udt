@@ -1,6 +1,5 @@
 # Build output
-index.js
-index.d.ts
+dist/
 
 # Logs
 logs
