@@ -1,4 +1,6 @@
-# UDT format (DRAFT)
+# ~UDT format~ (OUTDATED DRAFT)
+
+**Warning:** This is an outdated draft of the UDT spec that the current `@udt/lib` code was based on. The [UDT spec](../../spec/README.md) is currently evolving in a different direction and, once it stabilises a bit, this library will be updated accordingly.
 
 ## Basics
 UDT is essentially a JSON Schema. Therefore every UDT file is a JSON file, but they follow a well-defined structure.
