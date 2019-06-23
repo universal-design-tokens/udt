@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://udt.design/schemas/v0.1.0/udt-schema.json",
+  "$id": "http://udt.design/schemas/dev/udt-schema.json",
 
   "definitions": {
     "tokenReference": {

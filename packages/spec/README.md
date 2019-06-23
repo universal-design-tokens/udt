@@ -3,6 +3,8 @@
 # UDT Specification
 The Universal Design Tokens (UDT) specification.
 
+* Read the [current UDT specification](./docs/README.md)
+
 ## JSON schemas
 The [JSON schemas](http://json-schema.org/) for the current, in-development version and any published versions of the UDT specification are in the `schemas/` directory:
 
