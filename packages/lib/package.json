@@ -6,8 +6,8 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "clean": "del lib/*",
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "build": "tsc -p tsconfig.build.json",
+    "watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src/",
     "test": "jest --coverage"
   },

@@ -1,13 +1,6 @@
 {
   "extends": "../../shared-configs/tsconfig-base.json",
-  "compilerOptions": {
-    "outDir": "lib/",
-    "declaration": true
-  },
   "include": [
     "src/"
-  ],
-  "exclude": [
-    "**/*.test.ts"
   ]
 }
