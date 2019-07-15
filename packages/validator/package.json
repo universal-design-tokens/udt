@@ -31,11 +31,11 @@
   },
   "dependencies": {
     "@udt/spec": "^0.1.0",
-    "ajv": "^6.10.0"
+    "ajv": "^6.10.2"
   },
   "devDependencies": {
-    "@types/node": "^12.0.8",
+    "@types/node": "^12.6.3",
     "del-cli": "^2.0.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.3"
   }
 }
