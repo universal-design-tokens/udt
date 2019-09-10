@@ -33,9 +33,9 @@
     "npm": ">= 5.6.0"
   },
   "devDependencies": {
-    "@types/node": "^12.6.3",
-    "del-cli": "^2.0.0",
-    "typescript": "^3.5.3"
+    "@types/node": "^12.7.4",
+    "del-cli": "^3.0.0",
+    "typescript": "^3.6.3"
   },
   "dependencies": {
     "@udt/validator": "^0.1.0"
