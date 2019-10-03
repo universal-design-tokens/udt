@@ -9,7 +9,9 @@
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "build": "lerna run build",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -30,5 +32,9 @@
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "devDependencies": {
     "lerna": "^3.16.4"
+  },
+  "snyk": true,
+  "dependencies": {
+    "snyk": "^1.230.5"
   }
 }
