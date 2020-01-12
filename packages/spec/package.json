@@ -27,12 +27,12 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/spec#readme",
   "engines": {
-    "node": ">= 8.9.4",
-    "npm": ">= 5.6.0"
+    "node": ">= 10",
+    "npm": ">= 6"
   },
   "devDependencies": {
-    "@types/node": "^13.1.0",
+    "@types/node": "^10.17.3",
     "del-cli": "^3.0.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.7.4"
   }
 }

@@ -26,16 +26,16 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/validator#readme",
   "engines": {
-    "node": ">= 8.9.4",
-    "npm": ">= 5.6.0"
+    "node": ">= 10",
+    "npm": ">= 6"
   },
   "dependencies": {
     "@udt/spec": "^0.1.0",
     "ajv": "^6.10.2"
   },
   "devDependencies": {
-    "@types/node": "^12.7.4",
+    "@types/node": "^10.17.3",
     "del-cli": "^3.0.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.4"
   }
 }

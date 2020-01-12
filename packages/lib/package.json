@@ -29,18 +29,18 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/lib#readme",
   "devDependencies": {
-    "@types/jest": "^24.0.18",
-    "@types/node": "^13.1.0",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^10.17.3",
     "del-cli": "^3.0.0",
-    "eslint": "^6.3.0",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.20.0",
     "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.6.3"
+    "ts-jest": "^24.3.0",
+    "typescript": "^3.7.4"
   },
   "engines": {
-    "node": ">= 8.9.4",
-    "npm": ">= 5.6.0"
+    "node": ">= 10",
+    "npm": ">= 6"
   }
 }
