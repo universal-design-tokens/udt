@@ -8,5 +8,6 @@
         "packages/spec/package.json"
       ]
     }
-  }
+  },
+  "ignore": ["@types/node"]
 }
