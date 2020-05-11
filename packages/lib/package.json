@@ -9,7 +9,9 @@
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src/",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -42,5 +44,9 @@
   "engines": {
     "node": ">= 10",
     "npm": ">= 6"
+  },
+  "snyk": true,
+  "dependencies": {
+    "snyk": "^1.320.2"
   }
 }
