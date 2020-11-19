@@ -30,14 +30,14 @@
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/lib#readme",
   "devDependencies": {
     "@types/jest": "^26.0.15",
-    "@types/node": "^10.17.3",
-    "del-cli": "^3.0.0",
+    "@types/node": "^10.17.46",
+    "del-cli": "^3.0.1",
     "eslint": "^7.14.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
     "jest": "^26.0.1",
     "ts-jest": "^26.0.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 10",

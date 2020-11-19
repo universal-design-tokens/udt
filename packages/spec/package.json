@@ -31,8 +31,8 @@
     "npm": ">= 6"
   },
   "devDependencies": {
-    "@types/node": "^10.17.3",
-    "del-cli": "^3.0.0",
-    "typescript": "^3.7.4"
+    "@types/node": "^10.17.46",
+    "del-cli": "^3.0.1",
+    "typescript": "^3.9.7"
   }
 }
