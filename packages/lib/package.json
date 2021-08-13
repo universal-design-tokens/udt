@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/lib#readme",
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.1",
     "@types/node": "^10.17.60",
     "del-cli": "^3.0.1",
     "eslint": "^7.26.0",
