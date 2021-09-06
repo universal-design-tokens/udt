@@ -30,5 +30,12 @@
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "workspaces": [
+    "./packages/*"
+  ],
+  "engines": {
+    "node": ">= 12",
+    "npm": ">= 7"
   }
 }
