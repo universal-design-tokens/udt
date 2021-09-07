@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@udt/spec": "^0.1.0",
-    "ajv": "^6.12.6"
+    "ajv": "^8.6.2"
   },
   "devDependencies": {
     "@types/node": "^12.20.23",
