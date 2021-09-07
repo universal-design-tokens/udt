@@ -1,12 +1,13 @@
-import Ajv from 'ajv';
+import Ajv, { Options, ValidateFunction } from 'ajv';
+import addFormats from 'ajv-formats';
 import udtSpecInfos from '@udt/spec';
 import { readJsonFile } from './utils';
 
-const ajvOptions: Ajv.Options = {
+const ajvOptions: Options = {
   verbose: true,
-  format: 'full',
-  extendRefs: 'fail'
-}
+  validateFormats: true,
+  allowUnionTypes: true,
+};
 
 export async function validateUdtSchema() {
   const ajv = new Ajv(ajvOptions);
@@ -22,13 +23,13 @@ export async function validateUdtSchema() {
 }
 
 export async function getUdtValidator() {
-  const ajv = new Ajv(ajvOptions);
+  const ajv = addFormats(new Ajv(ajvOptions));
   const udtSchema = udtSpecInfos.dev.schema;
   return ajv.compile(udtSchema);
 }
 
 export class UdtValidator {
-  private _validateFn?: Ajv.ValidateFunction;
+  private _validateFn?: ValidateFunction;
 
   async validateUdtFile(filePath: string) {
     if (this._validateFn === undefined) {

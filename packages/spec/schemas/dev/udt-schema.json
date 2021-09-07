@@ -12,7 +12,7 @@
     "valueEscapedString": {
       "$comment": "For values that can be a token reference or a string, the string may need to be escaped to disambiguate it from a token reference. If the string value begins with an '@' character, then it must be escaped using a backslash ('\\@'). Other '@' characters in the string do not need to be escaped in this way.",
       "type": "string",
-      "pattern": "^(\\@|[^@])"
+      "pattern": "^(\\\\@|[^@])"
     },
 
     "valueReferenceOrString": {
@@ -60,6 +60,7 @@
           "$ref": "#/definitions/commonProperties"
         },
         {
+          "type": "object",
           "properties": {
             "type": {
               "$ref": "#/definitions/defaultTypeProperty"
@@ -76,6 +77,7 @@
           "$ref": "#/definitions/commonProperties"
         },
         {
+          "type": "object",
           "properties": {
             "id": {
               "description": "A unique identifier for this design token.",
@@ -95,6 +97,7 @@
           "$ref": "#/definitions/commonTokenProperties"
         },
         {
+          "type": "object",
           "properties": {
             "type": {
               "const": "json"
