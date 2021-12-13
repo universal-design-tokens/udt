@@ -2,6 +2,7 @@ import { TOMNode } from './tom-node';
 import { NodeWithChildren } from './node-with-children';
 import { DesignToken } from './design-token';
 import { isTokenData } from '../parser/utils';
+import { Type } from '../format/type';
 
 export type TokenOrGroup = DesignToken | Group;
 
@@ -94,6 +95,13 @@ export class Group extends TOMNode implements NodeWithChildren<TokenOrGroup> {
     return node;
   }
 
+  getInheritedType(): Type | undefined {
+    const ownType = this.type;
+    if (ownType === undefined && this.hasParent()) {
+      return this.getParent()!.getInheritedType();
+    }
+    return ownType;
+  }
 
 
   public [Symbol.iterator]() {

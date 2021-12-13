@@ -2,6 +2,7 @@ import { TOMNode } from "./tom-node";
 import { Type } from "../format/type";
 import { DesignTokenProps } from "../format/design-token-props";
 import { Extensions } from "../format/extensions";
+import { isReferenceValue, referenceToPath } from "./reference";
 
 export type TokenValue = string | number | boolean | object | null;
 
@@ -20,10 +21,51 @@ export class DesignToken extends TOMNode {
     this.extensions = extensions;
   }
 
+  public isAlias(): boolean {
+    return isReferenceValue(this.value);
+  }
+
+  public getNextReferencedToken(): DesignToken {
+    if (this.isAlias() && this.getParent()) {
+      const referencedNode = this.getTopParent()!.getNodeByPath(referenceToPath(this.value as string));
+      if (referencedNode instanceof DesignToken) {
+        return referencedNode;
+      }
+    }
+    throw new Error('Reference is invalid');
+  }
+
+  public getFinalReferencedToken(): DesignToken {
+    let nextToken: DesignToken = this;
+    while(nextToken.isAlias()) {
+      nextToken = nextToken.getNextReferencedToken();
+      if (nextToken === this) {
+        throw new Error(`Reference loop detected ("${this.name}"" references itself)`);
+      }
+    }
+    return nextToken;
+  }
+
+  public getValue(): TokenValue {
+    if (this.isAlias()) {
+      return this.getFinalReferencedToken().value;
+    }
+    return this.value;
+  }
 
   public getType(): Type {
-    const ownType = this.type;
-    if (ownType === undefined) {
+    let type = this.type;
+    if (type === undefined) {
+      // Is value a reference?
+      if (this.isAlias()) {
+        return this.getFinalReferencedToken().getType();
+      }
+
+      // Are we inheriting a type from parent group(s)
+      if (this.hasParent() && (type = this.getParent()!.getInheritedType()) !== undefined) {
+        return type;
+      }
+
       // Need to infer one of the JSON types from the value
       switch (typeof this.value) {
         case "string":
@@ -54,7 +96,7 @@ export class DesignToken extends TOMNode {
       }
     }
 
-    return ownType;
+    return type;
   }
 
   public toJSON(): object {
