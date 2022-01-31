@@ -1,20 +1,24 @@
-import { TOMNode } from './tom-node';
-import { NodeWithChildren } from './node-with-children';
+import { TOMNode, isValidName } from './tom-node';
+import { INodeWithChildren } from './interfaces/node-with-children';
 import { DesignToken } from './design-token';
 import { isTokenData } from '../parser/utils';
-import { Type } from '../format/type';
+import { Type } from './type';
 
 export type TokenOrGroup = DesignToken | Group;
 
-export class Group extends TOMNode implements NodeWithChildren<TokenOrGroup> {
+export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   #children: Set<TokenOrGroup>;
 
-  constructor(name: string, {type, description, ...children}: any = {}) {
-    super(name, type, { description });
+  constructor(name: string, {$type, $description, ...children}: any = {}) {
+    super(name, { $type, $description });
 
     this.#children = new Set();
 
     for (const name in children) {
+      if (!isValidName(name)) {
+        throw new Error(`${name} is not a valid group or token name.`);
+      }
+
       const data = children[name];
       if (isTokenData(data)) {
         this.addChild(new DesignToken(name, data));
@@ -95,10 +99,10 @@ export class Group extends TOMNode implements NodeWithChildren<TokenOrGroup> {
     return node;
   }
 
-  getInheritedType(): Type | undefined {
-    const ownType = this.type;
+  getType(): Type | undefined {
+    const ownType = this.getOwnType();
     if (ownType === undefined && this.hasParent()) {
-      return this.getParent()!.getInheritedType();
+      return this.getParent()!.getType();
     }
     return ownType;
   }
@@ -108,11 +112,21 @@ export class Group extends TOMNode implements NodeWithChildren<TokenOrGroup> {
     return this.#children.values();
   }
 
+  public isValid(): boolean {
+      for (const child of this) {
+        if (!child.isValid()) {
+          return false;
+        }
+      }
+      // All children must have been valid
+      return true;
+  }
+
   public toJSON(): object {
-    const childMap = [...this.#children].reduce<object>((prevChildMap, child) => {
-      (prevChildMap as any)[child.name] = child.toJSON();
+    const childMap = [...this.#children].reduce((prevChildMap, child) => {
+      prevChildMap[child.name] = child.toJSON();
       return prevChildMap;
-    }, {});
+    }, {} as any);
 
     return {
       ...(super.toJSON()),

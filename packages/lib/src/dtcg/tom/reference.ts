@@ -1,7 +1,7 @@
 
 const referenceRegex = /^\{[^\.\{\}]+(\.[^\.\{\}]+)*\}$/;
 
-export function isReferenceValue(value: any): boolean {
+export function isReferenceValue(value: any): value is string {
   return typeof value === 'string' && referenceRegex.test(value);
 }
 

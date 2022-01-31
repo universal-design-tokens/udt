@@ -30,7 +30,6 @@
     }
   },
   "group 2": {
-    "type": "dimension",
     "token 2-1": {
       "value": "1rem"
     }

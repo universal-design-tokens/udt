@@ -1,17 +1,19 @@
-import { Type } from "./format/type";
+import { Type } from "./tom/type";
 import { DesignToken } from "./tom/design-token";
 import { Group } from "./tom/group";
-import { DesignTokenFile } from "./tom/design-token-file";
+import { RootGroup } from "./tom/root-group";
 
 
 console.log('----- TOM --> JSON -----');
 
-const redToken = new DesignToken("red", {value: "#ff0000", type: Type.COLOR});
+const redToken = new DesignToken("red");
+redToken.setValue('#ff0000');
+redToken.setType(Type.COLOR);
 
 const colorGroup = new Group("color");
 colorGroup.addChild(redToken);
 
-const file = new DesignTokenFile('foo.tokens.json');
+const file = new RootGroup('foo.tokens.json');
 file.addChild(colorGroup);
 
 console.log(JSON.stringify(file, undefined, 2));

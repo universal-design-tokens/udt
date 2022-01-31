@@ -1,6 +1,6 @@
 import { Group } from "./group";
 
-export class DesignTokenFile extends Group {
+export class RootGroup extends Group {
 
 
   public getPath() {

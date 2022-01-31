@@ -1,7 +1,7 @@
-import { Type } from "./format/type";
+import { resolve } from 'path';
 import { DesignToken } from "./tom/design-token";
 import { Group } from "./tom/group";
-import { DesignTokenFile } from "./tom/design-token-file";
+import { RootGroup } from "./tom/root-group";
 import { readFileSync } from 'fs';
 import { TOMNode } from "./tom/tom-node";
 
@@ -13,7 +13,7 @@ function logTOMNodes(node: TOMNode, indent: string = '') {
     console.log(`${indent}  - is alias?: ${node.isAlias()}`);
   }
   else if (node instanceof Group) {
-    console.log(`${indent}* ${node instanceof DesignTokenFile ? 'File' : 'Group'} "${node.name}"`);
+    console.log(`${indent}* ${node instanceof RootGroup ? 'File' : 'Group'} "${node.name}"`);
     for (const childNode of node) {
       logTOMNodes(childNode, `  ${indent}`);
     }
@@ -31,12 +31,12 @@ function readJsonFile(path: string): any {
   return JSON.parse(readFileSync(path).toString());
 }
 
-function parseTokenFile(path: string): DesignTokenFile {
+function parseTokenFile(path: string): RootGroup {
   const data = readJsonFile(path);
-  return new DesignTokenFile(path, data);
+  return new RootGroup(path, data);
 }
 
-const parsedFile = parseTokenFile('./src/dtcg/examples/test.tokens.json');
+const parsedFile = parseTokenFile(resolve(__dirname, '../../src/dtcg/examples/draft-2/test.tokens.json'));
 
 logTOMNodes(parsedFile);
 
