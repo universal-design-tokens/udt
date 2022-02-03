@@ -27,28 +27,23 @@ export function isValidName(name: any): name is string {
  * @param type
  * @returns
  */
-function isValidType(type: any): type is Type {
+export function isValidType(type: any): type is Type {
   return typeof type === 'string' && allTypes.includes(type);
+}
+
+export interface TOMNodeCommonProps {
+  type?: Type;
+  description?: string;
 }
 
 export abstract class TOMNode {
   #parent?: ParentNode;
   #name: string;
-  #description?: string;
   #type?: Type;
+  #description?: string;
 
 
-  constructor(name: string, dtcgData?: any) {
-    const {
-      $description,
-      $type,
-      ...rest
-    } = dtcgData || {};
-
-    if (Object.keys(rest).length > 0) {
-      throw new Error(`Invalid props: ${Object.keys(rest).join(', ')}`);
-    }
-
+  constructor(name: string, {type, description}: TOMNodeCommonProps = {}) {
     if (isValidName(name)) {
       this.#name = name;
     }
@@ -57,10 +52,10 @@ export abstract class TOMNode {
     }
 
     // Inheritable properties use getXyz()/getOwnXyz()/setXyz() functions
-    this.setType($type);
+    this.setType(type);
 
     // Non-inheritable properties use getters/setters
-    this.description = $description;
+    this.description = description;
   }
 
   public get name(): string {
@@ -81,7 +76,7 @@ export abstract class TOMNode {
     return this.#type;
   }
 
-  public setType(type: any): void {
+  public setType(type: Type | undefined): void {
     if (isValidType(type) || type === undefined) {
       this.#type = type;
     }

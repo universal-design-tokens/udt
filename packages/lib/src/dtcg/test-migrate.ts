@@ -11,14 +11,15 @@ function isDraft1GroupData(data: any): boolean {
   return typeof data === 'object' && data !== null;
 }
 
-function parseToken(name: string, data: any, indent: string): DesignToken {
-  const token = new DesignToken(name);
+function parseToken(name: string, data: any): DesignToken {
   const {
     type,
     value,
     description,
     extensions
   } = data;
+
+  const token = new DesignToken(name, value);
 
   token.setType(type);
   token.setValue(value);
@@ -27,7 +28,7 @@ function parseToken(name: string, data: any, indent: string): DesignToken {
   return token;
 }
 
-function parseGroup(name: string, data: any, indent: string = ''): Group {
+function parseGroup(name: string, data: any): Group {
   const {
     description,
     ...children
@@ -39,10 +40,10 @@ function parseGroup(name: string, data: any, indent: string = ''): Group {
   for (const childName in children) {
     const childData = children[childName];
     if (isDraft1TokenData(childData)) {
-      group.addChild(parseToken(childName, childData, indent + '  '))
+      group.addChild(parseToken(childName, childData))
     }
     else if (isDraft1GroupData(childData)) {
-      group.addChild(parseGroup(childName, childData, indent + '  '));
+      group.addChild(parseGroup(childName, childData));
     }
     else {
       console.error(`${childData} is neither a token nor a group!`);

@@ -1,7 +1,6 @@
-import { TOMNode, isValidName } from './tom-node';
+import { TOMNode, TOMNodeCommonProps } from './tom-node';
 import { INodeWithChildren } from './interfaces/node-with-children';
 import { DesignToken } from './design-token';
-import { isTokenData } from '../parser/utils';
 import { Type } from './type';
 
 export type TokenOrGroup = DesignToken | Group;
@@ -9,24 +8,10 @@ export type TokenOrGroup = DesignToken | Group;
 export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   #children: Set<TokenOrGroup>;
 
-  constructor(name: string, {$type, $description, ...children}: any = {}) {
-    super(name, { $type, $description });
+  constructor(name: string, props: TOMNodeCommonProps = {}) {
+    super(name, props);
 
     this.#children = new Set();
-
-    for (const name in children) {
-      if (!isValidName(name)) {
-        throw new Error(`${name} is not a valid group or token name.`);
-      }
-
-      const data = children[name];
-      if (isTokenData(data)) {
-        this.addChild(new DesignToken(name, data));
-      }
-      else {
-        this.addChild(new Group(name, data));
-      }
-    }
   }
 
 

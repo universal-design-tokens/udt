@@ -1,4 +1,4 @@
-import { TOMNode } from "./tom-node";
+import { TOMNode, TOMNodeCommonProps } from "./tom-node";
 import { Type } from "./type";
 import { isReferenceValue, referenceToPath } from "./reference";
 
@@ -14,6 +14,10 @@ function isValidExtensions(extensions: any): extensions is Extensions {
   return typeof extensions === 'object' && extensions !== null && !Array.isArray(extensions);
 }
 
+export interface DesignTokenProps extends TOMNodeCommonProps {
+  extensions?: Extensions;
+}
+
 export class DesignToken extends TOMNode {
   #value: TokenValue;
   #extensions?: Extensions;
@@ -21,21 +25,21 @@ export class DesignToken extends TOMNode {
   /**
    * Constructs a new design token node.
    */
-  constructor(name: string, { $value, $extensions, ...restDtcgData }: any = { $value: null }) {
-    super(name, restDtcgData);
+  constructor(name: string, value: TokenValue, { extensions, ...commonProps }: DesignTokenProps = {} ) {
+    super(name, commonProps);
 
-    if (isValidValue($value)) {
-      this.#value = $value;
+    if (isValidValue(value)) {
+      this.#value = value;
     }
     else {
-      throw new Error(`${$value} is not a valid token value`);
+      throw new Error(`${value} is not a valid token value`);
     }
 
-    if (isValidExtensions($extensions) || $extensions === undefined) {
-      this.#extensions = $extensions;
+    if (isValidExtensions(extensions) || extensions === undefined) {
+      this.#extensions = extensions;
     }
     else {
-      throw new Error(`${$extensions} is not a valid extensions object`);
+      throw new Error(`${extensions} is not a valid extensions object`);
     }
   }
 

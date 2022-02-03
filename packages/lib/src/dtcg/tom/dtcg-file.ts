@@ -1,6 +1,10 @@
 import { Group } from "./group";
 
-export class RootGroup extends Group {
+export class DtcgFile extends Group {
+
+  constructor (props: any = {}) {
+    super('', props);
+  }
 
 
   public getPath() {
