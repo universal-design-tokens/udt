@@ -2,7 +2,7 @@ import { Type } from "./tom/type";
 import { DesignToken } from "./tom/design-token";
 import { Group } from "./tom/group";
 import { DtcgFile } from "./tom/dtcg-file";
-
+import { serializeDtcgFile } from './serializer/serialize-node';
 
 console.log('----- TOM --> JSON -----');
 
@@ -14,5 +14,5 @@ colorGroup.addChild(redToken);
 const file = new DtcgFile();
 file.addChild(colorGroup);
 
-console.log(JSON.stringify(file, undefined, 2));
+console.log(JSON.stringify(serializeDtcgFile(file), undefined, 2));
 

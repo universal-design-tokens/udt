@@ -161,13 +161,6 @@ export abstract class TOMNode {
     }
   }
 
-  public toJSON(): object {
-    return {
-      $type: this.#type,
-      $description: this.description,
-    }
-  }
-
   protected static _assignParent(child: TOMNode, parent: ParentNode) {
     child.#parent = parent;
   }

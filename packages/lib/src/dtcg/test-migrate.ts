@@ -1,7 +1,9 @@
 import { resolve } from 'path';
 import { DesignToken } from "./tom/design-token";
 import { Group } from "./tom/group";
+import { DtcgFile } from './tom/dtcg-file';
 import { readFileSync } from 'fs';
+import { serializeDtcgFile } from './serializer/serialize-node';
 
 function isDraft1TokenData(data: any): boolean {
   return typeof data === 'object' && data.value !== undefined;
@@ -28,15 +30,7 @@ function parseToken(name: string, data: any): DesignToken {
   return token;
 }
 
-function parseGroup(name: string, data: any): Group {
-  const {
-    description,
-    ...children
-  } = data;
-
-  const group = new Group(name);
-  group.description = description;
-
+function parseChildren(children: any, group: Group): void {
   for (const childName in children) {
     const childData = children[childName];
     if (isDraft1TokenData(childData)) {
@@ -49,23 +43,44 @@ function parseGroup(name: string, data: any): Group {
       console.error(`${childData} is neither a token nor a group!`);
     }
   }
+}
 
+function parseGroup(name: string, data: any): Group {
+  const {
+    description,
+    ...children
+  } = data;
+
+  const group = new Group(name);
+  group.description = description;
+  parseChildren(children, group);
   return group;
 }
 
+function parseFile(data: any): DtcgFile {
+  const {
+    description,
+    ...children
+  } = data;
+
+  const file = new DtcgFile();
+  file.description = description;
+  parseChildren(children, file);
+  return file;
+}
 
 function readJsonFile(path: string): any {
   return JSON.parse(readFileSync(path).toString());
 }
 
-function parseDraft1TokenFile(path: string): Group {
+function parseDraft1TokenFile(path: string): DtcgFile {
   const data = readJsonFile(path);
-  return parseGroup('', data);
+  return parseFile(data);
 }
 
 const parsedFile = parseDraft1TokenFile(resolve(__dirname, '../../src/dtcg/examples/draft-1/test.tokens.json'));
 
 console.log('----- DTCG Draft 1 --> TOM --> DTCG Draft 2 -----');
-console.log(JSON.stringify(parsedFile, undefined, 2));
+console.log(JSON.stringify(serializeDtcgFile(parsedFile), undefined, 2));
 
 

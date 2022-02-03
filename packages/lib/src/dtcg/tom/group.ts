@@ -107,16 +107,4 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
       return true;
   }
 
-  public toJSON(): object {
-    const childMap = [...this.#children].reduce((prevChildMap, child) => {
-      prevChildMap[child.name] = child.toJSON();
-      return prevChildMap;
-    }, {} as any);
-
-    return {
-      ...(super.toJSON()),
-
-      ...childMap,
-    };
-  }
 }

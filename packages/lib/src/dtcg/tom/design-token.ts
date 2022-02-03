@@ -139,12 +139,4 @@ export class DesignToken extends TOMNode {
       return true;
   }
 
-  public toJSON(): object {
-    return {
-      ...(super.toJSON()),
-
-      $value: this.#value,
-      $extensions: this.#extensions,
-    }
-  }
 }
