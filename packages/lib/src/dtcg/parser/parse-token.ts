@@ -1,5 +1,6 @@
 import { DesignToken } from "../tom/design-token";
 import { extractCommonProps } from "./extract-common-props";
+import { isJsonObject } from "./utils";
 
 export function parseToken(name: string, dtcgData: any): DesignToken {
   const {
@@ -16,5 +17,12 @@ export function parseToken(name: string, dtcgData: any): DesignToken {
     throw new Error(`Invalid props: ${Object.keys(rest).join(', ')}`);
   }
 
-  return new DesignToken(name, value, { ...commonProps, extensions });
+  const token = new DesignToken(name, value, commonProps);
+  if (isJsonObject(extensions)) {
+    for (const key of Object.keys(extensions)) {
+      token.setExtension(key, extensions[key]);
+    }
+  }
+
+  return token;
 }

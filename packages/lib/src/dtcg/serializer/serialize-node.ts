@@ -1,5 +1,5 @@
 import { TOMNode } from '../tom/tom-node';
-import { DesignToken } from '../tom/design-token';
+import { DesignToken, JsonValue } from '../tom/design-token';
 import { Group } from '../tom/group';
 import { DtcgFile } from '../tom/dtcg-file';
 
@@ -11,12 +11,21 @@ function serializeCommonProps(node: TOMNode) {
 }
 
 function serializeDesignToken(token: DesignToken) {
+  let extensions: Record<string, JsonValue> | undefined;
+  if (token.hasExtensions()) {
+    extensions = {};
+    for (const [key, extension] of token.extensions()) {
+      extensions[key] = extension;
+    }
+  }
+
+
   return {
     ...serializeCommonProps(token),
 
     $value: token.getOwnValue(),
-    // TODO: extensions
-  }
+    $extensions: extensions,
+  };
 }
 
 function serializeGroup(group: Group) {

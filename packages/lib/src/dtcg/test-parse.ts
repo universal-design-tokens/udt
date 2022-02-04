@@ -12,6 +12,9 @@ function logTOMNodes(node: TOMNode, indent: string = '') {
     console.log(`${indent}  - type:      ${node.getType()}`);
     console.log(`${indent}  - value:     ${node.getValue()}`);
     console.log(`${indent}  - is alias?: ${node.isAlias()}`);
+    if (node.hasExtensions()) {
+      console.log(`${indent}  - has extensions: ${[...node.extensions()].map(keyExt => keyExt[0]).join(', ')}`);
+    }
   }
   else if (node instanceof Group) {
     console.log(`${indent}* ${node instanceof DtcgFile ? 'File' : 'Group'} "${node.name}"`);

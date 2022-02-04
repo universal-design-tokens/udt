@@ -30,6 +30,10 @@
               "$value": 123
             }
           }
+        },
+        "$extensions": {
+          "design.udt.test": "dummy extension",
+          "design.udt.other": "another dummy extension"
         }
       }
     }

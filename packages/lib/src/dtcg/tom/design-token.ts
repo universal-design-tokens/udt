@@ -2,45 +2,33 @@ import { TOMNode, TOMNodeCommonProps } from "./tom-node";
 import { Type } from "./type";
 import { isReferenceValue, referenceToPath } from "./reference";
 
-export type TokenValue = string | number | boolean | object | null;
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
 
-type Extensions = Record<string, any>;
 
-function isValidValue(value: any): value is TokenValue {
-  return value !== undefined; // TODO: needs improving to detect functions, symbols, bigint, etc.
-}
+const permittedJsonTypes = ['string', 'number', 'boolean', 'object'];
 
-function isValidExtensions(extensions: any): extensions is Extensions {
-  return typeof extensions === 'object' && extensions !== null && !Array.isArray(extensions);
-}
-
-export interface DesignTokenProps extends TOMNodeCommonProps {
-  extensions?: Extensions;
+function isJsonValue(value: any): value is JsonValue {
+  return permittedJsonTypes.includes(typeof value);
 }
 
 export class DesignToken extends TOMNode {
-  #value: TokenValue;
-  #extensions?: Extensions;
+  #value: JsonValue;
+  #extensions: Map<string, JsonValue>;
 
   /**
    * Constructs a new design token node.
    */
-  constructor(name: string, value: TokenValue, { extensions, ...commonProps }: DesignTokenProps = {} ) {
+  constructor(name: string, value: JsonValue, commonProps: TOMNodeCommonProps = {} ) {
     super(name, commonProps);
 
-    if (isValidValue(value)) {
+    if (isJsonValue(value)) {
       this.#value = value;
     }
     else {
       throw new Error(`${value} is not a valid token value`);
     }
 
-    if (isValidExtensions(extensions) || extensions === undefined) {
-      this.#extensions = extensions;
-    }
-    else {
-      throw new Error(`${extensions} is not a valid extensions object`);
-    }
+    this.#extensions = new Map<string, JsonValue>();
   }
 
   public isAlias(): boolean {
@@ -68,19 +56,19 @@ export class DesignToken extends TOMNode {
     return nextToken;
   }
 
-  public getValue(): TokenValue {
+  public getValue(): JsonValue {
     if (this.isAlias()) {
       return this.getFinalReferencedToken().#value;
     }
     return this.#value;
   }
 
-  public getOwnValue(): TokenValue {
+  public getOwnValue(): JsonValue {
     return this.#value;
   }
 
   public setValue(value: any): void {
-    if (isValidValue(value)) {
+    if (isJsonValue(value)) {
       this.#value = value;
     }
     else {
@@ -132,6 +120,34 @@ export class DesignToken extends TOMNode {
     }
 
     return type;
+  }
+
+  public hasExtension(key: string): boolean {
+    return this.#extensions.has(key);
+  }
+
+  public getExtension(key: string): JsonValue | undefined {
+    return this.#extensions.get(key);
+  }
+
+  public setExtension(key: string, value: JsonValue): void {
+    this.#extensions.set(key, value)
+  }
+
+  public deleteExtension(key: string): boolean {
+    return this.#extensions.delete(key);
+  }
+
+  public clearExtensions(): void {
+    this.#extensions.clear();
+  }
+
+  public hasExtensions(): boolean {
+    return this.#extensions.size > 0;
+  }
+
+  public extensions(): IterableIterator<[string, JsonValue]> {
+    return this.#extensions.entries();
   }
 
   public isValid(): boolean {
