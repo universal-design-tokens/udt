@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^5.1.2"
   },
   "workspaces": [
     "./packages/*"
