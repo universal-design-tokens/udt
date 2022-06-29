@@ -51,10 +51,7 @@ export abstract class TOMNode {
       throw new Error(`"${name}" is not a valid TOM node name.`);
     }
 
-    // Inheritable properties use getXyz()/getOwnXyz()/setXyz() functions
-    this.setType(type);
-
-    // Non-inheritable properties use getters/setters
+    this.type = type;
     this.description = description;
   }
 
@@ -72,11 +69,11 @@ export abstract class TOMNode {
   }
 
 
-  public getOwnType(): Type | undefined {
+  public get type(): Type | undefined {
     return this.#type;
   }
 
-  public setType(type: Type | undefined): void {
+  public set type(type: Type | undefined) {
     if (isValidType(type) || type === undefined) {
       this.#type = type;
     }

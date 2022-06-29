@@ -56,18 +56,18 @@ export class DesignToken extends TOMNode {
     return nextToken;
   }
 
-  public getValue(): JsonValue {
+  public getResolvedValue(): JsonValue {
     if (this.isAlias()) {
-      return this.getFinalReferencedToken().#value;
+      return this.getFinalReferencedToken().value;
     }
     return this.#value;
   }
 
-  public getOwnValue(): JsonValue {
+  public get value(): JsonValue {
     return this.#value;
   }
 
-  public setValue(value: any): void {
+  public set value(value: any) {
     if (isJsonValue(value)) {
       this.#value = value;
     }
@@ -76,16 +76,16 @@ export class DesignToken extends TOMNode {
     }
   }
 
-  public getType(): Type {
-    let type = this.getOwnType();
+  public getResolvedType(): Type {
+    let type = this.type;
     if (type === undefined) {
       // Is value a reference?
       if (this.isAlias()) {
-        return this.getFinalReferencedToken().getType();
+        return this.getFinalReferencedToken().getResolvedType();
       }
 
       // Are we inheriting a type from parent group(s)
-      if (this.hasParent() && (type = this.getParent()!.getType()) !== undefined) {
+      if (this.hasParent() && (type = this.getParent()!.getInheritedType()) !== undefined) {
         return type;
       }
 

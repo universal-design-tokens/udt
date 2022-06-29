@@ -84,10 +84,10 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
     return node;
   }
 
-  getType(): Type | undefined {
-    const ownType = this.getOwnType();
+  getInheritedType(): Type | undefined {
+    const ownType = this.type;
     if (ownType === undefined && this.hasParent()) {
-      return this.getParent()!.getType();
+      return this.getParent()!.getInheritedType();
     }
     return ownType;
   }

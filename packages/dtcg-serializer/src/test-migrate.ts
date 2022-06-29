@@ -21,8 +21,8 @@ function parseToken(name: string, data: any): DesignToken {
 
   const token = new DesignToken(name, value);
 
-  token.setType(type);
-  token.setValue(value);
+  token.type = type;
+  token.value = value;
   token.description = description;
 
   return token;

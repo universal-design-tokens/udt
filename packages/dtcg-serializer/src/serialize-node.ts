@@ -2,7 +2,7 @@ import { TOMNode, DesignToken, JsonValue, Group, DtcgFile } from '@udt/tom';
 
 function serializeCommonProps(node: TOMNode) {
   return {
-    $type: node.getOwnType(),
+    $type: node.type,
     $description: node.description,
   };
 }
@@ -20,7 +20,7 @@ function serializeDesignToken(token: DesignToken) {
   return {
     ...serializeCommonProps(token),
 
-    $value: token.getOwnValue(),
+    $value: token.value,
     $extensions: extensions,
   };
 }

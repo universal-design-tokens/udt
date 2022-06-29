@@ -6,8 +6,8 @@ import { parseFile } from './parse-file';
 function logTOMNodes(node: TOMNode, indent: string = '') {
   if (node instanceof DesignToken) {
     console.log(`${indent}* Token "${node.name}"`);
-    console.log(`${indent}  - type:      ${node.getType()}`);
-    console.log(`${indent}  - value:     ${node.getValue()}`);
+    console.log(`${indent}  - type:      ${node.getResolvedType()}`);
+    console.log(`${indent}  - value:     ${node.getResolvedValue()}`);
     console.log(`${indent}  - is alias?: ${node.isAlias()}`);
     if (node.hasExtensions()) {
       console.log(`${indent}  - has extensions: ${[...node.extensions()].map(keyExt => keyExt[0]).join(', ')}`);
