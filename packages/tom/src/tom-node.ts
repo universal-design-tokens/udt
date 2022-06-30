@@ -1,9 +1,10 @@
 import { Type, allTypes } from "./type";
 import { INodeWithChildren } from "./interfaces/node-with-children";
+import { TOMInvalidAssignmentError } from "./exceptions";
 
 type ParentNode = TOMNode & INodeWithChildren<TOMNode>;
 
-const reservedCharactersRegEx = /\{\}\./g;
+const reservedCharactersRegEx = /[\{\}\.]/;
 
 /**
  * Checks that the given value can be used as a name for
@@ -14,8 +15,8 @@ const reservedCharactersRegEx = /\{\}\./g;
  * - cannot begin with the character `$`
  * - cannot contain `{`, `}` or `.` characters
  *
- * @param name
- * @returns
+ * @param name  The name to check
+ * @returns     `true` is the name is valid, `false` otherwise.
  */
 export function isValidName(name: any): name is string {
   return typeof name === 'string' && name[0] !== '$' && !reservedCharactersRegEx.test(name);
@@ -48,7 +49,7 @@ export abstract class TOMNode {
       this.#name = name;
     }
     else {
-      throw new Error(`"${name}" is not a valid TOM node name.`);
+      throw new TOMInvalidAssignmentError('name', name);
     }
 
     this.type = type;
@@ -64,7 +65,7 @@ export abstract class TOMNode {
       this.#name = name;
     }
     else {
-      throw new Error(`"${name}" is not a valid TOM node name.`);
+      throw new TOMInvalidAssignmentError('name', name);
     }
   }
 
@@ -78,7 +79,7 @@ export abstract class TOMNode {
       this.#type = type;
     }
     else {
-      throw new Error(`${type} is not a valid type value.`);
+      throw new TOMInvalidAssignmentError('type', type);
     }
   }
 
@@ -91,7 +92,7 @@ export abstract class TOMNode {
       this.#description = description;
     }
     else {
-      throw new Error(`${description} is not a valid type description.`);
+      throw new TOMInvalidAssignmentError('description', description);
     }
   }
 
