@@ -1,4 +1,8 @@
 {
   "version": "0.1.0",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "packages": [
+    "./packages/*"
+  ],
+  "useNx": false
 }

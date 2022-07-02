@@ -6,7 +6,7 @@
 Universal Design Tokens (UDT) is an open-standard file format for expressing design token data.
 
 ## Packages
-This is a monorepo (using [Lerna](https://lernajs.io/)) containing the source code for several UDT packages:
+This is a monorepo containing the source code for several UDT packages:
 
 * [**`@udt/spec`**](./packages/spec): The specification and JSON schemas for the Universal Design Token (UDT) format.
 * [**`@udt/lib`**](./packages/lib): A Node.js library for parsing, manipulating and serialising design token data in the UDT format.

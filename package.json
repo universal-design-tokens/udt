@@ -1,5 +1,5 @@
 {
-  "name": "udt",
+  "name": "udt-monorepo",
   "version": "0.1.0",
   "private": true,
   "description": "Monorepo for UDT spec, reference JS lib and tools.",
@@ -22,20 +22,26 @@
     "spec",
     "json-schema"
   ],
-  "author": "James Nash (http://cirrus.twiddles.com)",
+  "author": "James Nash (https://cirrus.twiddles.com)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/universal-design-tokens/udt/issues"
   },
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
   "workspaces": [
     "./packages/*"
   ],
   "engines": {
-    "node": ">= 12",
-    "npm": ">= 7"
+    "node": ">= 16",
+    "npm": ">= 8"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.3",
+    "@types/node": "^16.11.41",
+    "del-cli": "^4.0.1",
+    "jest": "^28.1.1",
+    "lerna": "^5.1.6",
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.7.4"
   }
 }

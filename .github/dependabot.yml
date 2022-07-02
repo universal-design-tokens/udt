@@ -9,7 +9,7 @@ updates:
       interval: "daily"
     ignore:
       - dependency-name: "@types/node"
-        versions: [">10"]
+        versions: [">16"]
     commit-message:
       prefix: fix
       prefix-development: chore
