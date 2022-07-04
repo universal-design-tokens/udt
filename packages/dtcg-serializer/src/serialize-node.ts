@@ -1,7 +1,4 @@
-import { TOMNode } from '../tom/tom-node';
-import { DesignToken, JsonValue } from '../tom/design-token';
-import { Group } from '../tom/group';
-import { DtcgFile } from '../tom/dtcg-file';
+import { TOMNode, DesignToken, JsonValue, Group, DtcgFile } from '@udt/tom';
 
 function serializeCommonProps(node: TOMNode) {
   return {

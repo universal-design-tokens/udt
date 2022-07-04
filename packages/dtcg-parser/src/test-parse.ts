@@ -1,10 +1,7 @@
 import { resolve } from 'path';
-import { parseFile } from './parser/parse-file';
-import { DesignToken } from "./tom/design-token";
-import { Group } from "./tom/group";
-import { DtcgFile } from "./tom/dtcg-file";
 import { readFileSync } from 'fs';
-import { TOMNode } from "./tom/tom-node";
+import { DesignToken, Group, DtcgFile, TOMNode } from "@udt/tom";
+import { parseFile } from './parse-file';
 
 function logTOMNodes(node: TOMNode, indent: string = '') {
   if (node instanceof DesignToken) {
@@ -40,7 +37,7 @@ function parseTokenFile(path: string): Group {
   return parseFile(data);
 }
 
-const parsedFile = parseTokenFile(resolve(__dirname, '../../src/dtcg/examples/draft-2/test.tokens.json'));
+const parsedFile = parseTokenFile(resolve(__dirname, '../../../example-files/draft-2/test.tokens.json'));
 
 logTOMNodes(parsedFile);
 

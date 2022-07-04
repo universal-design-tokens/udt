@@ -1,4 +1,4 @@
-import { DesignToken } from "../tom/design-token";
+import { DesignToken } from "@udt/tom";
 import { extractCommonProps } from "./extract-common-props";
 import { isJsonObject } from "./utils";
 

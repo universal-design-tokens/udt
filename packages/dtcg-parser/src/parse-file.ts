@@ -1,4 +1,4 @@
-import { DtcgFile } from '../tom/dtcg-file';
+import { DtcgFile } from '@udt/tom';
 import { parseChildren } from './parse-group';
 import { extractCommonProps } from './extract-common-props';
 

@@ -1,4 +1,4 @@
-import { Group } from '../tom/group';
+import { Group } from '@udt/tom';
 import { parseToken } from './parse-token';
 import { extractCommonProps } from './extract-common-props';
 import { isJsonObject, isTokenData } from './utils';

@@ -1,9 +1,7 @@
 import { resolve } from 'path';
-import { DesignToken } from "./tom/design-token";
-import { Group } from "./tom/group";
-import { DtcgFile } from './tom/dtcg-file';
 import { readFileSync } from 'fs';
-import { serializeDtcgFile } from './serializer/serialize-node';
+import { DesignToken, Group, DtcgFile } from "@udt/tom";
+import { serializeDtcgFile } from './serialize-node';
 
 function isDraft1TokenData(data: any): boolean {
   return typeof data === 'object' && data.value !== undefined;
@@ -78,7 +76,7 @@ function parseDraft1TokenFile(path: string): DtcgFile {
   return parseFile(data);
 }
 
-const parsedFile = parseDraft1TokenFile(resolve(__dirname, '../../src/dtcg/examples/draft-1/test.tokens.json'));
+const parsedFile = parseDraft1TokenFile(resolve(__dirname, '../../../example-files/draft-1/test.tokens.json'));
 
 console.log('----- DTCG Draft 1 --> TOM --> DTCG Draft 2 -----');
 console.log(JSON.stringify(serializeDtcgFile(parsedFile), undefined, 2));

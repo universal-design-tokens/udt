@@ -1,4 +1,4 @@
-import { isValidType, TOMNodeCommonProps } from "../tom/tom-node";
+import { isValidType, TOMNodeCommonProps } from "@udt/tom";
 
 export interface ExtractedCommonProps {
   commonProps: TOMNodeCommonProps;

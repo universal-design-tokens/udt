@@ -1,8 +1,5 @@
-import { Type } from "./tom/type";
-import { DesignToken } from "./tom/design-token";
-import { Group } from "./tom/group";
-import { DtcgFile } from "./tom/dtcg-file";
-import { serializeDtcgFile } from './serializer/serialize-node';
+import { DesignToken, Group, DtcgFile, Type } from "@udt/tom";
+import { serializeDtcgFile } from './serialize-node';
 
 console.log('----- TOM --> JSON -----');
 
