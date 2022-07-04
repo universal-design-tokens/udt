@@ -1,4 +1,4 @@
-import { DtcgFile } from '@udt/tom';
+import { RootGroup } from '@udt/tom';
 import { parseChildren } from './parse-group';
 import { extractCommonProps } from './extract-common-props';
 
@@ -8,7 +8,7 @@ export function parseFile(dtcgData: any) {
     rest: children,
   } = extractCommonProps(dtcgData);
 
-  const file = new DtcgFile(commonProps);
+  const file = new RootGroup(commonProps);
 
   parseChildren(children, file);
 

@@ -1,4 +1,4 @@
-import { TOMNode, DesignToken, JsonValue, Group, DtcgFile } from '@udt/tom';
+import { TOMNode, DesignToken, JsonValue, Group, RootGroup } from '@udt/tom';
 
 function serializeCommonProps(node: TOMNode) {
   return {
@@ -43,6 +43,6 @@ function serializeGroup(group: Group) {
 }
 
 
-export function serializeDtcgFile(file: DtcgFile) {
+export function serializeDtcgFile(file: RootGroup) {
   return serializeGroup(file);
 }

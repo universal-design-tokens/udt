@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
-import { DesignToken, Group, DtcgFile, TOMNode } from "@udt/tom";
+import { DesignToken, Group, RootGroup, TOMNode } from "@udt/tom";
 import { parseFile } from './parse-file';
 
 function logTOMNodes(node: TOMNode, indent: string = '') {
@@ -14,7 +14,7 @@ function logTOMNodes(node: TOMNode, indent: string = '') {
     }
   }
   else if (node instanceof Group) {
-    console.log(`${indent}* ${node instanceof DtcgFile ? 'File' : 'Group'} "${node.name}"`);
+    console.log(`${indent}* ${node instanceof RootGroup ? 'File' : 'Group'} "${node.name}"`);
     for (const childNode of node) {
       logTOMNodes(childNode, `  ${indent}`);
     }

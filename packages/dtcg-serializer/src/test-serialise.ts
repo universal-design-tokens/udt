@@ -1,4 +1,4 @@
-import { DesignToken, Group, DtcgFile, Type } from "@udt/tom";
+import { DesignToken, Group, RootGroup, Type } from "@udt/tom";
 import { serializeDtcgFile } from './serialize-node';
 
 console.log('----- TOM --> JSON -----');
@@ -9,7 +9,7 @@ redToken.setExtension('design.udt.test', 42);
 const colorGroup = new Group("color");
 colorGroup.addChild(redToken);
 
-const file = new DtcgFile();
+const file = new RootGroup();
 file.addChild(colorGroup);
 
 console.log(JSON.stringify(serializeDtcgFile(file), undefined, 2));

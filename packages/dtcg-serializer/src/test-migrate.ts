@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
-import { DesignToken, Group, DtcgFile } from "@udt/tom";
+import { DesignToken, Group, RootGroup } from "@udt/tom";
 import { serializeDtcgFile } from './serialize-node';
 
 function isDraft1TokenData(data: any): boolean {
@@ -55,13 +55,13 @@ function parseGroup(name: string, data: any): Group {
   return group;
 }
 
-function parseFile(data: any): DtcgFile {
+function parseFile(data: any): RootGroup {
   const {
     description,
     ...children
   } = data;
 
-  const file = new DtcgFile();
+  const file = new RootGroup();
   file.description = description;
   parseChildren(children, file);
   return file;
@@ -71,7 +71,7 @@ function readJsonFile(path: string): any {
   return JSON.parse(readFileSync(path).toString());
 }
 
-function parseDraft1TokenFile(path: string): DtcgFile {
+function parseDraft1TokenFile(path: string): RootGroup {
   const data = readJsonFile(path);
   return parseFile(data);
 }
