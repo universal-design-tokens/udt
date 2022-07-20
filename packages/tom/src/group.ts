@@ -107,4 +107,14 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
       return true;
   }
 
+  public *traverseTokens(recursive = true): Generator<DesignToken> {
+    for (const childNode of this) {
+      if (recursive && childNode instanceof Group) {
+        yield* childNode.traverseTokens();
+      }
+      else if (childNode instanceof DesignToken) {
+        yield childNode;
+      }
+    }
+  }
 }

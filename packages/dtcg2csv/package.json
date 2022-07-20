@@ -1,0 +1,31 @@
+{
+  "name": "@udt/dtcg2csv",
+  "version": "0.1.0",
+  "description": "A CLI utility for exporting tokens and groups from DTCG files to records in a CSV file.",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "del dist/*",
+    "build": "tsc -p tsconfig.build.json",
+    "watch": "tsc -p tsconfig.build.json --watch",
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/universal-design-tokens/udt.git"
+  },
+  "keywords": [
+    "dtcg",
+    "cli",
+    "csv"
+  ],
+  "author": "James Nash (https://cirrus.twiddles.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/universal-design-tokens/udt/issues"
+  },
+  "homepage": "https://github.com/universal-design-tokens/udt#readme",
+  "dependencies": {
+    "@udt/lib": "^0.1.0",
+    "csv-stringify": "^6.1.3"
+  }
+}
