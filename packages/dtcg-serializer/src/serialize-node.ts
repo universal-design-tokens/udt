@@ -20,7 +20,7 @@ function serializeDesignToken(token: DesignToken) {
   return {
     ...serializeCommonProps(token),
 
-    $value: token.value,
+    $value: token.getValue(),
     $extensions: extensions,
   };
 }

@@ -58,16 +58,16 @@ export class DesignToken extends TOMNode {
 
   public getResolvedValue(): JsonValue {
     if (this.isAlias()) {
-      return this.getFinalReferencedToken().value;
+      return this.getFinalReferencedToken().getValue();
     }
     return this.#value;
   }
 
-  public get value(): JsonValue {
+  public getValue(): JsonValue {
     return this.#value;
   }
 
-  public set value(value: any) {
+  public setValue(value: any): void {
     if (isJsonValue(value)) {
       this.#value = value;
     }

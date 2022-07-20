@@ -22,7 +22,7 @@ function parseToken(name: string, data: any): DesignToken {
   const token = new DesignToken(name, value);
 
   token.setType(type);
-  token.value = value;
+  token.setValue(value);
   token.setDescription(description);
 
   return token;
