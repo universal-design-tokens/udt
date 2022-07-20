@@ -2,8 +2,8 @@ import { TOMNode, DesignToken, JsonValue, Group, RootGroup } from '@udt/tom';
 
 function serializeCommonProps(node: TOMNode) {
   return {
-    $type: node.type,
-    $description: node.description,
+    $type: node.getType(),
+    $description: node.getDescription(),
   };
 }
 
@@ -32,10 +32,10 @@ function serializeGroup(group: Group) {
 
   for (const child of group) {
     if (child instanceof DesignToken) {
-      output[child.name] = serializeDesignToken(child);
+      output[child.getName()] = serializeDesignToken(child);
     }
     else {
-      output[child.name] = serializeGroup(child);
+      output[child.getName()] = serializeGroup(child);
     }
   }
 

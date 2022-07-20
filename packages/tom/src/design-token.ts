@@ -50,7 +50,7 @@ export class DesignToken extends TOMNode {
     while(nextToken.isAlias()) {
       nextToken = nextToken.getNextReferencedToken();
       if (nextToken === this) {
-        throw new Error(`Reference loop detected ("${this.name}"" references itself)`);
+        throw new Error(`Reference loop detected ("${this.getName}"" references itself)`);
       }
     }
     return nextToken;
@@ -77,7 +77,7 @@ export class DesignToken extends TOMNode {
   }
 
   public getResolvedType(): Type {
-    let type = this.type;
+    let type = this.getType();
     if (type === undefined) {
       // Is value a reference?
       if (this.isAlias()) {

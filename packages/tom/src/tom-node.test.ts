@@ -103,50 +103,50 @@ describe("TOMNode", () => {
     });
 
     it("has a name", () => {
-      expect(testNode.name).toBe(testNodeName);
+      expect(testNode.getName()).toBe(testNodeName);
     });
 
     it("has no type", () => {
-      expect(testNode.type).toBeUndefined();
+      expect(testNode.getType()).toBeUndefined();
     });
 
     it("has no description", () => {
-      expect(testNode.description).toBeUndefined();
+      expect(testNode.getDescription()).toBeUndefined();
     });
 
     it("let's you change its name", () => {
       const newName = "new-name";
-      testNode.name = newName;
-      expect(testNode.name).toBe(newName);
+      testNode.setName(newName);
+      expect(testNode.getName()).toBe(newName);
     });
 
     it("throws a TOMInvalidNameError if you set an invalid name", () => {
       expect(() => {
-        testNode.name = "$invalidName";
+        testNode.setName("$invalidName");
       }).toThrow(TOMInvalidAssignmentError);
     });
 
     it("let's you set a valid type", () => {
       const type = Type.BORDER;
-      testNode.type = type;
-      expect(testNode.type).toBe(type);
+      testNode.setType(type);
+      expect(testNode.getType()).toBe(type);
     });
 
     it("throws a TOMInvalidAssignmentError if you set an invalid type", () => {
       expect(() => {
-        testNode.type = "invalidType" as any;
+        testNode.setType("invalidType" as any);
       }).toThrow(TOMInvalidAssignmentError);
     });
 
     it("let's you set a valid description", () => {
       const description = "Hello world!";
-      testNode.description = description;
-      expect(testNode.description).toBe(description);
+      testNode.setDescription(description);
+      expect(testNode.getDescription()).toBe(description);
     });
 
     it("throws a TOMInvalidAssignmentError if you set an invalid description", () => {
       expect(() => {
-        testNode.description = 666 as any;
+        testNode.setDescription(666 as any);
       }).toThrow(TOMInvalidAssignmentError);
     });
 
@@ -176,11 +176,11 @@ describe("TOMNode", () => {
     });
 
     it("has a type", () => {
-      expect(testNode.type).toBe(testType);
+      expect(testNode.getType()).toBe(testType);
     });
 
     it("has a description", () => {
-      expect(testNode.description).toBe(testDescription);
+      expect(testNode.getDescription()).toBe(testDescription);
     });
   });
 });

@@ -5,7 +5,7 @@ import { parseFile } from './parse-file';
 
 function logTOMNodes(node: TOMNode, indent: string = '') {
   if (node instanceof DesignToken) {
-    console.log(`${indent}* Token "${node.name}"`);
+    console.log(`${indent}* Token "${node.getName()}"`);
     console.log(`${indent}  - type:      ${node.getResolvedType()}`);
     console.log(`${indent}  - value:     ${node.getResolvedValue()}`);
     console.log(`${indent}  - is alias?: ${node.isAlias()}`);
@@ -14,13 +14,13 @@ function logTOMNodes(node: TOMNode, indent: string = '') {
     }
   }
   else if (node instanceof Group) {
-    console.log(`${indent}* ${node instanceof RootGroup ? 'File' : 'Group'} "${node.name}"`);
+    console.log(`${indent}* ${node instanceof RootGroup ? 'File' : 'Group'} "${node.getName()}"`);
     for (const childNode of node) {
       logTOMNodes(childNode, `  ${indent}`);
     }
   }
   else {
-    console.log(`${indent}X Unknown node type "${node.name}"`);
+    console.log(`${indent}X Unknown node type "${node.getName()}"`);
   }
 }
 

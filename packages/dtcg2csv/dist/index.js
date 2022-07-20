@@ -38,7 +38,7 @@ function toCsvString(tom) {
         // Write records to the stream
         for (const token of tom.traverseTokens()) {
             stringifier.write([
-                token.name,
+                token.getName(),
                 token.getPath().join('.'),
                 token.getResolvedType(),
                 token.getResolvedValue()

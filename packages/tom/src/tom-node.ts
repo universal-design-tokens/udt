@@ -52,15 +52,15 @@ export abstract class TOMNode {
       throw new TOMInvalidAssignmentError('name', name);
     }
 
-    this.type = type;
-    this.description = description;
+    this.setType(type);
+    this.setDescription(description);
   }
 
-  public get name(): string {
+  public getName(): string {
     return this.#name;
   }
 
-  public set name(name: string) {
+  public setName(name: string): void {
     if (isValidName(name)) {
       this.#name = name;
     }
@@ -70,11 +70,11 @@ export abstract class TOMNode {
   }
 
 
-  public get type(): Type | undefined {
+  public getType(): Type | undefined {
     return this.#type;
   }
 
-  public set type(type: Type | undefined) {
+  public setType(type: Type | undefined): void {
     if (isValidType(type) || type === undefined) {
       this.#type = type;
     }
@@ -83,11 +83,11 @@ export abstract class TOMNode {
     }
   }
 
-  public get description(): string | undefined {
+  public getDescription(): string | undefined {
     return this.#description;
   }
 
-  public set description(description: string | undefined) {
+  public setDescription(description: string | undefined) {
     if (typeof description === 'string' || description === undefined) {
       this.#description = description;
     }
@@ -147,7 +147,7 @@ export abstract class TOMNode {
    */
   public getPath(): string[] {
     const parentNode = this.getParent();
-    const name = this.name;
+    const name = this.getName();
 
     if (parentNode === undefined) {
       return [name];

@@ -21,9 +21,9 @@ function parseToken(name: string, data: any): DesignToken {
 
   const token = new DesignToken(name, value);
 
-  token.type = type;
+  token.setType(type);
   token.value = value;
-  token.description = description;
+  token.setDescription(description);
 
   return token;
 }
@@ -50,7 +50,7 @@ function parseGroup(name: string, data: any): Group {
   } = data;
 
   const group = new Group(name);
-  group.description = description;
+  group.setDescription(description);
   parseChildren(children, group);
   return group;
 }
@@ -62,7 +62,7 @@ function parseFile(data: any): RootGroup {
   } = data;
 
   const file = new RootGroup();
-  file.description = description;
+  file.setDescription(description);
   parseChildren(children, file);
   return file;
 }

@@ -43,7 +43,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   public hasChild(nodeOrName: TokenOrGroup | string): boolean {
     if (typeof nodeOrName === 'string') {
       for (const child of this) {
-        if (child.name === nodeOrName) {
+        if (child.getName() === nodeOrName) {
           return true;
         }
       }
@@ -56,7 +56,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
 
   public getChild(name: string): TokenOrGroup | undefined {
     for (const child of this) {
-      if (child.name === name) {
+      if (child.getName() === name) {
         return child;
       }
     }
@@ -70,7 +70,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
     let node: TokenOrGroup = this;
     for (let i=0; i < path.length; i++) {
       if (!(node instanceof Group)) {
-        throw new Error(`Invalid path: "${node.name}" is not a node that can have children`);
+        throw new Error(`Invalid path: "${node.getName}" is not a node that can have children`);
       }
 
       const name = path[i];
@@ -85,7 +85,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   }
 
   getInheritedType(): Type | undefined {
-    const ownType = this.type;
+    const ownType = this.getType();
     if (ownType === undefined && this.hasParent()) {
       return this.getParent()!.getInheritedType();
     }
