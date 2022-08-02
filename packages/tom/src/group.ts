@@ -2,6 +2,7 @@ import { TOMNode, TOMNodeCommonProps } from './tom-node';
 import { INodeWithChildren } from './interfaces/node-with-children';
 import { DesignToken } from './design-token';
 import { Type } from './type';
+import { Reference } from './reference';
 
 export type TokenOrGroup = DesignToken | Group;
 
@@ -62,7 +63,8 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
     }
   }
 
-  public getNodeByPath(path: string[]): TokenOrGroup {
+  public getReferencedNode(reference: Reference): TokenOrGroup {
+    const path = reference.path;
     if (path.length === 0) {
       throw new Error('Invalid path. Paths must have at least one segment');
     }

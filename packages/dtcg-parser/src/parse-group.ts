@@ -8,7 +8,8 @@ export function parseChildren(children: any, group: Group): void {
     const data = children[name];
     if (isJsonObject(data)) {
       if (isTokenData(data)) {
-        group.addChild(parseToken(name, data));
+        const token = parseToken(name, data);
+        group.addChild(token);
       }
       else {
         group.addChild(parseGroup(name, data));
@@ -20,7 +21,7 @@ export function parseChildren(children: any, group: Group): void {
   }
 }
 
-export function parseGroup(name: string, dtcgData: any): Group {
+export function parseGroup(name: string, dtcgData: unknown): Group {
   const {
     commonProps,
     rest: children,

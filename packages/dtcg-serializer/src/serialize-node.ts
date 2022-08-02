@@ -1,4 +1,5 @@
 import { TOMNode, DesignToken, JsonValue, Group, RootGroup } from '@udt/tom';
+import { serializeValue } from './values/serialize-value';
 
 function serializeCommonProps(node: TOMNode) {
   return {
@@ -20,7 +21,7 @@ function serializeDesignToken(token: DesignToken) {
   return {
     ...serializeCommonProps(token),
 
-    $value: token.getValue(),
+    $value: serializeValue(token.getValue(), token.getResolvedType()),
     $extensions: extensions,
   };
 }

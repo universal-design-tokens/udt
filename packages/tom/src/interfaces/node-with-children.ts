@@ -1,3 +1,4 @@
+import { Reference } from "../reference";
 import { Type } from "../type";
 
 export interface INodeWithChildren<ChildNodeType> {
@@ -5,5 +6,5 @@ export interface INodeWithChildren<ChildNodeType> {
 
   getInheritedType(): Type | undefined;
 
-  getNodeByPath(path: string[]): ChildNodeType;
+  getReferencedNode(reference: Reference): ChildNodeType;
 }

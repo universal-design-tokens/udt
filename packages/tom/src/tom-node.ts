@@ -159,11 +159,17 @@ export abstract class TOMNode {
     }
   }
 
+  protected _onParentAssigned(): void {};
+
+  protected _onParentRemoved(): void {};
+
   protected static _assignParent(child: TOMNode, parent: ParentNode) {
     child.#parent = parent;
+    child._onParentAssigned();
   }
 
   protected static _clearParent(child: TOMNode) {
     child.#parent = undefined;
+    child._onParentRemoved();
   }
 }
