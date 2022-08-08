@@ -1,4 +1,5 @@
 import { isJsonValue, Type, Value, Reference } from "@udt/tom";
+import { parseColorValue } from "./color";
 import { parseDimensionValue } from "./dimension";
 import {
   parseArray,
@@ -30,6 +31,10 @@ export function parseValue(value: unknown, type?: Type): Value | Reference {
     return value;
   } else {
     switch (type) {
+      case Type.COLOR: {
+        return parseColorValue(value);
+      }
+
       case Type.DIMENSION: {
         return parseDimensionValue(value);
       }

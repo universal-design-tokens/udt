@@ -49,5 +49,9 @@
   },
   "token 4": {
     "$value": "{group 2.token 2-1}"
+  },
+  "token 5": {
+    "$type": "color",
+    "$value": "#123abc"
   }
 }
