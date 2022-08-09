@@ -1,11 +1,10 @@
 import { TOMNode, TOMNodeCommonProps } from "./tom-node";
 import { Type } from "./type";
 import { Value, JsonValue, identifyJsonType, NOT_JSON } from "./values";
-import { Reference } from "./reference";
+import { Reference, isReference } from "./reference";
+import { PropertyGetter, resolveReference } from "./referencable-property";
 
-export function isReference(value: unknown): value is Reference {
-  return value instanceof Reference;
-}
+
 
 export type DeferredValue = (ownOrInheritedType?: Type) => Value | Reference;
 
@@ -37,36 +36,43 @@ export class DesignToken extends TOMNode {
     return isReference(this.#value);
   }
 
-  public getNextReferencedToken(): DesignToken {
-    const value = this.getValue();
-    if (isReference(value) && this.hasParent()) {
-      const referencedNode = this.getTopParent()!.getReferencedNode(value);
-      if (referencedNode instanceof DesignToken) {
-        return referencedNode;
-      }
-    }
-    throw new Error("Reference is invalid");
-  }
+  // public getNextReferencedToken(): DesignToken {
+  //   const value = this.getValue();
+  //   if (isReference(value) && this.hasParent()) {
+  //     const referencedNode = this.getTopParent()!.getReferencedNode(value);
+  //     if (referencedNode instanceof DesignToken) {
+  //       return referencedNode;
+  //     }
+  //   }
+  //   throw new Error("Reference is invalid");
+  // }
 
-  public getFinalReferencedToken(): DesignToken {
-    let nextToken: DesignToken = this;
-    while (nextToken.isAlias()) {
-      nextToken = nextToken.getNextReferencedToken();
-      if (nextToken === this) {
-        throw new Error(
-          `Reference loop detected ("${this.getName()}"" references itself)`
-        );
-      }
+  // public getFinalReferencedToken(): DesignToken {
+  //   let nextToken: DesignToken = this;
+  //   while (nextToken.isAlias()) {
+  //     nextToken = nextToken.getNextReferencedToken();
+  //     if (nextToken === this) {
+  //       throw new Error(
+  //         `Reference loop detected ("${this.getName()}"" references itself)`
+  //       );
+  //     }
+  //   }
+  //   return nextToken;
+  // }
+
+  private static __getTokenValue(node: TOMNode): Value | Reference {
+    if (node instanceof DesignToken) {
+      return node.getValue();
     }
-    return nextToken;
+    throw new Error(`Node "${node.getName()}" is not a design token`);
   }
 
   public getResolvedValue(): Value {
-    const value = this.getValue()
-    if (isReference(value)) {
-      return this.getFinalReferencedToken().getValue() as Value;
+    const valueOrReference = this.getValue()
+    if (isReference(valueOrReference)) {
+      return resolveReference(valueOrReference, this, DesignToken.__getTokenValue);
     }
-    return value;
+    return valueOrReference;
   }
 
 
@@ -100,12 +106,21 @@ export class DesignToken extends TOMNode {
     return type;
   }
 
+
+  private static __getTokenType(node: TOMNode): Type {
+    if (node instanceof DesignToken) {
+      return node.getResolvedType();
+    }
+    throw new Error(`Node "${node.getName()}" is not a design token`);
+  }
+
   public getResolvedType(): Type {
     let type = this.getType();
     if (type === undefined) {
       // Is value a reference?
-      if (this.isAlias()) {
-        return this.getFinalReferencedToken().getResolvedType();
+      const valueOrReference = this.getValue();
+      if (isReference(valueOrReference)) {
+        return resolveReference(valueOrReference, this, DesignToken.__getTokenType);
       }
 
       // Are we inheriting a type from parent group(s)
