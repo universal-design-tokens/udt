@@ -1,5 +1,5 @@
 import { ColorValue, DesignToken, DimensionValue, Group, RootGroup, ShadowValue, Type } from "@udt/tom";
-import { serializeDtcgFile } from "./serialize-node";
+import { serializeDtcgFile } from "@udt/dtcg-serializer";
 
 console.log("----- TOM --> JSON -----");
 

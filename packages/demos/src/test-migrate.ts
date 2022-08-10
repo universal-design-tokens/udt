@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { DesignToken, Group, RootGroup } from "@udt/tom";
-import { serializeDtcgFile } from './serialize-node';
+import { serializeDtcgFile } from '@udt/dtcg-serializer';
 
 function isDraft1TokenData(data: any): boolean {
   return typeof data === 'object' && data.value !== undefined;

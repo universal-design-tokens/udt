@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { DesignToken, Group, RootGroup, TOMNode } from "@udt/tom";
-import { parseFile } from './parse-file';
+import { parseFile } from '@udt/dtcg-parser';
 
 function logTOMNodes(node: TOMNode, indent: string = '') {
   if (node instanceof DesignToken) {
