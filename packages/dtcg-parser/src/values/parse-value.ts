@@ -1,6 +1,8 @@
 import { isJsonValue, Type, Value, Reference } from "@udt/tom";
+import { isReferenceValue, makeReference } from "./reference";
 import { parseColorValue } from "./color";
 import { parseDimensionValue } from "./dimension";
+import { parseShadowValue } from "./shadow";
 import {
   parseArray,
   parseBoolean,
@@ -10,24 +12,10 @@ import {
   parseString,
 } from "./json";
 
-const referenceRegex = /^\{[^\.\{\}]+(\.[^\.\{\}]+)*\}$/;
-
-export function isReferenceValue(value: any): value is string {
-  return typeof value === 'string' && referenceRegex.test(value);
-}
-
-export function referenceToPath(referenceValue: string): string[] {
-  if (!isReferenceValue(referenceValue)) {
-    throw new Error(`"${referenceValue}" is not a valid reference`);
-  }
-  return referenceValue.slice(1, -1).split('.');
-}
-
 export function parseValue(value: unknown, type?: Type): Value | Reference {
   if (isReferenceValue(value)) {
-    return new Reference(referenceToPath(value));
-  }
-  else if (type === undefined && isJsonValue(value)) {
+    return makeReference(value);
+  } else if (type === undefined && isJsonValue(value)) {
     return value;
   } else {
     switch (type) {
@@ -37,6 +25,10 @@ export function parseValue(value: unknown, type?: Type): Value | Reference {
 
       case Type.DIMENSION: {
         return parseDimensionValue(value);
+      }
+
+      case Type.SHADOW: {
+        return parseShadowValue(value);
       }
 
       case Type.ARRAY: {

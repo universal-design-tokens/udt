@@ -3,6 +3,7 @@ import { INodeWithChildren } from './interfaces/node-with-children';
 import { DesignToken } from './design-token';
 import { Type } from './type';
 import { Reference } from './reference';
+import { NodeWithParent } from './node-with-parent';
 
 export type TokenOrGroup = DesignToken | Group;
 
@@ -19,7 +20,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   public removeChild(child: TokenOrGroup): boolean {
     if (this.#children.has(child)) {
       this.#children.delete(child);
-      TOMNode._clearParent(child);
+      NodeWithParent._clearParent(child);
       return true;
     }
     // not our child
@@ -38,7 +39,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
     }
 
     this.#children.add(child);
-    TOMNode._assignParent(child, this);
+    NodeWithParent._assignParent(child, this);
   }
 
   public hasChild(nodeOrName: TokenOrGroup | string): boolean {

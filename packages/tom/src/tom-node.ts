@@ -1,5 +1,6 @@
 import { Type, allTypes } from "./type";
 import { INodeWithChildren } from "./interfaces/node-with-children";
+import { NodeWithParent } from "./node-with-parent";
 import { TOMInvalidAssignmentError } from "./exceptions";
 
 type ParentNode = TOMNode & INodeWithChildren<TOMNode>;
@@ -37,14 +38,14 @@ export interface TOMNodeCommonProps {
   description?: string;
 }
 
-export abstract class TOMNode {
-  #parent?: ParentNode;
+export abstract class TOMNode extends NodeWithParent<ParentNode> {
   #name: string;
   #type?: Type;
   #description?: string;
 
 
   constructor(name: string, {type, description}: TOMNodeCommonProps = {}) {
+    super();
     if (isValidName(name)) {
       this.#name = name;
     }
@@ -98,10 +99,6 @@ export abstract class TOMNode {
 
   public abstract isValid(): boolean;
 
-  public getParent(): ParentNode | undefined {
-    return this.#parent;
-  }
-
   /**
    * Retrieves this node's uppermost parent, if any.
    */
@@ -138,7 +135,7 @@ export abstract class TOMNode {
    * Checks if this node has a parent.
    */
    public hasParent(): boolean {
-    return this.#parent !== undefined;
+    return this.getParent() !== undefined;
   }
 
   /**
@@ -162,14 +159,4 @@ export abstract class TOMNode {
   protected _onParentAssigned(): void {};
 
   protected _onParentRemoved(): void {};
-
-  protected static _assignParent(child: TOMNode, parent: ParentNode) {
-    child.#parent = parent;
-    child._onParentAssigned();
-  }
-
-  protected static _clearParent(child: TOMNode) {
-    child.#parent = undefined;
-    child._onParentRemoved();
-  }
 }

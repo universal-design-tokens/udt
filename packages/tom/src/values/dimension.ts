@@ -40,3 +40,6 @@ export class DimensionValue {
   }
 }
 
+export function isDimensionValue(value: unknown): value is DimensionValue {
+  return value instanceof DimensionValue;
+}

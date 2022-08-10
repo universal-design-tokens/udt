@@ -19,6 +19,7 @@ export const enum Type {
   GRADIENT = 'gradient',
   TYPOGRAPHY = 'typography',
   BORDER = 'border',
+  SHADOW = 'shadow',
 }
 
 export const allTypes: string[] = [
@@ -41,4 +42,5 @@ export const allTypes: string[] = [
   Type.GRADIENT,
   Type.TYPOGRAPHY,
   Type.BORDER,
+  Type.SHADOW,
 ]

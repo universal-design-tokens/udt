@@ -1,10 +1,12 @@
-import { Reference, Type, Value, isReference, DimensionValue, ColorValue } from "@udt/tom";
+import { Reference, Type, Value, isReference, DimensionValue, ColorValue, ShadowValue } from "@udt/tom";
+import { serializeReference } from "./reference";
 import { serializeColor } from "./color";
 import { serializeDimension } from "./dimension";
+import { serializeShadow } from "./shadow";
 
 export function serializeValue(value: Value | Reference, type: Type): any {
   if (isReference(value)) {
-    return `{${value.path.join('.')}}`;
+    return serializeReference(value);
   }
 
   switch(type) {
@@ -14,6 +16,10 @@ export function serializeValue(value: Value | Reference, type: Type): any {
 
     case Type.DIMENSION: {
       return serializeDimension(value as DimensionValue);
+    }
+
+    case Type.SHADOW: {
+      return serializeShadow(value as ShadowValue);
     }
 
     // JSON types

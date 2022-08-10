@@ -1,14 +1,15 @@
 import { TOMNode, TOMNodeCommonProps } from "./tom-node";
+import { NodeWithParent } from "./node-with-parent";
 import { Type } from "./type";
 import { Value, JsonValue, identifyJsonType, NOT_JSON } from "./values";
 import { Reference, isReference } from "./reference";
-import { PropertyGetter, resolveReference } from "./referencable-property";
-
-
+import { resolveReference } from "./referencable-property";
+import { isCompositeValue } from "./values/composite-value";
+import { ReferencedValueResolver } from "./interfaces/referenced-value-resolver";
 
 export type DeferredValue = (ownOrInheritedType?: Type) => Value | Reference;
 
-export class DesignToken extends TOMNode {
+export class DesignToken extends TOMNode implements ReferencedValueResolver {
   #value: Value | Reference | DeferredValue;
   #extensions: Map<string, JsonValue>;
 
@@ -36,30 +37,6 @@ export class DesignToken extends TOMNode {
     return isReference(this.#value);
   }
 
-  // public getNextReferencedToken(): DesignToken {
-  //   const value = this.getValue();
-  //   if (isReference(value) && this.hasParent()) {
-  //     const referencedNode = this.getTopParent()!.getReferencedNode(value);
-  //     if (referencedNode instanceof DesignToken) {
-  //       return referencedNode;
-  //     }
-  //   }
-  //   throw new Error("Reference is invalid");
-  // }
-
-  // public getFinalReferencedToken(): DesignToken {
-  //   let nextToken: DesignToken = this;
-  //   while (nextToken.isAlias()) {
-  //     nextToken = nextToken.getNextReferencedToken();
-  //     if (nextToken === this) {
-  //       throw new Error(
-  //         `Reference loop detected ("${this.getName()}"" references itself)`
-  //       );
-  //     }
-  //   }
-  //   return nextToken;
-  // }
-
   private static __getTokenValue(node: TOMNode): Value | Reference {
     if (node instanceof DesignToken) {
       return node.getValue();
@@ -67,14 +44,17 @@ export class DesignToken extends TOMNode {
     throw new Error(`Node "${node.getName()}" is not a design token`);
   }
 
+  public resolveReferencedValue(reference: Reference): Value {
+    return resolveReference(reference, this, DesignToken.__getTokenValue);
+  }
+
   public getResolvedValue(): Value {
     const valueOrReference = this.getValue()
     if (isReference(valueOrReference)) {
-      return resolveReference(valueOrReference, this, DesignToken.__getTokenValue);
+      return this.resolveReferencedValue(valueOrReference);
     }
     return valueOrReference;
   }
-
 
   public getValue(): Value | Reference {
     if (typeof this.#value === 'function') {
@@ -84,12 +64,14 @@ export class DesignToken extends TOMNode {
   }
 
   public setValue(value: Value | Reference): void {
-    // if (isJsonValue(value)) {
+    const oldValue = this.#value;
     this.#value = value;
-    // }
-    // else {
-    //   throw new Error(`${value} is not a valid token value`);
-    // }
+    if (isCompositeValue(value)) {
+      NodeWithParent._assignParent(value, this);
+    }
+    if (isCompositeValue(oldValue)) {
+      NodeWithParent._clearParent(oldValue);
+    }
   }
 
   private __getOwnOrInheritedType(): Type | undefined {

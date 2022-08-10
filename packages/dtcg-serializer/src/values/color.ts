@@ -3,7 +3,7 @@ import { ColorValue } from "@udt/tom";
 export type DtcgColorValue = string;
 
 function channelToHex(value: number): string {
-  return Math.round(value * 255).toString(16);
+  return Math.round(value * 255).toString(16).padStart(2, '0');
 }
 
 export function serializeColor(color: ColorValue): DtcgColorValue {

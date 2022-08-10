@@ -53,5 +53,15 @@
   "token 5": {
     "$type": "color",
     "$value": "#123abc"
+  },
+  "token 6": {
+    "$type": "shadow",
+    "$value": {
+      "color": "{token 5}",
+      "offsetX": "{token 4}",
+      "offsetY": "2rem",
+      "blur": "5px",
+      "spread": "{group 2.token 2-1}"
+    }
   }
 }

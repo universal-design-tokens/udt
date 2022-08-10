@@ -39,3 +39,7 @@ export class ColorValue {
     return ColorSpace.SRGB;
   }
 }
+
+export function isColorValue(value: unknown): value is ColorValue {
+  return value instanceof ColorValue;
+}
