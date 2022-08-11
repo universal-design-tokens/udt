@@ -23,12 +23,11 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
   ) {
     super(name, commonProps);
 
-    // if (isJsonValue(value)) {
     this.#value = value;
-    // }
-    // else {
-    //   throw new Error(`${value} is not a valid token value`);
-    // }
+    if (isCompositeValue(value)) {
+      NodeWithParent._assignParent(value, this);
+    }
+
 
     this.#extensions = new Map<string, JsonValue>();
   }
@@ -160,7 +159,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
 
   protected _onParentAssigned(): void {
     if (typeof this.#value === "function") {
-      this.#value = this.#value(this.__getOwnOrInheritedType());
+      this.setValue(this.#value(this.__getOwnOrInheritedType()));
     }
   };
 }

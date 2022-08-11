@@ -75,7 +75,7 @@ export class ShadowValue extends CompositeValue {
     throw new Error(`Cannot set shadow offsetY to a (reference to a) non-dimension value`);
   }
 
-  public getResolvedOffseYX(): DimensionValue {
+  public getResolvedOffsetY(): DimensionValue {
     return this._getResolvedValue(this.#offsetY, isDimensionValue);
   }
 
