@@ -1,40 +1,62 @@
-import { ColorValue, DimensionValue, JsonValue, Reference, ShadowValue, Type, Value } from "@udt/tom";
+import {
+  ColorValue,
+  DimensionValue,
+  JsonValue,
+  Reference,
+  ShadowValue,
+  Type,
+  Value,
+} from "@udt/tom";
 import { indentable, Indentable, tabWidth } from "./text-formatting";
+import chalk from "chalk";
+
+const data = chalk.yellowBright.bold;
+const keyword = chalk.greenBright;
+const syntax = chalk.yellow.dim;
 
 export function formatReference(reference: Reference): string {
-  return `{${reference.path.join('.')}}`;
+  return syntax("{") + data(reference.path.join(syntax("."))) + syntax("}");
+}
+
+function round(value: number): string {
+  return value.toFixed(2);
 }
 
 export function formatColor(value: ColorValue): Indentable {
   return indentable(
-    `{`,
-    indentable(`channels: [${value.getChannels().join(', ')}]`),
-    value.hasAlpha() ? indentable(` alpha: ${value.getAlpha()}`) : null,
-    `}`
+    syntax(`{`),
+    indentable(
+      keyword("channels") +
+        syntax(": [") +
+        data(value.getChannels().map(round).join(syntax(", "))) +
+        syntax("]")
+    ),
+    value.hasAlpha() ? indentable(` alpha: ${round(value.getAlpha())}`) : null,
+    syntax(`}`)
   );
 }
 
 export function formatDimension(value: DimensionValue): string {
-  return `${value.getAmount()}${value.getUnit()}`;
+  return data(`${value.getAmount()}${value.getUnit()}`);
 }
 
 export function formatShadow(value: ShadowValue): Indentable {
   return indentable(
-    `color:`,
+    keyword(`color`) + syntax(`:` ),
     formatColor(value.getResolvedColor()),
-    `offsetX: ${formatDimension(value.getResolvedOffsetX())}`,
-    `offsetY: ${formatDimension(value.getResolvedOffsetY())}`,
-    `blur: ${formatDimension(value.getResolvedBlur())}`,
-    `spread: ${formatDimension(value.getResolvedSpread())}`,
+    keyword(`offsetX`)+ syntax(`: `) + formatDimension(value.getResolvedOffsetX()),
+    keyword(`offsetY`)+ syntax(`: `) + formatDimension(value.getResolvedOffsetY()),
+    keyword(`blur`)+ syntax(`: `) + formatDimension(value.getResolvedBlur()),
+    keyword(`spread`)+ syntax(`: `) + formatDimension(value.getResolvedSpread())
   );
-};
+}
 
 export function formatJSON(value: JsonValue): string {
-  return JSON.stringify(value, undefined, tabWidth);
+  return data(JSON.stringify(value, undefined, tabWidth));
 }
 
 export function formatValue(value: Value, type: Type): string | Indentable {
-  switch(type) {
+  switch (type) {
     case Type.COLOR: {
       return formatColor(value as ColorValue);
     }
@@ -48,7 +70,7 @@ export function formatValue(value: Value, type: Type): string | Indentable {
     }
 
     default: {
-      return JSON.stringify(value);
+      return formatJSON(value as JsonValue);
     }
   }
 }
