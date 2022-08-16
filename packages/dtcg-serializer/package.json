@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "A library for serializing Token Object Models (TOM) to DTCG design token files",
   "main": "dist/index.js",
-  "devDependencies": {},
   "scripts": {
     "clean": "del dist/*",
     "build": "tsc -p tsconfig.build.json",

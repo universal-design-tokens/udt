@@ -37,12 +37,12 @@
     "npm": ">= 8"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.3",
-    "@types/node": "^16.11.41",
-    "del-cli": "^4.0.1",
-    "jest": "^28.1.1",
-    "lerna": "^5.1.6",
-    "ts-jest": "^28.0.5",
+    "@types/jest": "^28.1.7",
+    "@types/node": "^16.11.49",
+    "del-cli": "^5.0.0",
+    "jest": "^28.1.3",
+    "lerna": "^5.4.3",
+    "ts-jest": "^28.0.8",
     "typescript": "^4.7.4"
   }
 }
