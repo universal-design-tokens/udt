@@ -1,6 +1,0 @@
-{
-  "extends": "../../shared-configs/tsconfig-base.json",
-  "include": [
-    "src/"
-  ]
-}
