@@ -1,0 +1,43 @@
+{
+  "group 1": {
+    "group 1-1": {
+      "token 1-1-1": {
+        "value": 123
+      },
+      "token 1-1-2": {
+        "value": 321
+      }
+    },
+    "token 1-2": {
+      "value": 99
+    },
+    "group 1-3": {
+      "token 1-3-1": {
+        "value": {
+          "foo": 123,
+          "bar": 321
+        }
+      },
+      "token 1-3-2": {
+        "value": {
+          "nested": {
+            "nested again": {
+              "value": 123
+            }
+          }
+        }
+      }
+    }
+  },
+  "group 2": {
+    "token 2-1": {
+      "value": "1rem"
+    }
+  },
+  "token 3": {
+    "value": "1rem"
+  },
+  "token 4": {
+    "value": "{group 2.token 2-1}"
+  }
+}

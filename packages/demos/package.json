@@ -2,20 +2,27 @@
   "name": "@udt/demos",
   "private": true,
   "version": "0.1.0",
-  "description": "Simple demos that use the @udt/lib library",
-  "main": "index.ts",
-  "scripts": {},
+  "description": "Demos that use the @udt/* libraries",
+  "scripts": {
+    "clean": "del dist/*",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
   "keywords": [
     "udt",
+    "dtcg",
     "design",
     "tokens",
     "demo",
     "example"
   ],
-  "author": "James Nash (http://cirrus.twiddles.com/)",
+  "author": "James Nash (https://cirrus.twiddles.com/)",
   "license": "ISC",
   "dependencies": {
-    "@udt/lib": "^0.1.0",
+    "@udt/dtcg-parser": "^0.1.0",
+    "@udt/dtcg-serializer": "^0.1.0",
+    "@udt/tom": "^0.1.0",
+    "chalk": "^4.1.2",
     "lodash.kebabcase": "^4.1.1"
   }
 }
