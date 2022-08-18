@@ -1,10 +1,9 @@
-import { ColorValue } from "./color";
-import { DimensionValue } from "./dimension";
-import { ShadowValue } from "./shadow";
-import { JsonValue } from "./json";
+import { Type } from "../type";
 
-export type Value =
-  | ColorValue
-  | DimensionValue
-  | ShadowValue
-  | JsonValue;
+export abstract class Value {
+  public abstract readonly type: Type;
+}
+
+export function isValue(value: unknown): value is Value {
+  return value instanceof Value;
+}

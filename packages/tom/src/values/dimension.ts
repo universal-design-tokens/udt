@@ -1,10 +1,16 @@
+import { Type } from "../type";
+import { Value } from "./value";
+
 export type DimensionUnit = 'rem' | 'px';
 
-export class DimensionValue {
+export class DimensionValue extends Value {
+  readonly type = Type.DIMENSION;
+
   #amount: number;
   #unit: DimensionUnit;
 
   constructor({ amount, unit }: { amount: number, unit: DimensionUnit }) {
+    super();
     this.#amount = amount;
     this.#unit = unit;
   }

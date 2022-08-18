@@ -1,10 +1,13 @@
 import { isReference, Reference } from "../reference";
 import { NodeWithParent } from "../node-with-parent";
 import { ReferencedValueResolver } from "../interfaces/referenced-value-resolver";
+import { Type } from "../type";
 
 export type ValueCheckedFn<V> = (value: unknown) => value is V;
 
-export class CompositeValue extends NodeWithParent<ReferencedValueResolver> {
+export abstract class CompositeValue extends NodeWithParent<ReferencedValueResolver> {
+  public abstract readonly type: Type;
+
   private _resolveReferencedValue(reference: Reference): unknown {
     const parent = this.getParent();
     if (parent === undefined) {

@@ -1,10 +1,10 @@
-import { Reference, Type, Value, isReference, DimensionValue, ColorValue, ShadowValue } from "@udt/tom";
+import { Reference, Type, TokenValue, isReference, DimensionValue, ColorValue, ShadowValue } from "@udt/tom";
 import { serializeReference } from "./reference";
 import { serializeColor } from "./color";
 import { serializeDimension } from "./dimension";
 import { serializeShadow } from "./shadow";
 
-export function serializeValue(value: Value | Reference, type: Type): any {
+export function serializeValue(value: TokenValue | Reference, type: Type): any {
   if (isReference(value)) {
     return serializeReference(value);
   }

@@ -5,7 +5,7 @@ import {
   Reference,
   ShadowValue,
   Type,
-  Value,
+  TokenValue,
 } from "@udt/tom";
 import { indentable, Indentable, tabWidth } from "./text-formatting";
 import chalk from "chalk";
@@ -55,7 +55,7 @@ export function formatJSON(value: JsonValue): string {
   return data(JSON.stringify(value, undefined, tabWidth));
 }
 
-export function formatValue(value: Value, type: Type): string | Indentable {
+export function formatValue(value: TokenValue, type: Type): string | Indentable {
   switch (type) {
     case Type.COLOR: {
       return formatColor(value as ColorValue);

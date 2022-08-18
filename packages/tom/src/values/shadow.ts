@@ -1,4 +1,5 @@
 import { Reference } from "../reference";
+import { Type } from "../type";
 import { ColorValue, isColorValue } from "./color";
 import { CompositeValue } from "./composite-value";
 import { DimensionValue, isDimensionValue } from "./dimension";
@@ -12,6 +13,8 @@ export interface IShadowValueProps {
 }
 
 export class ShadowValue extends CompositeValue {
+  readonly type = Type.SHADOW;
+
   #color: ColorValue | Reference;
   #offsetX: DimensionValue | Reference;
   #offsetY: DimensionValue | Reference;

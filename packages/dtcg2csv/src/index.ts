@@ -49,7 +49,7 @@ function toCsvString(tom: RootGroup): Promise<string> {
         token.getName(),
         token.getPath().join('.'),
         token.getResolvedType(),
-        token.getResolvedValue()
+        token.getValue(true)
       ]);
     }
 

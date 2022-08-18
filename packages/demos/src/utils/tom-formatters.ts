@@ -9,7 +9,7 @@ function formatToken(node: DesignToken): Indentable {
     indentable(
       chalk.blue(`- resolved type: `) + chalk.magenta(node.getResolvedType()),
       chalk.blue(`- resolved value:`),
-      indentable(formatValue(node.getResolvedValue(), node.getResolvedType())),
+      indentable(formatValue(node.getValue(true), node.getResolvedType())),
       chalk.blue(`- is alias?: `) + chalk.magenta(node.isAlias()),
       node.hasExtensions()
         ? chalk.blue(`- has extensions: `) +

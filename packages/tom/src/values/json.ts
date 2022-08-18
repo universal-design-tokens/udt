@@ -10,7 +10,7 @@ export type JsonValue =
   | number
   | string;
 
-export const NOT_JSON = -1;
+export const UNSUPPORTED_TYPE = -1;
 
 export function identifyJsonType(
   value: unknown
@@ -21,7 +21,7 @@ export function identifyJsonType(
   | Type.NUMBER
   | Type.OBJECT
   | Type.STRING
-  | typeof NOT_JSON {
+  | typeof UNSUPPORTED_TYPE {
   switch (typeof value) {
     case "boolean":
       return Type.BOOLEAN;
@@ -43,7 +43,7 @@ export function identifyJsonType(
       return Type.OBJECT;
     }
   }
-  return NOT_JSON;
+  return UNSUPPORTED_TYPE;
 }
 
 export function isBoolean(value: unknown): value is boolean {

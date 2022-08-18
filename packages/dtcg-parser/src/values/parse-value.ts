@@ -1,4 +1,4 @@
-import { isJsonValue, Type, Value, Reference } from "@udt/tom";
+import { isJsonValue, Type, TokenValue, Reference } from "@udt/tom";
 import { isReferenceValue, makeReference } from "./reference";
 import { parseColorValue } from "./color";
 import { parseDimensionValue } from "./dimension";
@@ -12,7 +12,7 @@ import {
   parseString,
 } from "./json";
 
-export function parseValue(value: unknown, type?: Type): Value | Reference {
+export function parseValue(value: unknown, type?: Type): TokenValue | Reference {
   if (isReferenceValue(value)) {
     return makeReference(value);
   } else if (type === undefined && isJsonValue(value)) {

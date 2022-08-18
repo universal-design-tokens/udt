@@ -1,3 +1,6 @@
+import { Type } from "../type";
+import { Value } from "./value";
+
 export enum ColorSpace {
   SRGB = 'sRGB'
 }
@@ -6,11 +9,14 @@ type ColorChannels = [number, number, number];
 
 const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
 
-export class ColorValue {
+export class ColorValue extends Value {
+  readonly type = Type.COLOR;
+
   #channels: ColorChannels;
   #alpha: number | undefined;
 
   constructor({ channels, alpha}: { channels: ColorChannels, alpha?: number }) {
+    super();
     this.#channels = channels;
     this.#alpha = alpha;
   }
