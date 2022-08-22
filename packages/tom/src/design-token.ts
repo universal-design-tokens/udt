@@ -67,7 +67,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
    * @param resolve
    */
   public getValue(resolve: true): TokenValue;
-  public getValue(resolve?: false): TokenValue | Reference;
+  public getValue(resolve?: boolean): TokenValue | Reference;
   public getValue(resolve: boolean = false): TokenValue | Reference {
     if (typeof this.#valueOrReference === 'function') {
       throw new Error(`Token "${this.getName()}" has pending value`);
@@ -81,12 +81,14 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
 
 
   public setValue(valueOrReferenceOrToken: TokenValue | Reference | DesignToken): void {
-    const oldValue = this.getValue();
+    // While assigning a parent for the first time, we may still have a deferred value
+    // which would cause getValue() to throw an error, so we need to guard against that.
+    const oldValue = typeof this.#valueOrReference === 'function' ? undefined : this.getValue();
     this.#valueOrReference = tokenToReference(valueOrReferenceOrToken);
     if (isCompositeValue(valueOrReferenceOrToken)) {
       NodeWithParent._assignParent(valueOrReferenceOrToken, this);
     }
-    if (isCompositeValue(oldValue)) {
+    if (oldValue !== undefined && isCompositeValue(oldValue)) {
       NodeWithParent._clearParent(oldValue);
     }
   }

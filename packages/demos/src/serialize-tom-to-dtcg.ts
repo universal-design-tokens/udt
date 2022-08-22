@@ -1,8 +1,6 @@
 import { ColorValue, DesignToken, DimensionValue, Group, RootGroup, ShadowValue, Type } from "@udt/tom";
 import { serializeDtcgFile } from "@udt/dtcg-serializer";
 
-console.log("----- TOM --> JSON -----");
-
 const mediumToken = new DesignToken(
   "medium",
   new DimensionValue({ amount: 2.75, unit: "rem" }),
