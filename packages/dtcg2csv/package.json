@@ -26,6 +26,6 @@
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "dependencies": {
     "@udt/tom": "^0.1.0",
-    "csv-stringify": "^6.2.0"
+    "csv-stringify": "^6.2.2"
   }
 }
