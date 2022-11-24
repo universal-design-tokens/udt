@@ -1,19 +1,20 @@
 import { TOMNode, TOMNodeCommonProps } from "./tom-node";
 import { NodeWithParent } from "./node-with-parent";
 import { Type } from "./type";
-import { Value, CompositeValue, JsonValue, identifyJsonType, UNSUPPORTED_TYPE, identifyType } from "./values";
+import {
+  Value,
+  CompositeValue,
+  JsonValue,
+  identifyJsonType,
+  UNSUPPORTED_TYPE,
+  identifyType,
+} from "./values";
 import { Reference, isReference } from "./reference";
 import { resolveReference } from "./referencable-property";
 import { isCompositeValue } from "./values/composite-value";
 import { ReferencedValueResolver } from "./interfaces/referenced-value-resolver";
 
 export const enum SetValueStrategy {
-  /**
-   * Set a new value or reference, regardless of whether it's compatible
-   * with the token's resolved type or not.
-   */
-  NO_CHECK,
-
   /**
    * Only accept the new value or reference if it is compatible with
    * the token's resolved type. Throw an error otherwise.
@@ -31,14 +32,20 @@ export const enum SetValueStrategy {
 
 export type TokenValue = Value | CompositeValue | JsonValue;
 
-export type DeferredValue = (ownOrInheritedType?: Type) => TokenValue | Reference;
+export type DeferredValue = (
+  ownOrInheritedType?: Type
+) => TokenValue | Reference;
 
 export function isDesignToken(node: unknown): node is DesignToken {
   return node instanceof DesignToken;
 }
 
-function tokenToReference<V extends TokenValue | DeferredValue>(tokenOrOther: DesignToken | Reference | V): Reference | V {
-  return isDesignToken(tokenOrOther) ? tokenOrOther.getReference() : tokenOrOther;
+function tokenToReference<V extends TokenValue | DeferredValue>(
+  tokenOrOther: DesignToken | Reference | V
+): Reference | V {
+  return isDesignToken(tokenOrOther)
+    ? tokenOrOther.getReference()
+    : tokenOrOther;
 }
 
 export class DesignToken extends TOMNode implements ReferencedValueResolver {
@@ -50,22 +57,29 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
    */
   constructor(
     name: string,
-    valueOrReferenceOrToken: TokenValue | Reference | DeferredValue | DesignToken,
+    valueOrReferenceOrToken:
+      | TokenValue
+      | Reference
+      | DeferredValue
+      | DesignToken,
     commonProps: TOMNodeCommonProps = {},
-    strategy: SetValueStrategy = SetValueStrategy.UPDATE_TYPE,
+    strategy: SetValueStrategy = SetValueStrategy.UPDATE_TYPE
   ) {
     super(name, commonProps);
 
     const newValueOrReference = tokenToReference(valueOrReferenceOrToken);
-    if (typeof newValueOrReference !== 'function') {
-      this.__applySetValueStrategy(newValueOrReference, this.getType(), strategy);
+    if (typeof newValueOrReference !== "function") {
+      this.__applySetValueStrategy(
+        newValueOrReference,
+        this.getType(),
+        strategy
+      );
     }
 
     this.#valueOrReference = newValueOrReference;
     if (isCompositeValue(valueOrReferenceOrToken)) {
       NodeWithParent._assignParent(valueOrReferenceOrToken, this);
     }
-
 
     this.#extensions = new Map<string, JsonValue>();
   }
@@ -97,7 +111,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
   public getValue(resolve: true): TokenValue;
   public getValue(resolve?: boolean): TokenValue | Reference;
   public getValue(resolve: boolean = false): TokenValue | Reference {
-    if (typeof this.#valueOrReference === 'function') {
+    if (typeof this.#valueOrReference === "function") {
       throw new Error(`Token "${this.getName()}" has pending value`);
     }
     const valueOrReference = this.#valueOrReference;
@@ -110,7 +124,10 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
   private __doSetValue(valueOrReference: TokenValue | Reference): void {
     // While assigning a parent for the first time, we may still have a deferred value
     // which would cause getValue() to throw an error, so we need to guard against that.
-    const oldValue = typeof this.#valueOrReference === 'function' ? undefined : this.getValue();
+    const oldValue =
+      typeof this.#valueOrReference === "function"
+        ? undefined
+        : this.getValue();
     this.#valueOrReference = valueOrReference;
     if (isCompositeValue(valueOrReference)) {
       NodeWithParent._assignParent(valueOrReference, this);
@@ -120,29 +137,43 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     }
   }
 
-  private __applySetValueStrategy(valueOrReference: Reference | TokenValue, currentType: Type | undefined, strategy: SetValueStrategy): void {
-    if (strategy !== SetValueStrategy.NO_CHECK) {
-      const newValueType = isReference(valueOrReference) ? resolveReference(valueOrReference, this, DesignToken.__getTokenType) : identifyType(valueOrReference);
+  private __applySetValueStrategy(
+    valueOrReference: Reference | TokenValue,
+    currentType: Type | undefined,
+    strategy: SetValueStrategy
+  ): void {
+    const newValueType = isReference(valueOrReference)
+      ? resolveReference(valueOrReference, this, DesignToken.__getTokenType)
+      : identifyType(valueOrReference);
 
-      if (newValueType === UNSUPPORTED_TYPE) {
-        throw new Error(`Cannot set token value as it has an unsupported type: ${newValueType}`);
-      }
+    if (newValueType === UNSUPPORTED_TYPE) {
+      throw new Error(
+        `Cannot set token value as it has an unsupported type: ${newValueType}`
+      );
+    }
 
-      if (currentType !== newValueType) {
-        if (strategy === SetValueStrategy.REJECT_INCOMPATIBLE) {
-          throw new Error(`New token value's type (${newValueType}) does not match token's type: ${currentType}`);
-        }
-        else {
-          // strategy is update type
-          this.setType(newValueType);
-        }
+    if (currentType !== newValueType) {
+      if (strategy === SetValueStrategy.REJECT_INCOMPATIBLE) {
+        throw new Error(
+          `New token value's type (${newValueType}) does not match token's type: ${currentType}`
+        );
+      } else {
+        // strategy is update type
+        this.setType(newValueType);
       }
     }
   }
 
-  public setValue(valueOrReferenceOrToken: TokenValue | Reference | DesignToken, strategy: SetValueStrategy = SetValueStrategy.UPDATE_TYPE): void {
+  public setValue(
+    valueOrReferenceOrToken: TokenValue | Reference | DesignToken,
+    strategy: SetValueStrategy = SetValueStrategy.UPDATE_TYPE
+  ): void {
     const newValueOrReference = tokenToReference(valueOrReferenceOrToken);
-    this.__applySetValueStrategy(newValueOrReference, this.getResolvedType(), strategy);
+    this.__applySetValueStrategy(
+      newValueOrReference,
+      this.getResolvedType(),
+      strategy
+    );
     this.__doSetValue(newValueOrReference);
   }
 
@@ -160,7 +191,6 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     return type;
   }
 
-
   private static __getTokenType(node: TOMNode): Type {
     if (node instanceof DesignToken) {
       return node.getResolvedType();
@@ -174,7 +204,11 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
       // Is value a reference?
       const valueOrReference = this.getValue();
       if (isReference(valueOrReference)) {
-        return resolveReference(valueOrReference, this, DesignToken.__getTokenType);
+        return resolveReference(
+          valueOrReference,
+          this,
+          DesignToken.__getTokenType
+        );
       }
 
       // Are we inheriting a type from parent group(s)
@@ -234,10 +268,9 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     if (typeof this.#valueOrReference === "function") {
       this.__doSetValue(this.#valueOrReference(this.__getOwnOrInheritedType()));
     }
-  };
+  }
 }
 
-
-const tmp = new DesignToken('test', 123);
+const tmp = new DesignToken("test", 123);
 
 const foo = tokenToReference(tmp);
