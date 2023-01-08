@@ -1,14 +1,11 @@
 import { DeferredValue, DesignToken, Reference, Type } from "@udt/tom";
-import { addExtensions } from "./add-extensions";
 import { extractCommonProps } from "./extract-common-props";
-import { isJsonObject } from "./utils";
 import { parseValue } from "./values/parse-value";
 import { isReferenceValue, makeReference } from "./values/reference";
 
 export function parseToken(name: string, dtcgData: unknown): DesignToken {
   const {
     commonProps,
-    extensions,
     rest: { $value: value, ...rest },
   } = extractCommonProps(dtcgData);
 
@@ -29,8 +26,6 @@ export function parseToken(name: string, dtcgData: unknown): DesignToken {
     () => tokenValue,
     commonProps
   );
-
-  addExtensions(token, extensions);
 
   return token;
 }

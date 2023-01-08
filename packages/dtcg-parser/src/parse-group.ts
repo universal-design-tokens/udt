@@ -2,8 +2,6 @@ import { Group } from '@udt/tom';
 import { parseToken } from './parse-token';
 import { extractCommonProps } from './extract-common-props';
 import { isJsonObject, isTokenData } from './utils';
-import { addExtensions } from './add-extensions';
-
 
 interface ParsedGroup {
   group: Group;
@@ -13,13 +11,10 @@ interface ParsedGroup {
 function parseGroup(name: string, dtcgData: unknown): ParsedGroup {
   const {
     commonProps,
-    extensions,
     rest: children,
   } = extractCommonProps(dtcgData);
 
   const group = new Group(name, commonProps);
-
-  addExtensions(group, extensions);
 
   return {
     group,

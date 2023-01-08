@@ -20,7 +20,11 @@ const reservedCharactersRegEx = /[\{\}\.]/;
  * @returns     `true` is the name is valid, `false` otherwise.
  */
 export function isValidName(name: any): name is string {
-  return typeof name === 'string' && name[0] !== '$' && !reservedCharactersRegEx.test(name);
+  return (
+    typeof name === "string" &&
+    name[0] !== "$" &&
+    !reservedCharactersRegEx.test(name)
+  );
 }
 
 /**
@@ -30,35 +34,42 @@ export function isValidName(name: any): name is string {
  * @returns
  */
 export function isValidType(type: any): type is Type {
-  return typeof type === 'string' && allTypes.includes(type);
+  return typeof type === "string" && allTypes.includes(type);
 }
 
-export interface TOMNodeCommonProps {
+export interface ExtensionsMap {
+  [key: string]: any;
+}
+
+export interface TOMNodeCommonConstructorProps {
   type?: Type;
   description?: string;
+  extensions?: ExtensionsMap;
 }
-
-export type Extension = any;
 
 export abstract class TOMNode extends NodeWithParent<ParentNode> {
   #name: string;
   #type?: Type;
   #description?: string;
-  #extensions: Map<string, Extension>;
+  #extensions: Map<string, any>;
 
-
-  constructor(name: string, {type, description}: TOMNodeCommonProps = {}) {
+  constructor(
+    name: string,
+    { type, description, extensions }: TOMNodeCommonConstructorProps = {}
+  ) {
     super();
     if (isValidName(name)) {
       this.#name = name;
-    }
-    else {
-      throw new TOMInvalidAssignmentError('name', name);
+    } else {
+      throw new TOMInvalidAssignmentError("name", name);
     }
 
     this.setType(type);
     this.setDescription(description);
-    this.#extensions = new Map<string, Extension>();
+    this.#extensions = new Map<string, any>();
+    if (extensions !== undefined) {
+      this.setExtensions(extensions);
+    }
   }
 
   public getName(): string {
@@ -68,12 +79,10 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
   public setName(name: string): void {
     if (isValidName(name)) {
       this.#name = name;
-    }
-    else {
-      throw new TOMInvalidAssignmentError('name', name);
+    } else {
+      throw new TOMInvalidAssignmentError("name", name);
     }
   }
-
 
   public getType(): Type | undefined {
     return this.#type;
@@ -82,9 +91,8 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
   public setType(type: Type | undefined): void {
     if (isValidType(type) || type === undefined) {
       this.#type = type;
-    }
-    else {
-      throw new TOMInvalidAssignmentError('type', type);
+    } else {
+      throw new TOMInvalidAssignmentError("type", type);
     }
   }
 
@@ -93,11 +101,10 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
   }
 
   public setDescription(description: string | undefined) {
-    if (typeof description === 'string' || description === undefined) {
+    if (typeof description === "string" || description === undefined) {
       this.#description = description;
-    }
-    else {
-      throw new TOMInvalidAssignmentError('description', description);
+    } else {
+      throw new TOMInvalidAssignmentError("description", description);
     }
   }
 
@@ -138,7 +145,7 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
   /**
    * Checks if this node has a parent.
    */
-   public hasParent(): boolean {
+  public hasParent(): boolean {
     return this.getParent() !== undefined;
   }
 
@@ -152,28 +159,33 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
 
     if (parentNode === undefined) {
       return [name];
-    }
-    else {
+    } else {
       const parentPath = parentNode.getPath();
       parentPath.push(name);
       return parentPath;
     }
   }
 
-  protected _onParentAssigned(): void {};
+  protected _onParentAssigned(): void {}
 
-  protected _onParentRemoved(): void {};
+  protected _onParentRemoved(): void {}
 
   public hasExtension(key: string): boolean {
     return this.#extensions.has(key);
   }
 
-  public getExtension(key: string): Extension | undefined {
+  public getExtension(key: string): any | undefined {
     return this.#extensions.get(key);
   }
 
-  public setExtension(key: string, value: Extension): void {
+  public setExtension(key: string, value: any): void {
     this.#extensions.set(key, value);
+  }
+
+  public setExtensions(extensions: ExtensionsMap): void {
+    for (const key of Object.keys(extensions)) {
+      this.setExtension(key, extensions[key]);
+    }
   }
 
   public deleteExtension(key: string): boolean {
@@ -188,8 +200,7 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
     return this.#extensions.size > 0;
   }
 
-  public extensions(): IterableIterator<[string, Extension]> {
+  public extensions(): IterableIterator<[string, any]> {
     return this.#extensions.entries();
   }
-
 }

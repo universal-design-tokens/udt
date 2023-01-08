@@ -1,8 +1,8 @@
-import { Extension, isValidType, TOMNodeCommonProps } from "@udt/tom";
+import { isValidType, TOMNodeCommonConstructorProps } from "@udt/tom";
+import { isJsonObject } from "./utils";
 
 export interface ExtractedCommonProps {
-  commonProps: TOMNodeCommonProps;
-  extensions: any;
+  commonProps: TOMNodeCommonConstructorProps;
   rest: any;
 }
 
@@ -13,8 +13,8 @@ export function extractCommonProps(dtcgData: any): ExtractedCommonProps {
     commonProps: {
       description: typeof $description === "string" ? $description : undefined,
       type: isValidType($type) ? $type : undefined,
+      extensions: isJsonObject($extensions) ? $extensions : undefined
     },
-    extensions: $extensions,
     rest,
   };
 }

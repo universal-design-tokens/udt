@@ -1,4 +1,4 @@
-import { TOMNode, TOMNodeCommonProps } from './tom-node';
+import { TOMNode, TOMNodeCommonConstructorProps } from './tom-node';
 import { INodeWithChildren } from './interfaces/node-with-children';
 import { DesignToken } from './design-token';
 import { Type } from './type';
@@ -10,7 +10,7 @@ export type TokenOrGroup = DesignToken | Group;
 export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   #children: Set<TokenOrGroup>;
 
-  constructor(name: string, props: TOMNodeCommonProps = {}) {
+  constructor(name: string, props: TOMNodeCommonConstructorProps = {}) {
     super(name, props);
 
     this.#children = new Set();

@@ -1,4 +1,4 @@
-import { TOMNode, TOMNodeCommonProps } from "./tom-node";
+import { TOMNode, TOMNodeCommonConstructorProps } from "./tom-node";
 import { NodeWithParent } from "./node-with-parent";
 import { Type } from "./type";
 import {
@@ -60,7 +60,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
       | Reference
       | DeferredValueOrReference
       | DesignToken,
-    commonProps: TOMNodeCommonProps = {},
+    commonProps: TOMNodeCommonConstructorProps = {},
     strategy: SetValueStrategy = SetValueStrategy.UPDATE_TYPE
   ) {
     super(name, commonProps);
