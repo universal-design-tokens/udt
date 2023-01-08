@@ -38,10 +38,13 @@ export interface TOMNodeCommonProps {
   description?: string;
 }
 
+export type Extension = any;
+
 export abstract class TOMNode extends NodeWithParent<ParentNode> {
   #name: string;
   #type?: Type;
   #description?: string;
+  #extensions: Map<string, Extension>;
 
 
   constructor(name: string, {type, description}: TOMNodeCommonProps = {}) {
@@ -55,6 +58,7 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
 
     this.setType(type);
     this.setDescription(description);
+    this.#extensions = new Map<string, Extension>();
   }
 
   public getName(): string {
@@ -159,4 +163,33 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
   protected _onParentAssigned(): void {};
 
   protected _onParentRemoved(): void {};
+
+  public hasExtension(key: string): boolean {
+    return this.#extensions.has(key);
+  }
+
+  public getExtension(key: string): Extension | undefined {
+    return this.#extensions.get(key);
+  }
+
+  public setExtension(key: string, value: Extension): void {
+    this.#extensions.set(key, value);
+  }
+
+  public deleteExtension(key: string): boolean {
+    return this.#extensions.delete(key);
+  }
+
+  public clearExtensions(): void {
+    this.#extensions.clear();
+  }
+
+  public hasExtensions(): boolean {
+    return this.#extensions.size > 0;
+  }
+
+  public extensions(): IterableIterator<[string, Extension]> {
+    return this.#extensions.entries();
+  }
+
 }

@@ -33,6 +33,13 @@ function formatGroup(node: Group): Indentable {
           : `Group "${chalk.magentaBright.bold(node.getName())}"`
       }`
     ),
+    node.hasExtensions()
+      ? chalk.blue(`- has extensions: `) +
+          [...node.extensions()]
+            .map((keyExt) => keyExt[0])
+            .map((ext) => chalk.magenta(ext))
+            .join(chalk.magenta.dim(", "))
+      : null,
     ...childNodes
   );
 }

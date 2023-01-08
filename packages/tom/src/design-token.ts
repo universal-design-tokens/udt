@@ -30,8 +30,6 @@ export const enum SetValueStrategy {
 
 export type TokenValue = Value | CompositeValue | number;
 
-export type Extension = any;
-
 export type DeferredValue = (ownOrInheritedType: Type) => TokenValue;
 
 export type DeferredValueOrReference = () => Reference | DeferredValue;
@@ -50,7 +48,7 @@ function tokenToReference<V extends TokenValue | DeferredValueOrReference>(
 
 export class DesignToken extends TOMNode implements ReferencedValueResolver {
   #valueOrReference: TokenValue | Reference | DeferredValueOrReference;
-  #extensions: Map<string, Extension>;
+
 
   /**
    * Constructs a new design token node.
@@ -80,8 +78,6 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     if (isCompositeValue(valueOrReferenceOrToken)) {
       NodeWithParent._assignParent(valueOrReferenceOrToken, this);
     }
-
-    this.#extensions = new Map<string, Extension>();
   }
 
   public isAlias(): boolean {
@@ -228,34 +224,6 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
       );
     }
     return type;
-  }
-
-  public hasExtension(key: string): boolean {
-    return this.#extensions.has(key);
-  }
-
-  public getExtension(key: string): Extension | undefined {
-    return this.#extensions.get(key);
-  }
-
-  public setExtension(key: string, value: Extension): void {
-    this.#extensions.set(key, value);
-  }
-
-  public deleteExtension(key: string): boolean {
-    return this.#extensions.delete(key);
-  }
-
-  public clearExtensions(): void {
-    this.#extensions.clear();
-  }
-
-  public hasExtensions(): boolean {
-    return this.#extensions.size > 0;
-  }
-
-  public extensions(): IterableIterator<[string, Extension]> {
-    return this.#extensions.entries();
   }
 
   public isValid(): boolean {

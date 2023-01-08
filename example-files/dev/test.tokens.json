@@ -31,6 +31,10 @@
     }
   },
   "group 2": {
+    "$extensions": {
+      "design.udt.group-ext": "dummy extension",
+      "design.udt.other": "another dummy extension"
+    },
     "$type": "dimension",
     "token 2-1": {
       "$value": "1.5rem"
