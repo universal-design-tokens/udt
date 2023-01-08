@@ -1,4 +1,4 @@
-import { TOMNode, DesignToken, JsonValue, Group, RootGroup } from '@udt/tom';
+import { TOMNode, DesignToken, Extension, Group, RootGroup } from '@udt/tom';
 import { serializeValue } from './values/serialize-value';
 
 function serializeCommonProps(node: TOMNode) {
@@ -9,7 +9,7 @@ function serializeCommonProps(node: TOMNode) {
 }
 
 function serializeDesignToken(token: DesignToken) {
-  let extensions: Record<string, JsonValue> | undefined;
+  let extensions: Record<string, Extension> | undefined;
   if (token.hasExtensions()) {
     extensions = {};
     for (const [key, extension] of token.extensions()) {

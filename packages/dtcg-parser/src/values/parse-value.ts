@@ -1,59 +1,26 @@
-import { isJsonValue, Type, TokenValue, Reference } from "@udt/tom";
+import { Type, TokenValue, Reference } from "@udt/tom";
 import { isReferenceValue, makeReference } from "./reference";
 import { parseColorValue } from "./color";
 import { parseDimensionValue } from "./dimension";
 import { parseShadowValue } from "./shadow";
-import {
-  parseArray,
-  parseBoolean,
-  parseNull,
-  parseNumber,
-  parseObject,
-  parseString,
-} from "./json";
+import { parseNumber } from "./number";
 
-export function parseValue(value: unknown, type?: Type): TokenValue | Reference {
-  if (isReferenceValue(value)) {
-    return makeReference(value);
-  } else if (type === undefined && isJsonValue(value)) {
-    return value;
-  } else {
-    switch (type) {
-      case Type.COLOR: {
-        return parseColorValue(value);
-      }
+export function parseValue(value: unknown, type: Type): TokenValue {
+  switch (type) {
+    case Type.COLOR: {
+      return parseColorValue(value);
+    }
 
-      case Type.DIMENSION: {
-        return parseDimensionValue(value);
-      }
+    case Type.DIMENSION: {
+      return parseDimensionValue(value);
+    }
 
-      case Type.SHADOW: {
-        return parseShadowValue(value);
-      }
+    case Type.SHADOW: {
+      return parseShadowValue(value);
+    }
 
-      case Type.ARRAY: {
-        return parseArray(value);
-      }
-
-      case Type.BOOLEAN: {
-        return parseBoolean(value);
-      }
-
-      case Type.OBJECT: {
-        return parseObject(value);
-      }
-
-      case Type.NULL: {
-        return parseNull(value);
-      }
-
-      case Type.NUMBER: {
-        return parseNumber(value);
-      }
-
-      case Type.STRING: {
-        return parseString(value);
-      }
+    case Type.NUMBER: {
+      return parseNumber(value);
     }
   }
 

@@ -1,24 +1,14 @@
-import { DesignToken, Group, RootGroup, Type } from "@udt/tom";
+import { readFileSync } from 'fs';
+import { RootGroup } from "@udt/tom";
+import { parseFile } from "@udt/dtcg-parser";
 import { stringify } from "csv-stringify";
 
-function generateTom(): RootGroup {
-  const tomRoot = new RootGroup();
+function getArgs(): string[] {
+  return process.argv.slice(2);
+}
 
-  const colorNames = ["red", "green", "blue"];
-
-  const colorGroup = new Group("color", { type: Type.COLOR });
-  for (const colorName of colorNames) {
-    const group = new Group(colorName);
-    for (let i = 1; i < 10; ++i) {
-      const token = new DesignToken(`${i * 100}`, "#ffaabb");
-      group.addChild(token);
-    }
-    colorGroup.addChild(group);
-  }
-
-  tomRoot.addChild(colorGroup);
-
-  return tomRoot;
+function readJsonFile(path: string): any {
+  return JSON.parse(readFileSync(path).toString());
 }
 
 function toCsvString(tom: RootGroup): Promise<string> {
@@ -58,7 +48,10 @@ function toCsvString(tom: RootGroup): Promise<string> {
 }
 
 async function run() {
-  const tom = generateTom();
+  const args = getArgs();
+  const inputFile = args[0];
+  const data = readJsonFile(inputFile);
+  const tom = parseFile(data);
   const csvData = await toCsvString(tom);
   console.log(csvData);
 }

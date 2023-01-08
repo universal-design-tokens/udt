@@ -22,13 +22,7 @@ export function serializeValue(value: TokenValue | Reference, type: Type): any {
       return serializeShadow(value as ShadowValue);
     }
 
-    // JSON types
-    case Type.ARRAY:
-    case Type.BOOLEAN:
-    case Type.OBJECT:
-    case Type.NULL:
-    case Type.NUMBER:
-    case Type.STRING: {
+    case Type.NUMBER: {
       return value;
     }
   }

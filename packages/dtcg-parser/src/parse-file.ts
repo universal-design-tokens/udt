@@ -1,5 +1,5 @@
 import { RootGroup } from '@udt/tom';
-import { parseChildren } from './parse-group';
+import { parseAndAddChildren } from './parse-group';
 import { extractCommonProps } from './extract-common-props';
 
 export function parseFile(dtcgData: unknown) {
@@ -10,7 +10,7 @@ export function parseFile(dtcgData: unknown) {
 
   const file = new RootGroup(commonProps);
 
-  parseChildren(children, file);
+  parseAndAddChildren(children, file);
 
   return file;
 }

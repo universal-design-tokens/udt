@@ -1,7 +1,6 @@
 import {
   ColorValue,
   DimensionValue,
-  JsonValue,
   Reference,
   ShadowValue,
   Type,
@@ -51,8 +50,8 @@ export function formatShadow(value: ShadowValue): Indentable {
   );
 }
 
-export function formatJSON(value: JsonValue): string {
-  return data(JSON.stringify(value, undefined, tabWidth));
+export function formatNumber(value: number): string {
+  return data(value);
 }
 
 export function formatValue(value: TokenValue, type: Type): string | Indentable {
@@ -69,8 +68,10 @@ export function formatValue(value: TokenValue, type: Type): string | Indentable 
       return formatShadow(value as ShadowValue);
     }
 
-    default: {
-      return formatJSON(value as JsonValue);
+    case Type.NUMBER: {
+      return formatNumber(value as number);
     }
   }
+
+  throw new Error('Invalid type');
 }

@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "dependencies": {
+    "@udt/dtcg-parser": "^0.1.0",
     "@udt/tom": "^0.1.0",
     "csv-stringify": "^6.2.3"
   }

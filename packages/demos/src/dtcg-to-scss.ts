@@ -11,7 +11,7 @@ import {
   Type,
 } from "@udt/tom";
 import { parseFile } from "@udt/dtcg-parser";
-import { readJsonFile, dtcgDraft2ExampleFile } from "./utils/file";
+import { readJsonFile, dtcgDevExampleFile } from "./utils/file";
 import kebabcase from "lodash.kebabcase";
 import { getArgs } from "./utils/cli-args";
 
@@ -146,4 +146,4 @@ else {
   preserveReferences = false;
 }
 
-parseTokenFileAndOutputScss(inputFile || dtcgDraft2ExampleFile, !preserveReferences);
+parseTokenFileAndOutputScss(inputFile || dtcgDevExampleFile, !preserveReferences);

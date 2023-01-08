@@ -4,8 +4,6 @@ import { Type } from "./type";
 import {
   Value,
   CompositeValue,
-  JsonValue,
-  identifyJsonType,
   UNSUPPORTED_TYPE,
   identifyType,
 } from "./values";
@@ -30,17 +28,19 @@ export const enum SetValueStrategy {
   UPDATE_TYPE,
 }
 
-export type TokenValue = Value | CompositeValue | JsonValue;
+export type TokenValue = Value | CompositeValue | number;
 
-export type DeferredValue = (
-  ownOrInheritedType?: Type
-) => TokenValue | Reference;
+export type Extension = any;
+
+export type DeferredValue = (ownOrInheritedType: Type) => TokenValue;
+
+export type DeferredValueOrReference = () => Reference | DeferredValue;
 
 export function isDesignToken(node: unknown): node is DesignToken {
   return node instanceof DesignToken;
 }
 
-function tokenToReference<V extends TokenValue | DeferredValue>(
+function tokenToReference<V extends TokenValue | DeferredValueOrReference>(
   tokenOrOther: DesignToken | Reference | V
 ): Reference | V {
   return isDesignToken(tokenOrOther)
@@ -49,8 +49,8 @@ function tokenToReference<V extends TokenValue | DeferredValue>(
 }
 
 export class DesignToken extends TOMNode implements ReferencedValueResolver {
-  #valueOrReference: TokenValue | Reference | DeferredValue;
-  #extensions: Map<string, JsonValue>;
+  #valueOrReference: TokenValue | Reference | DeferredValueOrReference;
+  #extensions: Map<string, Extension>;
 
   /**
    * Constructs a new design token node.
@@ -60,7 +60,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     valueOrReferenceOrToken:
       | TokenValue
       | Reference
-      | DeferredValue
+      | DeferredValueOrReference
       | DesignToken,
     commonProps: TOMNodeCommonProps = {},
     strategy: SetValueStrategy = SetValueStrategy.UPDATE_TYPE
@@ -81,7 +81,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
       NodeWithParent._assignParent(valueOrReferenceOrToken, this);
     }
 
-    this.#extensions = new Map<string, JsonValue>();
+    this.#extensions = new Map<string, Extension>();
   }
 
   public isAlias(): boolean {
@@ -177,7 +177,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     this.__doSetValue(newValueOrReference);
   }
 
-  private __getOwnOrInheritedType(): Type | undefined {
+  private __getOwnOrInheritedType(): Type {
     let type = this.getType();
     if (type === undefined) {
       // Are we inheriting a type from parent group(s)
@@ -187,8 +187,12 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
       ) {
         return type;
       }
+    } else {
+      return type;
     }
-    return type;
+    throw new Error(
+      `No own or inherited type found for design token "${this.getName()}"`
+    );
   }
 
   private static __getTokenType(node: TOMNode): Type {
@@ -219,14 +223,9 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
         return type;
       }
 
-      // Need to infer one of the JSON types from the value
-      const inferredJsonType = identifyJsonType(this.getValue());
-      if (inferredJsonType === UNSUPPORTED_TYPE) {
-        throw new Error(
-          `Unsupported value (JS type is: ${typeof this.getValue()})`
-        );
-      }
-      type = inferredJsonType;
+      throw new Error(
+        `Type for token ${this.getName()} cannot be resolved (no own type, no reference and no inherited type)`
+      );
     }
     return type;
   }
@@ -235,11 +234,11 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     return this.#extensions.has(key);
   }
 
-  public getExtension(key: string): JsonValue | undefined {
+  public getExtension(key: string): Extension | undefined {
     return this.#extensions.get(key);
   }
 
-  public setExtension(key: string, value: JsonValue): void {
+  public setExtension(key: string, value: Extension): void {
     this.#extensions.set(key, value);
   }
 
@@ -255,7 +254,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     return this.#extensions.size > 0;
   }
 
-  public extensions(): IterableIterator<[string, JsonValue]> {
+  public extensions(): IterableIterator<[string, Extension]> {
     return this.#extensions.entries();
   }
 
@@ -266,11 +265,13 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
 
   protected _onParentAssigned(): void {
     if (typeof this.#valueOrReference === "function") {
-      this.__doSetValue(this.#valueOrReference(this.__getOwnOrInheritedType()));
+      const deferredValueOrReference = this.#valueOrReference();
+
+      this.__doSetValue(
+        typeof deferredValueOrReference === "function"
+          ? deferredValueOrReference(this.__getOwnOrInheritedType())
+          : deferredValueOrReference
+      );
     }
   }
 }
-
-const tmp = new DesignToken("test", 123);
-
-const foo = tokenToReference(tmp);
