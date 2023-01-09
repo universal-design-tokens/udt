@@ -1,4 +1,4 @@
-import { isValidName, isValidType, TOMNode } from "./tom-node";
+import { ExtensionsMap, isValidName, isValidType, TOMNode } from "./tom-node";
 import { allTypes, Type } from "./type";
 import { MockTOMNode } from "./test/mock-tom-node";
 import { TOMInvalidAssignmentError } from "./exceptions";
@@ -95,7 +95,7 @@ describe("TOMNode", () => {
     }).toThrow(TOMInvalidAssignmentError);
   });
 
-  describe("constructed with a valid name", () => {
+  describe("constructed with only a valid name", () => {
     let testNode: TOMNode;
 
     beforeEach(() => {
@@ -114,7 +114,7 @@ describe("TOMNode", () => {
       expect(testNode.getDescription()).toBeUndefined();
     });
 
-    it("let's you change its name", () => {
+    it("lets you change its name", () => {
       const newName = "new-name";
       testNode.setName(newName);
       expect(testNode.getName()).toBe(newName);
@@ -126,7 +126,7 @@ describe("TOMNode", () => {
       }).toThrow(TOMInvalidAssignmentError);
     });
 
-    it("let's you set a valid type", () => {
+    it("lets you set a valid type", () => {
       const type = Type.BORDER;
       testNode.setType(type);
       expect(testNode.getType()).toBe(type);
@@ -138,7 +138,16 @@ describe("TOMNode", () => {
       }).toThrow(TOMInvalidAssignmentError);
     });
 
-    it("let's you set a valid description", () => {
+
+    it("lets you clear the type", () => {
+      // set a valid type
+      testNode.setType(Type.BORDER);
+      // now clear it
+      testNode.setType(undefined);
+      expect(testNode.getType()).toBe(undefined);
+    });
+
+    it("lets you set a valid description", () => {
       const description = "Hello world!";
       testNode.setDescription(description);
       expect(testNode.getDescription()).toBe(description);
@@ -150,37 +159,168 @@ describe("TOMNode", () => {
       }).toThrow(TOMInvalidAssignmentError);
     });
 
-    it("has no parent", () => {
+    it("lets you clear the description", () => {
+      // set a valid description
+      testNode.setDescription("Hello world");
+      // now clear it
+      testNode.setDescription(undefined);
+      expect(testNode.getDescription()).toBe(undefined);
+    });
+
+    it("returns undefined as its parent", () => {
       expect(testNode.getParent()).toBeUndefined();
     });
 
-    it("has no top parent", () => {
+    it("returns undefined as its top parent", () => {
       expect(testNode.getTopParent()).toBeUndefined();
     });
 
-    it("is the root", () => {
+    it("returns itself as the root", () => {
       expect(testNode.getRoot()).toBe(testNode);
     });
+
+    it("has a path containing only its name", () => {
+      expect(testNode.getPath()).toStrictEqual([testNodeName]);
+    });
+
+    it("has no parent", () => {
+      expect(testNode.hasParent()).toBe(false);
+    });
+
+    it("has no extensions", () => {
+      expect(testNode.hasExtensions()).toBe(false);
+    });
+
+    it("lets you set and get an extension", () => {
+      const extKey = 'design.udt.test';
+      const extVal = 42;
+      testNode.setExtension(extKey, extVal);
+      expect(testNode.getExtension(extKey)).toBe(extVal);
+    });
+
+    it("lets you set multiple extensions at once", () => {
+      const extensions: ExtensionsMap = {
+        'design.udt.test': 42,
+        'design.udt.test2': false,
+        'design.udt.test3': {},
+      };
+      testNode.setExtensions(extensions);
+      for (const extKey of Object.keys(extensions)) {
+        expect(testNode.getExtension(extKey)).toBe(extensions[extKey]);
+      }
+    });
+
   });
 
   describe("constructed with common props", () => {
     const testDescription = "bla bla bla";
     const testType = Type.CUBIC_BEZIER;
+    const testExtensions: ExtensionsMap = {
+      'design.udt.test': 42,
+      'design.udt.test2': false,
+      'design.udt.test3': {},
+    };
     let testNode: TOMNode;
 
     beforeEach(() => {
       testNode = new MockTOMNode(testNodeName, {
         description: testDescription,
         type: testType,
+        extensions: testExtensions,
       });
     });
 
-    it("has a type", () => {
+    it("has the correct type", () => {
       expect(testNode.getType()).toBe(testType);
     });
 
-    it("has a description", () => {
+    it("has the correct description", () => {
       expect(testNode.getDescription()).toBe(testDescription);
+    });
+
+    it("has the correct extensions", () => {
+      for (const extKey of Object.keys(testExtensions)) {
+        expect(testNode.getExtension(extKey)).toBe(testExtensions[extKey]);
+      }
+    });
+  });
+
+  describe("with some extensions", () => {
+    const testExtName = "design.udt.test";
+    const testExtensions: ExtensionsMap = {
+      [testExtName]: 42,
+      'design.udt.test2': false,
+      'design.udt.test3': {},
+    };
+    let testNode: TOMNode;
+
+    beforeEach(() => {
+      testNode = new MockTOMNode(testNodeName);
+      testNode.setExtensions(testExtensions);
+    });
+
+    it("correctly reports that is has the given extensions", () => {
+      for (const extKey of Object.keys(testExtensions)) {
+        expect(testNode.hasExtension(extKey)).toBe(true);
+      }
+    });
+
+    it("correctly reports the absernce of an extension", () => {
+      expect(testNode.hasExtension('does.not.exist')).toBe(false);
+    });
+
+    it("correctly reports that it has some extensions", () => {
+      expect(testNode.hasExtensions()).toBe(true);
+    });
+
+    it("lets you delete an extension", () => {
+      expect(testNode.deleteExtension(testExtName)).toBe(true);
+      expect(testNode.hasExtension(testExtName)).toBe(false);
+    });
+
+    it("returns false when you try to delete an extension it does not have", () => {
+      expect(testNode.deleteExtension("does.not.exist")).toBe(false);
+    });
+
+    it("lets you clear all extensions", () => {
+      testNode.clearExtensions();
+      expect(testNode.hasExtensions()).toBe(false);
+    });
+
+    it("lets you iterate over extensions", () => {
+      for(const [key, extension] of testNode.extensions()) {
+        expect(extension).toBe(testExtensions[key]);
+      }
+    });
+  });
+
+  describe("with some parents", () => {
+    const testPath = ['grand parent', 'parent', testNodeName]
+    let testNode: TOMNode;
+    let testGrandParent: TOMNode;
+
+    beforeEach(() => {
+      const grandParent = new MockTOMNode(testPath[0]);
+      const parent = new MockTOMNode(testPath[1]);
+      const child = new MockTOMNode(testNodeName);
+
+      parent.setParent(grandParent);
+      child.setParent(parent);
+
+      testNode = child;
+      testGrandParent = grandParent;
+    });
+
+    it("can find the top parent", () => {
+      expect(testNode.getTopParent()).toBe(testGrandParent);
+    });
+
+    it("reports the top parent as the root", () => {
+      expect(testNode.getRoot()).toBe(testGrandParent);
+    });
+
+    it("reports the correct path", () => {
+      expect(testNode.getPath()).toStrictEqual(testPath);
     });
   });
 });
