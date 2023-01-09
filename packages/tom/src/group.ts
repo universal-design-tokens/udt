@@ -29,13 +29,20 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
 
   public addChild(child: TokenOrGroup): void {
     if (this.#children.has(child)) {
-      // Already a child, so do nothing
+      // Already the child, so do nothing
       return;
     }
 
     if (child.hasParent()) {
       // Need to remove from other parent first
       child.getParent()!.removeChild(child);
+    }
+
+    const existingChild = this.getChild(child.getName());
+    if (existingChild !== undefined) {
+      // We already have a child with the same name, so need
+      // to remove that first
+      this.removeChild(existingChild);
     }
 
     this.#children.add(child);
@@ -54,6 +61,14 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
     else {
       return this.#children.has(nodeOrName);
     }
+  }
+
+  public hasChildren(): boolean {
+    return this.childCount() > 0;
+  }
+
+  public childCount(): number {
+    return this.#children.size;
   }
 
   public getChild(name: string): TokenOrGroup | undefined {
