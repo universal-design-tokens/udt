@@ -2,6 +2,7 @@ import { Type, allTypes } from "./type";
 import { INodeWithChildren } from "./interfaces/node-with-children";
 import { NodeWithParent } from "./node-with-parent";
 import { TOMInvalidAssignmentError } from "./exceptions";
+import { Reference } from "./reference";
 
 type ParentNode = TOMNode & INodeWithChildren<TOMNode>;
 
@@ -152,6 +153,9 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
   /**
    * Returns an array of node names from the root
    * down to this node.
+   *
+   * If this node is the root, then an empty path
+   * will be returned.
    */
   public getPath(): string[] {
     const parentNode = this.getParent();
@@ -164,6 +168,10 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
       parentPath.push(name);
       return parentPath;
     }
+  }
+
+  public getReference(): Reference {
+    return new Reference(this.getPath());
   }
 
   protected _onParentAssigned(): void {}

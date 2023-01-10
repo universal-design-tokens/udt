@@ -193,12 +193,12 @@ describe("Group", () => {
     });
 
     it("can retrieve a group by its reference", () => {
-      const ref = new Reference(groupA.getPath());
+      const ref = groupA.getReference();
       expect(testGroup.getReferencedNode(ref)).toBe(groupA);
     });
 
     it("can retrieve a token by its reference", () => {
-      const ref = new Reference(tokenA2.getPath());
+      const ref = tokenA2.getReference();
       expect(testGroup.getReferencedNode(ref)).toBe(tokenA2);
     });
 

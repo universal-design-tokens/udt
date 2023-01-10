@@ -95,10 +95,6 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     return resolveReference(reference, this, DesignToken.__getTokenValue);
   }
 
-  public getReference(): Reference {
-    return new Reference(this.getPath());
-  }
-
   /**
    * Retrieves the token value.
    *

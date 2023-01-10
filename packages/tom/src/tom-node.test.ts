@@ -2,6 +2,7 @@ import { ExtensionsMap, isValidName, isValidType, TOMNode } from "./tom-node";
 import { allTypes, Type } from "./type";
 import { MockTOMNode } from "./test/mock-tom-node";
 import { TOMInvalidAssignmentError } from "./exceptions";
+import { Reference } from "./reference";
 
 describe("isValidName()", () => {
   it("accepts strings that are empty or only contain whitespace", () => {
@@ -321,6 +322,12 @@ describe("TOMNode", () => {
 
     it("reports the correct path", () => {
       expect(testNode.getPath()).toStrictEqual(testPath);
+    });
+
+    it("can return a reference to itself", () => {
+      const ref = testNode.getReference();
+      expect(ref).toBeInstanceOf(Reference);
+      expect(ref.path).toStrictEqual(testNode.getPath());
     });
   });
 });
