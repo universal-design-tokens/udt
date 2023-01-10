@@ -179,8 +179,8 @@ describe("TOMNode", () => {
       expect(testNode.getRoot()).toBe(testNode);
     });
 
-    it("has a path containing only its name", () => {
-      expect(testNode.getPath()).toStrictEqual([testNodeName]);
+    it("has an empty path", () => {
+      expect(testNode.getPath()).toStrictEqual([]);
     });
 
     it("has no parent", () => {
@@ -295,13 +295,13 @@ describe("TOMNode", () => {
   });
 
   describe("with some parents", () => {
-    const testPath = ['grand parent', 'parent', testNodeName]
+    const testPath = ['parent', testNodeName]
     let testNode: TOMNode;
     let testGrandParent: TOMNode;
 
     beforeEach(() => {
-      const grandParent = new MockTOMNode(testPath[0]);
-      const parent = new MockTOMNode(testPath[1]);
+      const grandParent = new MockTOMNode('grand parent');
+      const parent = new MockTOMNode(testPath[0]);
       const child = new MockTOMNode(testNodeName);
 
       parent.setParent(grandParent);

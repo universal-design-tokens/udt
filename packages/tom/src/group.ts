@@ -82,7 +82,7 @@ export class Group extends TOMNode implements INodeWithChildren<TokenOrGroup> {
   public getReferencedNode(reference: Reference): TokenOrGroup {
     const path = reference.path;
     if (path.length === 0) {
-      throw new Error('Invalid path. Paths must have at least one segment');
+      return this;
     }
 
     let node: TokenOrGroup = this;

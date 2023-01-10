@@ -22,7 +22,7 @@ export class MockTOMNode
   // From INodeWithChildren:
 
   /* istanbul ignore next */
-  public removeChild(child: MockTOMNode): boolean {
+  public removeChild(_child: MockTOMNode): boolean {
     throw new Error('not implemented');
   }
 
@@ -32,7 +32,7 @@ export class MockTOMNode
   }
 
   /* istanbul ignore next */
-  public getReferencedNode(reference: Reference): MockTOMNode {
+  public getReferencedNode(_reference: Reference): MockTOMNode {
     throw new Error('not implemented');
   }
 }

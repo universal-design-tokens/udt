@@ -1,14 +1,9 @@
 import { Group } from "./group";
+import { TOMNodeCommonConstructorProps } from "./tom-node";
 
 export class RootGroup extends Group {
 
-  constructor (props: any = {}) {
+  constructor (props: TOMNodeCommonConstructorProps = {}) {
     super('', props);
-  }
-
-
-  public getPath() {
-    // Filename is not included in paths
-    return [];
   }
 }

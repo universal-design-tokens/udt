@@ -158,7 +158,7 @@ export abstract class TOMNode extends NodeWithParent<ParentNode> {
     const name = this.getName();
 
     if (parentNode === undefined) {
-      return [name];
+      return [];
     } else {
       const parentPath = parentNode.getPath();
       parentPath.push(name);

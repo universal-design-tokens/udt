@@ -1,3 +1,4 @@
+/* istanbul ignore */
 export * from './design-token';
 export * from './root-group';
 export * from './group';
