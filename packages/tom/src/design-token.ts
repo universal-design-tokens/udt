@@ -8,7 +8,7 @@ import {
   identifyType,
 } from "./values";
 import { Reference, isReference } from "./reference";
-import { resolveReference } from "./referencable-property";
+import { resolveReference } from "./resolve-reference";
 import { isCompositeValue } from "./values/composite-value";
 import { ReferencedValueResolver } from "./interfaces/referenced-value-resolver";
 
@@ -48,7 +48,6 @@ function tokenToReference<V extends TokenValue | DeferredValueOrReference>(
 
 export class DesignToken extends TOMNode implements ReferencedValueResolver {
   #valueOrReference: TokenValue | Reference | DeferredValueOrReference;
-
 
   /**
    * Constructs a new design token node.
@@ -91,8 +90,20 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     throw new Error(`Node "${node.getName()}" is not a design token`);
   }
 
+  private static __getTokenByReference(
+    node: TOMNode,
+    reference: Reference
+  ): TOMNode | undefined {
+    return node.getTopParent()?.getReferencedNode(reference);
+  }
+
   public resolveReferencedValue(reference: Reference): TokenValue {
-    return resolveReference(reference, this, DesignToken.__getTokenValue);
+    return resolveReference(
+      reference,
+      this,
+      DesignToken.__getTokenByReference,
+      DesignToken.__getTokenValue
+    );
   }
 
   /**
@@ -135,7 +146,12 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
     strategy: SetValueStrategy
   ): void {
     const newValueType = isReference(valueOrReference)
-      ? resolveReference(valueOrReference, this, DesignToken.__getTokenType)
+      ? resolveReference(
+          valueOrReference,
+          this,
+          DesignToken.__getTokenByReference,
+          DesignToken.__getTokenType
+        )
       : identifyType(valueOrReference);
 
     if (newValueType === UNSUPPORTED_TYPE) {
@@ -203,6 +219,7 @@ export class DesignToken extends TOMNode implements ReferencedValueResolver {
         return resolveReference(
           valueOrReference,
           this,
+          DesignToken.__getTokenByReference,
           DesignToken.__getTokenType
         );
       }
