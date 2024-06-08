@@ -1,4 +1,4 @@
-import { NodeWithParent } from "../node-with-parent";
+import { NodeWithParent } from "../node-with-parent.js";
 
 
 export class MockNodeWithParent extends NodeWithParent<number> {

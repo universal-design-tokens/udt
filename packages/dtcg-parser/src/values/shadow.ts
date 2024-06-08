@@ -1,7 +1,7 @@
 import { ShadowValue } from "@udt/tom";
-import { parseColorValue } from "./color";
-import { parseDimensionValue } from "./dimension";
-import { isReferenceValue, makeReference } from "./reference";
+import { parseColorValue } from "./color.js";
+import { parseDimensionValue } from "./dimension.js";
+import { isReferenceValue, makeReference } from "./reference.js";
 
 export function parseShadowValue(value: any): ShadowValue {
   if (typeof value === "object") {

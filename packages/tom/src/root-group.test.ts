@@ -1,4 +1,4 @@
-import { RootGroup } from "./root-group";
+import { RootGroup } from "./root-group.js";
 
 describe('RootGroup', () => {
   it('has an empty name', () => {

@@ -1,8 +1,8 @@
 import { Reference, Type, TokenValue, isReference, DimensionValue, ColorValue, ShadowValue } from "@udt/tom";
-import { serializeReference } from "./reference";
-import { serializeColor } from "./color";
-import { serializeDimension } from "./dimension";
-import { serializeShadow } from "./shadow";
+import { serializeReference } from "./reference.js";
+import { serializeColor } from "./color.js";
+import { serializeDimension } from "./dimension.js";
+import { serializeShadow } from "./shadow.js";
 
 export function serializeValue(value: TokenValue | Reference, type: Type): any {
   if (isReference(value)) {

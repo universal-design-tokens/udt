@@ -1,8 +1,8 @@
-import { TOMNode } from "../tom-node";
-import { Type } from "../type";
-import { INodeWithChildren } from "../interfaces/node-with-children";
-import { NodeWithParent } from "../node-with-parent";
-import { Reference } from "../reference";
+import { TOMNode } from "../tom-node.js";
+import { Type } from "../type.js";
+import { INodeWithChildren } from "../interfaces/node-with-children.js";
+import { NodeWithParent } from "../node-with-parent.js";
+import { Reference } from "../reference.js";
 
 export class MockTOMNode
   extends TOMNode

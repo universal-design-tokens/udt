@@ -1,7 +1,7 @@
 import { DesignToken, Group, RootGroup, TOMNode } from "@udt/tom";
 import chalk from "chalk";
-import { indentable, Indentable } from "./text-formatting";
-import { formatValue } from "./value-formatters";
+import { indentable, Indentable } from "./text-formatting.js";
+import { formatValue } from "./value-formatters.js";
 
 function formatToken(node: DesignToken): Indentable {
   return indentable(

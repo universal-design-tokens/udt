@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    // Target Node >= 8.10.0 (LTS Carbon)
-    "target": "es2017",
-    "module": "commonjs",
-    "lib": ["es2017"],
+    "target": "ES2022",
+    "module": "NodeNext",
+    "lib": ["ES2022"],
 
     // Search under node_modules for non-relative imports.
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     // Enable strictest settings like strictNullChecks & noImplicitAny.
     "strict": true,
     "strictNullChecks": true,

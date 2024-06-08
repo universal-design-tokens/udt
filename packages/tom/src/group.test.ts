@@ -1,8 +1,7 @@
-import exp from "constants";
-import { DesignToken } from "./design-token";
-import { Group, TokenOrGroup } from "./group";
-import { Reference } from "./reference";
-import { Type } from "./type";
+import { DesignToken } from "./design-token.js";
+import { Group, TokenOrGroup } from "./group.js";
+import { Reference } from "./reference.js";
+import { Type } from "./type.js";
 
 describe("Group", () => {
   const testGroupName = "test group";

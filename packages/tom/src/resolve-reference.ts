@@ -1,4 +1,4 @@
-import { Reference, isReference } from "./reference";
+import { Reference, isReference } from "./reference.js";
 
 export type PropertyGetter<N, V> = (node: N) => V | Reference;
 

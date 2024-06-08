@@ -6,7 +6,7 @@ import {
   Type,
   TokenValue,
 } from "@udt/tom";
-import { indentable, Indentable, tabWidth } from "./text-formatting";
+import { indentable, Indentable, tabWidth } from "./text-formatting.js";
 import chalk from "chalk";
 
 const data = chalk.yellowBright.bold;

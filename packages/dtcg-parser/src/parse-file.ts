@@ -1,6 +1,6 @@
 import { RootGroup } from '@udt/tom';
-import { parseAndAddChildren } from './parse-group';
-import { extractCommonProps } from './extract-common-props';
+import { parseAndAddChildren } from './parse-group.js';
+import { extractCommonProps } from './extract-common-props.js';
 
 export function parseFile(dtcgData: unknown) {
   const {

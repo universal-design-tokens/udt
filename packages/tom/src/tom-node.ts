@@ -1,8 +1,8 @@
-import { Type, allTypes } from "./type";
-import { INodeWithChildren } from "./interfaces/node-with-children";
-import { NodeWithParent } from "./node-with-parent";
-import { TOMInvalidAssignmentError } from "./exceptions";
-import { Reference } from "./reference";
+import { Type, allTypes } from "./type.js";
+import { INodeWithChildren } from "./interfaces/node-with-children.js";
+import { NodeWithParent } from "./node-with-parent.js";
+import { TOMInvalidAssignmentError } from "./exceptions.js";
+import { Reference } from "./reference.js";
 
 type ParentNode = TOMNode & INodeWithChildren<TOMNode>;
 

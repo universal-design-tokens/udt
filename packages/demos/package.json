@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "description": "Demos that use the @udt/* libraries",
+  "type": "module",
   "scripts": {
     "clean": "del dist/*",
     "build": "tsc",

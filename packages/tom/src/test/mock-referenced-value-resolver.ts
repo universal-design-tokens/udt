@@ -1,5 +1,5 @@
-import { ReferencedValueResolver } from "../interfaces/referenced-value-resolver";
-import { Reference } from "../reference";
+import { ReferencedValueResolver } from "../interfaces/referenced-value-resolver.js";
+import { Reference } from "../reference.js";
 
 export class MockReferencedValueResolver implements ReferencedValueResolver {
   #testValues = new Map<Reference, unknown>();

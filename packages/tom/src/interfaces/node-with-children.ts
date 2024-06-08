@@ -1,5 +1,5 @@
-import { Reference } from "../reference";
-import { Type } from "../type";
+import { Reference } from "../reference.js";
+import { Type } from "../type.js";
 
 export interface INodeWithChildren<ChildNodeType> {
   removeChild(child: ChildNodeType): boolean;

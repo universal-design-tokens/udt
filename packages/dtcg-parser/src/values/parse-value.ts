@@ -1,9 +1,8 @@
-import { Type, TokenValue, Reference } from "@udt/tom";
-import { isReferenceValue, makeReference } from "./reference";
-import { parseColorValue } from "./color";
-import { parseDimensionValue } from "./dimension";
-import { parseShadowValue } from "./shadow";
-import { parseNumber } from "./number";
+import { Type, TokenValue } from "@udt/tom";
+import { parseColorValue } from "./color.js";
+import { parseDimensionValue } from "./dimension.js";
+import { parseShadowValue } from "./shadow.js";
+import { parseNumber } from "./number.js";
 
 export function parseValue(value: unknown, type: Type): TokenValue {
   switch (type) {

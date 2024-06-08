@@ -1,9 +1,9 @@
-import { TOMNode, TOMNodeCommonConstructorProps } from './tom-node';
-import { INodeWithChildren } from './interfaces/node-with-children';
-import { DesignToken } from './design-token';
-import { Type } from './type';
-import { Reference } from './reference';
-import { NodeWithParent } from './node-with-parent';
+import { TOMNode, TOMNodeCommonConstructorProps } from './tom-node.js';
+import { INodeWithChildren } from './interfaces/node-with-children.js';
+import { DesignToken } from './design-token.js';
+import { Type } from './type.js';
+import { Reference } from './reference.js';
+import { NodeWithParent } from './node-with-parent.js';
 
 export type TokenOrGroup = DesignToken | Group;
 

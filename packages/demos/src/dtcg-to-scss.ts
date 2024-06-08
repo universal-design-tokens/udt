@@ -11,9 +11,9 @@ import {
   Type,
 } from "@udt/tom";
 import { parseFile } from "@udt/dtcg-parser";
-import { readJsonFile, dtcgDevExampleFile } from "./utils/file";
+import { readJsonFile, dtcgDevExampleFile } from "./utils/file.js";
 import kebabcase from "lodash.kebabcase";
-import { getArgs } from "./utils/cli-args";
+import { getArgs } from "./utils/cli-args.js";
 
 const resolveReferences = false;
 

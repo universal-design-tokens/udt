@@ -1,4 +1,4 @@
-import { MockCompositeValue } from "../test/mock-composite-value";
+import { MockCompositeValue } from "../test/mock-composite-value.js";
 
 describe('CompositeValue', () => {
   describe('_isSuitableValueOrReference()', () => {

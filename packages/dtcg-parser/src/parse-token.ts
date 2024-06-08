@@ -1,7 +1,7 @@
 import { DeferredValue, DesignToken, Reference, Type } from "@udt/tom";
-import { extractCommonProps } from "./extract-common-props";
-import { parseValue } from "./values/parse-value";
-import { isReferenceValue, makeReference } from "./values/reference";
+import { extractCommonProps } from "./extract-common-props.js";
+import { parseValue } from "./values/parse-value.js";
+import { isReferenceValue, makeReference } from "./values/reference.js";
 
 export function parseToken(name: string, dtcgData: unknown): DesignToken {
   const {

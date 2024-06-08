@@ -1,8 +1,8 @@
-import { NodeWithParent } from "../node-with-parent";
-import { Reference } from "../reference";
-import { Type } from "../type";
-import { CompositeValue } from "../values";
-import { MockReferencedValueResolver } from "./mock-referenced-value-resolver";
+import { NodeWithParent } from "../node-with-parent.js";
+import { Reference } from "../reference.js";
+import { Type } from "../type.js";
+import { CompositeValue } from "../values/index.js";
+import { MockReferencedValueResolver } from "./mock-referenced-value-resolver.js";
 
 export class MockCompositeValue extends CompositeValue {
   public readonly type = Type.BORDER;

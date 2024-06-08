@@ -1,5 +1,5 @@
 import { isValidType, TOMNodeCommonConstructorProps } from "@udt/tom";
-import { isJsonObject } from "./utils";
+import { isJsonObject } from "./utils.js";
 
 export interface ExtractedCommonProps {
   commonProps: TOMNodeCommonConstructorProps;

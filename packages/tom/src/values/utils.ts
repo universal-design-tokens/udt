@@ -1,7 +1,7 @@
-import { Type } from "../type";
-import { CompositeValue } from "./composite-value";
-import { isNumber } from "./number";
-import { Value } from "./value";
+import { Type } from "../type.js";
+import { CompositeValue } from "./composite-value.js";
+import { isNumber } from "./number.js";
+import { Value } from "./value.js";
 
 export const UNSUPPORTED_TYPE = -1;
 

@@ -1,6 +1,6 @@
-import { Reference } from "./reference";
-import { resolveReference } from "./resolve-reference";
-import { MockReferencableNode } from "./test/mock-referencable-node";
+import { Reference } from "./reference.js";
+import { resolveReference } from "./resolve-reference.js";
+import { MockReferencableNode } from "./test/mock-referencable-node.js";
 
 // Node with a value
 const testValue = 42;
