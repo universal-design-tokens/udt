@@ -1,7 +1,7 @@
 import { Group } from '@udt/tom';
-import { parseToken } from './parse-token';
-import { extractCommonProps } from './extract-common-props';
-import { isJsonObject, isTokenData } from './utils';
+import { parseToken } from './parse-token.js';
+import { extractCommonProps } from './extract-common-props.js';
+import { isJsonObject, isTokenData } from './utils.js';
 
 interface ParsedGroup {
   group: Group;

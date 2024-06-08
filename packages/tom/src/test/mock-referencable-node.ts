@@ -1,4 +1,4 @@
-import { Reference } from "../reference";
+import { Reference } from "../reference.js";
 
 export interface MockReferencableNode {
   value: number | Reference;

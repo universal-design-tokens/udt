@@ -1,7 +1,7 @@
-import { isReference, Reference } from "../reference";
-import { NodeWithParent } from "../node-with-parent";
-import { ReferencedValueResolver } from "../interfaces/referenced-value-resolver";
-import { Type } from "../type";
+import { isReference, Reference } from "../reference.js";
+import { NodeWithParent } from "../node-with-parent.js";
+import { ReferencedValueResolver } from "../interfaces/referenced-value-resolver.js";
+import { Type } from "../type.js";
 
 export type ValueCheckedFn<V> = (value: unknown) => value is V;
 

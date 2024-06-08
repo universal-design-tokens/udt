@@ -1,5 +1,5 @@
-import { Type } from "../type";
-import { Value } from "./value";
+import { Type } from "../type.js";
+import { Value } from "./value.js";
 
 export enum ColorSpace {
   SRGB = 'sRGB'

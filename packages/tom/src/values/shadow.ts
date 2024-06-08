@@ -1,8 +1,8 @@
-import { Reference } from "../reference";
-import { Type } from "../type";
-import { ColorValue, isColorValue } from "./color";
-import { CompositeValue } from "./composite-value";
-import { DimensionValue, isDimensionValue } from "./dimension";
+import { Reference } from "../reference.js";
+import { Type } from "../type.js";
+import { ColorValue, isColorValue } from "./color.js";
+import { CompositeValue } from "./composite-value.js";
+import { DimensionValue, isDimensionValue } from "./dimension.js";
 
 export interface IShadowValueProps {
   color: ColorValue | Reference;

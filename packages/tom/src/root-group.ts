@@ -1,5 +1,5 @@
-import { Group } from "./group";
-import { TOMNodeCommonConstructorProps } from "./tom-node";
+import { Group } from "./group.js";
+import { TOMNodeCommonConstructorProps } from "./tom-node.js";
 
 export class RootGroup extends Group {
 

@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 import { RootGroup } from "@udt/tom";
 import { parseFile } from "@udt/dtcg-parser";
 import { stringify } from "csv-stringify";

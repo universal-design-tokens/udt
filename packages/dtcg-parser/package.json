@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "A library for parsing DTCG design token files to a Token Object Model (TOM) representation",
   "main": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
   "scripts": {
     "clean": "del dist/*",
     "build": "tsc -p tsconfig.build.json",

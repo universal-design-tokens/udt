@@ -1,16 +1,16 @@
-import { TOMNode, TOMNodeCommonConstructorProps } from "./tom-node";
-import { NodeWithParent } from "./node-with-parent";
-import { Type } from "./type";
+import { TOMNode, TOMNodeCommonConstructorProps } from "./tom-node.js";
+import { NodeWithParent } from "./node-with-parent.js";
+import { Type } from "./type.js";
 import {
   Value,
   CompositeValue,
   UNSUPPORTED_TYPE,
   identifyType,
-} from "./values";
-import { Reference, isReference } from "./reference";
-import { resolveReference } from "./resolve-reference";
-import { isCompositeValue } from "./values/composite-value";
-import { ReferencedValueResolver } from "./interfaces/referenced-value-resolver";
+} from "./values/index.js";
+import { Reference, isReference } from "./reference.js";
+import { resolveReference } from "./resolve-reference.js";
+import { isCompositeValue } from "./values/composite-value.js";
+import { ReferencedValueResolver } from "./interfaces/referenced-value-resolver.js";
 
 export const enum SetValueStrategy {
   /**

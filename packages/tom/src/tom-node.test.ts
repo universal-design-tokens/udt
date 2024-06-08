@@ -1,8 +1,8 @@
-import { ExtensionsMap, isValidName, isValidType, TOMNode } from "./tom-node";
-import { allTypes, Type } from "./type";
-import { MockTOMNode } from "./test/mock-tom-node";
-import { TOMInvalidAssignmentError } from "./exceptions";
-import { Reference } from "./reference";
+import { ExtensionsMap, isValidName, isValidType, TOMNode } from "./tom-node.js";
+import { allTypes, Type } from "./type.js";
+import { MockTOMNode } from "./test/mock-tom-node.js";
+import { TOMInvalidAssignmentError } from "./exceptions.js";
+import { Reference } from "./reference.js";
 
 describe("isValidName()", () => {
   it("accepts strings that are empty or only contain whitespace", () => {

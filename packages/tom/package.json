@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "description": "A Token Object Model (TOM) library for creating and manipulating design tokens which is aligned to the DTCG file format",
   "main": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
   "devDependencies": {},
   "scripts": {
     "clean": "del dist/*",

@@ -1,4 +1,4 @@
-import { Type } from "../type";
+import { Type } from "../type.js";
 
 export abstract class Value {
   public abstract readonly type: Type;

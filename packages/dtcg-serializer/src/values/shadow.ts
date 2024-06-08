@@ -1,7 +1,7 @@
 import { isReference, ShadowValue } from "@udt/tom";
-import { DtcgColorValue, serializeColor } from "./color";
-import { DtcgDimensionValue, serializeDimension } from "./dimension";
-import { DtcgReference, serializeReference } from "./reference";
+import { DtcgColorValue, serializeColor } from "./color.js";
+import { DtcgDimensionValue, serializeDimension } from "./dimension.js";
+import { DtcgReference, serializeReference } from "./reference.js";
 
 export interface DtcgShadowValue {
   color: DtcgColorValue | DtcgReference;

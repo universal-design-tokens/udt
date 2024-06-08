@@ -1,5 +1,5 @@
-import { Type } from "../type";
-import { isValue, Value } from "./value";
+import { Type } from "../type.js";
+import { isValue, Value } from "./value.js";
 
 class MockValue extends Value {
   public type = Type.BORDER;

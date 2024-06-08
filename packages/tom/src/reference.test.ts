@@ -1,4 +1,4 @@
-import { isReference, Reference } from "./reference";
+import { isReference, Reference } from "./reference.js";
 
 const testPath = ['foo', 'bar', 'baz'];
 

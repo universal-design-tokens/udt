@@ -1,4 +1,4 @@
-import { MockNodeWithParent } from "./test/mock-node-with-parent";
+import { MockNodeWithParent } from "./test/mock-node-with-parent.js";
 
 describe('NodeWithParent', () => {
   it('getParent() returns the set parent', () => {

@@ -1,7 +1,7 @@
 import { DesignToken, Group, RootGroup } from "@udt/tom";
 import { serializeDtcgFile } from "@udt/dtcg-serializer";
-import { getExampleFilePath, readJsonFile } from "./utils/file";
-import { getArgs } from "./utils/cli-args";
+import { getExampleFilePath, readJsonFile } from "./utils/file.js";
+import { getArgs } from "./utils/cli-args.js";
 
 function isDraft1TokenData(data: any): boolean {
   return typeof data === "object" && data.value !== undefined;
