@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Monorepo for UDT spec, reference JS lib and tools.",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "clean": "nx run-many -t clean",
     "lint": "nx run-many -t lint",
