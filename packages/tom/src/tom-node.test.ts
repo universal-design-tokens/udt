@@ -1,4 +1,10 @@
-import { ExtensionsMap, isValidName, isValidType, TOMNode } from "./tom-node.js";
+import { describe, it, expect, beforeEach } from "vitest";
+import {
+  ExtensionsMap,
+  isValidName,
+  isValidType,
+  TOMNode,
+} from "./tom-node.js";
 import { allTypes, Type } from "./type.js";
 import { MockTOMNode } from "./test/mock-tom-node.js";
 import { TOMInvalidAssignmentError } from "./exceptions.js";
@@ -139,7 +145,6 @@ describe("TOMNode", () => {
       }).toThrow(TOMInvalidAssignmentError);
     });
 
-
     it("lets you clear the type", () => {
       // set a valid type
       testNode.setType(Type.BORDER);
@@ -193,7 +198,7 @@ describe("TOMNode", () => {
     });
 
     it("lets you set and get an extension", () => {
-      const extKey = 'design.udt.test';
+      const extKey = "design.udt.test";
       const extVal = 42;
       testNode.setExtension(extKey, extVal);
       expect(testNode.getExtension(extKey)).toBe(extVal);
@@ -201,25 +206,24 @@ describe("TOMNode", () => {
 
     it("lets you set multiple extensions at once", () => {
       const extensions: ExtensionsMap = {
-        'design.udt.test': 42,
-        'design.udt.test2': false,
-        'design.udt.test3': {},
+        "design.udt.test": 42,
+        "design.udt.test2": false,
+        "design.udt.test3": {},
       };
       testNode.setExtensions(extensions);
       for (const extKey of Object.keys(extensions)) {
         expect(testNode.getExtension(extKey)).toBe(extensions[extKey]);
       }
     });
-
   });
 
   describe("constructed with common props", () => {
     const testDescription = "bla bla bla";
     const testType = Type.CUBIC_BEZIER;
     const testExtensions: ExtensionsMap = {
-      'design.udt.test': 42,
-      'design.udt.test2': false,
-      'design.udt.test3': {},
+      "design.udt.test": 42,
+      "design.udt.test2": false,
+      "design.udt.test3": {},
     };
     let testNode: TOMNode;
 
@@ -250,8 +254,8 @@ describe("TOMNode", () => {
     const testExtName = "design.udt.test";
     const testExtensions: ExtensionsMap = {
       [testExtName]: 42,
-      'design.udt.test2': false,
-      'design.udt.test3': {},
+      "design.udt.test2": false,
+      "design.udt.test3": {},
     };
     let testNode: TOMNode;
 
@@ -267,7 +271,7 @@ describe("TOMNode", () => {
     });
 
     it("correctly reports the absernce of an extension", () => {
-      expect(testNode.hasExtension('does.not.exist')).toBe(false);
+      expect(testNode.hasExtension("does.not.exist")).toBe(false);
     });
 
     it("correctly reports that it has some extensions", () => {
@@ -289,19 +293,19 @@ describe("TOMNode", () => {
     });
 
     it("lets you iterate over extensions", () => {
-      for(const [key, extension] of testNode.extensions()) {
+      for (const [key, extension] of testNode.extensions()) {
         expect(extension).toBe(testExtensions[key]);
       }
     });
   });
 
   describe("with some parents", () => {
-    const testPath = ['parent', testNodeName]
+    const testPath = ["parent", testNodeName];
     let testNode: TOMNode;
     let testGrandParent: TOMNode;
 
     beforeEach(() => {
-      const grandParent = new MockTOMNode('grand parent');
+      const grandParent = new MockTOMNode("grand parent");
       const parent = new MockTOMNode(testPath[0]);
       const child = new MockTOMNode(testNodeName);
 

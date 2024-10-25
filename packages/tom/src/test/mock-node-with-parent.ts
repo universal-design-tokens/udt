@@ -1,9 +1,9 @@
+import { vi } from "vitest";
 import { NodeWithParent } from "../node-with-parent.js";
 
-
 export class MockNodeWithParent extends NodeWithParent<number> {
-  public parentAssignedMock = jest.fn();
-  public parentRemovedMock = jest.fn();
+  public parentAssignedMock = vi.fn();
+  public parentRemovedMock = vi.fn();
 
   protected _onParentAssigned(): void {
     this.parentAssignedMock();
