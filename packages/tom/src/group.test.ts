@@ -1,5 +1,6 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { DesignToken } from "./design-token.js";
-import { Group, TokenOrGroup } from "./group.js";
+import { Group } from "./group.js";
 import { Reference } from "./reference.js";
 import { Type } from "./type.js";
 
@@ -70,10 +71,10 @@ describe("Group", () => {
 
   it("checks validity of all children when isValid() is called", () => {
     const child1 = new Group("child 1");
-    const isValidSpy1 = jest.spyOn(child1, "isValid");
+    const isValidSpy1 = vi.spyOn(child1, "isValid");
 
     const child2 = new Group("child 2");
-    const isValidSpy2 = jest.spyOn(child2, "isValid");
+    const isValidSpy2 = vi.spyOn(child2, "isValid");
 
     testGroup.addChild(child1);
     testGroup.addChild(child2);
@@ -207,13 +208,21 @@ describe("Group", () => {
     });
 
     it("throws an error for reference where an intermediate segment is not a group", () => {
-      const ref = new Reference([groupA.getName(), tokenA1.getName(), 'invalid']);
-      expect(() => {testGroup.getReferencedNode(ref)}).toThrow(Error);
+      const ref = new Reference([
+        groupA.getName(),
+        tokenA1.getName(),
+        "invalid",
+      ]);
+      expect(() => {
+        testGroup.getReferencedNode(ref);
+      }).toThrow(Error);
     });
 
     it("throws an error for reference pointing to nodes that do not exist", () => {
-      const ref = new Reference([groupA.getName(), 'invalid']);
-      expect(() => {testGroup.getReferencedNode(ref)}).toThrow(Error);
+      const ref = new Reference([groupA.getName(), "invalid"]);
+      expect(() => {
+        testGroup.getReferencedNode(ref);
+      }).toThrow(Error);
     });
   });
 });

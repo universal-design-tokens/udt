@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Reference } from "./reference.js";
 import { resolveReference } from "./resolve-reference.js";
 import { MockReferencableNode } from "./test/mock-referencable-node.js";
@@ -39,14 +40,14 @@ testNodes.set(testNode2Ref, testNode2);
 testNodes.set(testNode4Ref, testNode4);
 testNodes.set(testNode5Ref, testNode5);
 
-const dereference = jest.fn(function (
+const dereference = vi.fn(function (
   _sourceNode: MockReferencableNode,
   reference: Reference
 ): MockReferencableNode | undefined {
   return testNodes.get(reference);
 });
 
-const getValue = jest.fn(function (
+const getValue = vi.fn(function (
   node: MockReferencableNode
 ): number | Reference {
   return node.value;

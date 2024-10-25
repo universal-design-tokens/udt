@@ -9,7 +9,7 @@
     "clean": "del dist/*",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
-    "test": "jest --coverage --passWithNoTests"
+    "test": "vitest run --coverage --passWithNoTests"
   },
   "repository": {
     "type": "git",

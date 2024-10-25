@@ -5,12 +5,11 @@
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
-  "devDependencies": {},
   "scripts": {
     "clean": "del dist/*",
     "build": "tsc -p tsconfig.build.json",
     "watch": "tsc -p tsconfig.build.json --watch",
-    "test": "jest --coverage"
+    "test": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
