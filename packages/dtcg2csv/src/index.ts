@@ -1,6 +1,6 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync } from "node:fs";
 import { RootGroup } from "@udt/tom";
-import { parseFile } from "@udt/dtcg-parser";
+import { parseDtcgFileData } from "@udt/dtcg-parser";
 import { stringify } from "csv-stringify";
 
 function getArgs(): string[] {
@@ -37,9 +37,9 @@ function toCsvString(tom: RootGroup): Promise<string> {
     for (const token of tom.traverseTokens()) {
       stringifier.write([
         token.getName(),
-        token.getPath().join('.'),
+        token.getPath().join("."),
         token.getResolvedType(),
-        token.getValue(true)
+        token.getValue(true),
       ]);
     }
 
@@ -51,7 +51,7 @@ async function run() {
   const args = getArgs();
   const inputFile = args[0];
   const data = readJsonFile(inputFile);
-  const tom = parseFile(data);
+  const tom = parseDtcgFileData(data);
   const csvData = await toCsvString(tom);
   console.log(csvData);
 }

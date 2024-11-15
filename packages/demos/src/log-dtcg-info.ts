@@ -1,7 +1,7 @@
 import { RootGroup, TOMNode } from "@udt/tom";
-import { parseFile } from '@udt/dtcg-parser';
-import { formatTomNode } from './utils/tom-formatters.js';
-import { readJsonFile, dtcgDevExampleFile } from './utils/file.js';
+import { parseDtcgFileData } from "@udt/dtcg-parser";
+import { formatTomNode } from "./utils/tom-formatters.js";
+import { readJsonFile, dtcgDevExampleFile } from "./utils/file.js";
 import { getArgs } from "./utils/cli-args.js";
 
 function logTOMNodes(root: TOMNode) {
@@ -10,8 +10,8 @@ function logTOMNodes(root: TOMNode) {
 
 function parseTokenFile(path: string): RootGroup {
   const data = readJsonFile(path);
-  return parseFile(data);
+  return parseDtcgFileData(data);
 }
 
-const [ inputFile ] = getArgs();
+const [inputFile] = getArgs();
 logTOMNodes(parseTokenFile(inputFile || dtcgDevExampleFile));

@@ -10,7 +10,7 @@ import {
   TokenValue,
   Type,
 } from "@udt/tom";
-import { parseFile } from "@udt/dtcg-parser";
+import { parseDtcgFileData } from "@udt/dtcg-parser";
 import { readJsonFile, dtcgDevExampleFile } from "./utils/file.js";
 import kebabcase from "lodash.kebabcase";
 import { getArgs } from "./utils/cli-args.js";
@@ -53,7 +53,10 @@ function dimensionToCssValue(dimension: DimensionValue): string {
 
 // Shadow helpers
 
-function shadowToCssValue(shadow: ShadowValue, resolveReferences: boolean): string {
+function shadowToCssValue(
+  shadow: ShadowValue,
+  resolveReferences: boolean
+): string {
   const offsetX = resolveReferences
     ? dimensionToCssValue(shadow.getResolvedOffsetX())
     : toScssValue(shadow.getOffsetX(), resolveReferences);
@@ -124,10 +127,13 @@ function tokenToScss(token: DesignToken, resolveReferences: boolean): string {
 
 // Convert DTCG --> Scss
 
-function parseTokenFileAndOutputScss(path: string, resolveReferences: boolean): void {
+function parseTokenFileAndOutputScss(
+  path: string,
+  resolveReferences: boolean
+): void {
   console.log(path, resolveReferences);
   const data = readJsonFile(path);
-  const rootGroup = parseFile(data);
+  const rootGroup = parseDtcgFileData(data);
 
   for (const token of rootGroup.traverseTokens()) {
     console.log(tokenToScss(token, resolveReferences), "\n");
@@ -137,13 +143,15 @@ function parseTokenFileAndOutputScss(path: string, resolveReferences: boolean): 
 const args = getArgs();
 let inputFile: string | undefined, preserveReferences: boolean | undefined;
 
-if (args[0] === '-p') {
+if (args[0] === "-p") {
   inputFile = args[1];
   preserveReferences = true;
-}
-else {
+} else {
   inputFile = args[0];
   preserveReferences = false;
 }
 
-parseTokenFileAndOutputScss(inputFile || dtcgDevExampleFile, !preserveReferences);
+parseTokenFileAndOutputScss(
+  inputFile || dtcgDevExampleFile,
+  !preserveReferences
+);
