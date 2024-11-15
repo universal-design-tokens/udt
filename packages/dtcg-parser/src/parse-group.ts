@@ -1,48 +1,29 @@
-import { Group } from '@udt/tom';
-import { parseToken } from './parse-token.js';
-import { extractCommonProps } from './extract-common-props.js';
-import { isJsonObject, isTokenData } from './utils.js';
+import { type DesignToken, Group, RootGroup } from "@udt/tom";
+import { type JsonObject, type ParseGroupResult } from "@udt/parser-utils";
+import { extractCommonProps } from "./extract-common-props.js";
 
-interface ParsedGroup {
-  group: Group;
-  children: any;
-}
+export function parseGroup(
+  groupProps: JsonObject,
+  path: string[]
+): ParseGroupResult<Group | RootGroup, DesignToken, never> {
+  const { commonProps, rest } = extractCommonProps(groupProps);
 
-function parseGroup(name: string, dtcgData: unknown): ParsedGroup {
-  const {
-    commonProps,
-    rest: children,
-  } = extractCommonProps(dtcgData);
+  if (Object.keys(rest).length > 0) {
+    throw new Error(`Invalid props: ${Object.keys(rest).join(", ")}`);
+  }
 
-  const group = new Group(name, commonProps);
+  let group: Group | RootGroup;
+  if (path.length === 0) {
+    group = new RootGroup(commonProps);
+  } else {
+    const name = path[path.length - 1];
+    group = new Group(name, commonProps);
+  }
 
   return {
     group,
-    children
+    addChild(_name, child: Group | DesignToken) {
+      group.addChild(child);
+    },
   };
-}
-
-export function parseAndAddChildren(children: any, group: Group): void {
-  for (const name in children) {
-    const data = children[name];
-    if (isJsonObject(data)) {
-      if (isTokenData(data)) {
-        group.addChild(parseToken(name, data));
-      }
-      else {
-        const {
-          group: childGroup,
-          children: childChildren
-        } = parseGroup(name, data);
-        // Need to add child group to current group *before*
-        // we parse its children, so that they will have access
-        // to ancestor groups
-        group.addChild(childGroup);
-        parseAndAddChildren(childChildren, childGroup);
-      }
-    }
-    else {
-      throw new Error(`Unexpected ${typeof data} value encountered: ${data}`);
-    }
-  }
 }
