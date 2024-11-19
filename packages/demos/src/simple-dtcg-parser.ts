@@ -1,4 +1,6 @@
-import { type JsonObject, parseData } from "./index.js";
+import { type JsonObject, parseData } from "@udt/parser-utils";
+import { readJsonFile, dtcgDevExampleFile } from "./utils/file.js";
+import { getArgs } from "./utils/cli-args.js";
 
 export type InheritablePropValueProcessor<T = unknown> = (
   propValue: T,
@@ -82,16 +84,5 @@ export function parseDtcg(data: unknown) {
   });
 }
 
-parseDtcg({
-  $description: "root group",
-  $type: "color",
-  foo: {
-    $extensions: {},
-    childOfFoo: {
-      $type: "number",
-      fooToken: {
-        $value: 123,
-      },
-    },
-  },
-});
+const [inputFile] = getArgs();
+parseDtcg(readJsonFile(inputFile || dtcgDevExampleFile));
