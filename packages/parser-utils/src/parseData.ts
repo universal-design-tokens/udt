@@ -33,6 +33,22 @@ export interface ParserConfig<ParsedDesignToken, ParsedGroup, T> {
   parseDesignTokenData: ParseDesignTokenDataFn<ParsedDesignToken, T>;
 }
 
+export class InvalidDataError extends Error {
+  public path: string[];
+  public data: unknown;
+
+  constructor(path: string[], data: unknown) {
+    super(
+      `Expected object at path "${path.join(
+        "."
+      )}", but got ${typeof data} instead`
+    );
+    this.name = "InvalidDataError";
+    this.path = path;
+    this.data = data;
+  }
+}
+
 function parseDataImpl<ParsedDesignToken, ParsedGroup, T>(
   data: unknown,
   config: ParserConfig<ParsedDesignToken, ParsedGroup, T>,
@@ -41,7 +57,7 @@ function parseDataImpl<ParsedDesignToken, ParsedGroup, T>(
   addToParent?: AddChildFn<ParsedGroup, ParsedDesignToken>
 ): ParsedDesignToken | ParsedGroup {
   if (!isJsonObject(data)) {
-    throw new Error();
+    throw new InvalidDataError(path, data);
   }
 
   const {
