@@ -1,6 +1,6 @@
 {
   "name": "@udt/dtcg-serializer",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A library for serializing Token Object Models (TOM) to DTCG design token files",
   "main": "dist/index.js",
   "type": "module",
@@ -30,6 +30,6 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/dtcg-serializer#readme",
   "dependencies": {
-    "@udt/tom": "^0.1.0"
+    "@udt/tom": "^0.0.0"
   }
 }
