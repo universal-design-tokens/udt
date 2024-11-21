@@ -1,5 +1,6 @@
 {
   "name": "@udt/dtcg-parser",
+  "private": true,
   "version": "0.0.0",
   "description": "A library for parsing DTCG design token files to a Token Object Model (TOM) representation",
   "main": "dist/index.js",

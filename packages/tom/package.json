@@ -1,5 +1,6 @@
 {
   "name": "@udt/tom",
+  "private": "true",
   "version": "0.0.0",
   "description": "A Token Object Model (TOM) library for creating and manipulating design tokens which is aligned to the DTCG file format",
   "main": "dist/index.js",
