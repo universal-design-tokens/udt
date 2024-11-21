@@ -1,6 +1,6 @@
 {
   "name": "@udt/dtcg2csv",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A CLI utility for exporting tokens and groups from DTCG files to records in a CSV file.",
   "main": "dist/index.js",
   "type": "module",
@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/universal-design-tokens/udt#readme",
   "dependencies": {
-    "@udt/dtcg-parser": "^0.1.0",
-    "@udt/tom": "^0.1.0",
+    "@udt/dtcg-parser": "^0.0.0",
+    "@udt/tom": "^0.0.0",
     "csv-stringify": "^6.5.1"
   }
 }
