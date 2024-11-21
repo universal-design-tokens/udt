@@ -1,14 +1,16 @@
-name: Build and test PR
+name: Build, test & release
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout Repo
         uses: actions/checkout@v3
 
       - name: Setup Node.js 18
@@ -24,3 +26,8 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Create Release Pull Request
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
