@@ -30,6 +30,6 @@
   "dependencies": {
     "@udt/dtcg-parser": "^0.0.1",
     "@udt/tom": "^0.0.0",
-    "csv-stringify": "^6.5.1"
+    "csv-stringify": "^6.5.2"
   }
 }
