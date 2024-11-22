@@ -1,6 +1,6 @@
 {
   "name": "@udt/parser-utils",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Low-level logic and utilities for parsing DTCG and DTCG-like files",
   "main": "dist/index.js",
   "type": "module",
