@@ -7,10 +7,10 @@ import {
 import { extractCommonProps } from "./extract-common-props.js";
 import { parseValue } from "./values/parse-value.js";
 import { isReferenceValue, makeReference } from "./values/reference.js";
-import { type JsonObject } from "@udt/parser-utils";
+import { type PlainObject } from "@udt/parser-utils";
 
 export function parseToken(
-  tokenProps: JsonObject,
+  tokenProps: PlainObject,
   path: string[]
 ): DesignToken {
   const name = path[path.length - 1];

@@ -1,32 +1,32 @@
 import { describe, it, expect } from "vitest";
-import { isJsonObject } from "./isJsonObject.js";
+import { isPlainObject } from "./isJsonObject.js";
 
-describe("isJsonObject()", () => {
+describe("isPlainObject()", () => {
   it("Returns true for a genuine object", () => {
-    expect(isJsonObject({ foo: "bar" })).toBe(true);
+    expect(isPlainObject({ foo: "bar" })).toBe(true);
   });
 
   it("Returns false for null", () => {
-    expect(isJsonObject(null)).toBe(false);
+    expect(isPlainObject(null)).toBe(false);
   });
 
   it("Returns false for an array", () => {
-    expect(isJsonObject([1, 2, 3])).toBe(false);
+    expect(isPlainObject([1, 2, 3])).toBe(false);
   });
 
   it("Returns false for undefined", () => {
-    expect(isJsonObject(undefined)).toBe(false);
+    expect(isPlainObject(undefined)).toBe(false);
   });
 
   it("Returns false for a function", () => {
-    expect(isJsonObject(function () {})).toBe(false);
+    expect(isPlainObject(function () {})).toBe(false);
   });
 
   it("Returns false for a boolean", () => {
-    expect(isJsonObject(true)).toBe(false);
+    expect(isPlainObject(true)).toBe(false);
   });
 
   it("Returns false for a number", () => {
-    expect(isJsonObject(42)).toBe(false);
+    expect(isPlainObject(42)).toBe(false);
   });
 });

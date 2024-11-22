@@ -1,4 +1,4 @@
-import { type JsonObject, parseData } from "@udt/parser-utils";
+import { type PlainObject, parseData } from "@udt/parser-utils";
 import { RootGroup } from "@udt/tom";
 import { parseGroup } from "./parse-group.js";
 import { parseToken } from "./parse-token.js";
@@ -9,7 +9,7 @@ import { parseToken } from "./parse-token.js";
  * @param data
  * @returns
  */
-function isDesignTokenData(data: JsonObject): boolean {
+function isDesignTokenData(data: PlainObject): boolean {
   return data.$value !== undefined;
 }
 

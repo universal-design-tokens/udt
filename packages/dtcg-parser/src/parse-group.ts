@@ -1,9 +1,9 @@
 import { type DesignToken, Group, RootGroup } from "@udt/tom";
-import { type JsonObject, type ParseGroupResult } from "@udt/parser-utils";
+import { type PlainObject, type ParseGroupResult } from "@udt/parser-utils";
 import { extractCommonProps } from "./extract-common-props.js";
 
 export function parseGroup(
-  groupProps: JsonObject,
+  groupProps: PlainObject,
   path: string[]
 ): ParseGroupResult<Group | RootGroup, DesignToken, never> {
   const { commonProps, rest } = extractCommonProps(groupProps);
