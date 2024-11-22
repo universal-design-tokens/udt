@@ -1,4 +1,4 @@
-import { type JsonObject, parseData } from "@udt/parser-utils";
+import { type PlainObject, parseData } from "@udt/parser-utils";
 import { readJsonFile, dtcgDevExampleFile } from "./utils/file.js";
 import { getArgs } from "./utils/cli-args.js";
 
@@ -13,7 +13,7 @@ export interface InheritableProperties {
 
 // Test impl.
 
-function isDtcgDesignToken(data: JsonObject): boolean {
+function isDtcgDesignToken(data: PlainObject): boolean {
   return data.$value !== undefined;
 }
 
@@ -23,9 +23,9 @@ export function parseDtcg(data: unknown) {
   };
 
   function parseDtcgDesignToken(
-    data: JsonObject,
+    data: PlainObject,
     path: string[],
-    contextFromParent?: JsonObject
+    contextFromParent?: PlainObject
   ) {
     console.log(
       `Got token ${path.join(".")}, with data: `,
@@ -36,9 +36,9 @@ export function parseDtcg(data: unknown) {
   }
 
   function parseDtcgGroup(
-    data: JsonObject,
+    data: PlainObject,
     path: string[],
-    contextFromParent?: JsonObject
+    contextFromParent?: PlainObject
   ) {
     if (path.length === 0) {
       console.log(
