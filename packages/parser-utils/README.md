@@ -39,25 +39,6 @@ const parsedData = parseData(fileData, {
   // format properties
   groupPropsToExtract: [ /* ... */ ];
 
-  // Function which is called for each group data object
-  // that is encountered.
-  //
-  // Is given the extracted properties of that group and its
-  // path, and should parse that data into whatever structure
-  // is desired.
-  parseGroupData: (data, path, contextFromParent) => {
-    /* ... */
-    return {
-      group: parsedGroup,
-
-      // optional:
-      addChild: (childName, childGroupOrToken) => { /*... */ },
-
-      // optional:
-      contextForChildren: /* anything you like */,
-    }
-  },
-
   // Function which is called for each design token
   // data object that is encountered.
   //
@@ -68,6 +49,29 @@ const parsedData = parseData(fileData, {
     /* ... */
     return parsedDesignToken;
   },
+
+  // OPTIONAL function which is called for each group data object
+  // that is encountered.
+  //
+  // Is given the extracted properties of that group and its
+  // path, and should parse that data into whatever structure
+  // is desired.
+  parseGroupData: (data, path, contextFromParent) => {
+    /* ... */
+    return {
+      group: parsedGroup,
+
+      // OPTIONAL:
+      contextForChildren: /* anything you like */,
+    }
+  },
+
+  // OPTIONAL function which is called for each design token and/or
+  // nested group found within a group.
+  //
+  // Useful if your parsed groups and design tokens need to be assembled into
+  // a tree structure.
+  addChildToGroup: (parsedParentGroup, childName, parsedChildGroupOrToken) => { /*... */ },
 });
 ```
 

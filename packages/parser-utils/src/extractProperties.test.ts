@@ -18,12 +18,12 @@ describe("extractProperties()", () => {
     expect(extractResult.extracted).toStrictEqual({ bar: 13, baz: 666 });
   });
 
-  it("returns keys of non-extracted properties", () => {
+  it("returns non-extracted properties", () => {
     const extractResult = extractProperties(
       { foo: 42, bar: 13, baz: 666, quux: 0 },
       ["foo", "baz"]
     );
-    expect(extractResult.remainingProps).toStrictEqual(["bar", "quux"]);
+    expect(extractResult.rest).toStrictEqual({ bar: 13, quux: 0 });
   });
 
   it("ignores props to extract that are not present in input object", () => {

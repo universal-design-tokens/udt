@@ -39,12 +39,14 @@ export type ParseDesignTokenDataFn<ParsedDesignToken, T> = (
 
 /**
  * A function that adds a parsed group or design token
- * as a child of a parsed group.
+ * as a child of the given parsed group.
  *
+ * @param parent The parent group to add a child to
  * @param name  The name of the child group or design token
- * @param child The group or desing token to add
+ * @param child The group or design token to add
  */
 export type AddChildFn<ParsedGroup, ParsedDesignToken> = (
+  parent: ParsedGroup,
   name: string,
   child: ParsedGroup | ParsedDesignToken
 ) => void;
@@ -52,25 +54,15 @@ export type AddChildFn<ParsedGroup, ParsedDesignToken> = (
 /**
  * The return value of a `ParseGroupDataFn`.
  */
-export interface ParseGroupResult<ParsedGroup, ParsedDesignToken, T> {
+export interface ParseGroupResult<ParsedGroup, T> {
   /**
    * The parsed representation of the group.
    *
-   * May be `undefined` if there is no useful result
-   * to return from `parseData()` - e.g. if just
-   * logging group info or something like that.
+   * May be omitted if there is no useful result to
+   * return and we only need to pass along context
+   * data.
    */
-  group: ParsedGroup;
-
-  /**
-   * Optional function that will add other parsed groups
-   * or design tokens as children of this parsed group.
-   *
-   * Intended for cases where the parsed representation
-   * of a group needs to contain its children. If not
-   * needed, this property can be omitted.
-   */
-  addChild?: AddChildFn<ParsedGroup, ParsedDesignToken>;
+  group?: ParsedGroup;
 
   /**
    * Optional context data to be passed into the
@@ -96,15 +88,14 @@ export interface ParseGroupResult<ParsedGroup, ParsedDesignToken, T> {
  *              parsed the group containing this group.
  *
  * @returns The parsed representation of the group and,
- *          optionally, a function to add child groups or
- *          design tokens to it and some context data to
- *          pass down when child data is parsed.
+ *          optionally, some context data to pass down
+ *          when child data is parsed.
  */
-export type ParseGroupDataFn<ParsedGroup, ParsedDesignToken, T> = (
+export type ParseGroupDataFn<ParsedGroup, T> = (
   data: PlainObject,
   path: string[],
   contextFromParent?: T
-) => ParseGroupResult<ParsedGroup, ParsedDesignToken, T>;
+) => ParseGroupResult<ParsedGroup, T>;
 
 export interface ParserConfig<ParsedDesignToken, ParsedGroup, T> {
   /**
@@ -132,7 +123,7 @@ export interface ParserConfig<ParsedDesignToken, ParsedGroup, T> {
    * path, and should parse that data into whatever structure
    * is desired.
    */
-  parseGroupData: ParseGroupDataFn<ParsedGroup, ParsedDesignToken, T>;
+  parseGroupData?: ParseGroupDataFn<ParsedGroup, T>;
 
   /**
    * Function which is called for each design token
@@ -143,6 +134,16 @@ export interface ParserConfig<ParsedDesignToken, ParsedGroup, T> {
    * desired.
    */
   parseDesignTokenData: ParseDesignTokenDataFn<ParsedDesignToken, T>;
+
+  /**
+   * Optional function that will add parsed groups
+   * or design tokens as children of another parsed group.
+   *
+   * Intended for cases where the parsed representation
+   * of a group needs to contain its children. If not
+   * needed, this property can be omitted.
+   */
+  addChildToGroup?: AddChildFn<ParsedGroup, ParsedDesignToken>;
 }
 
 /**
@@ -192,8 +193,8 @@ function parseDataImpl<ParsedDesignToken, ParsedGroup, T>(
   config: ParserConfig<ParsedDesignToken, ParsedGroup, T>,
   contextFromParent?: T,
   path: string[] = [],
-  addToParent?: AddChildFn<ParsedGroup, ParsedDesignToken>
-): ParsedDesignToken | ParsedGroup {
+  parentGroup?: ParsedGroup
+): ParsedDesignToken | ParsedGroup | undefined {
   if (!isPlainObject(data)) {
     throw new InvalidDataError(path, data);
   }
@@ -203,38 +204,46 @@ function parseDataImpl<ParsedDesignToken, ParsedGroup, T>(
     groupPropsToExtract,
     parseGroupData,
     parseDesignTokenData,
+    addChildToGroup,
   } = config;
 
-  let groupOrToken: ParsedGroup | ParsedDesignToken;
+  let groupOrToken: ParsedGroup | ParsedDesignToken | undefined = undefined;
   if (isDesignTokenData(data)) {
     // looks like a token
     groupOrToken = parseDesignTokenData(data, path, contextFromParent);
-    if (addToParent && path.length > 0) {
-      addToParent(path[path.length - 1], groupOrToken);
+    if (addChildToGroup && path.length > 0 && parentGroup !== undefined) {
+      addChildToGroup(parentGroup, path[path.length - 1], groupOrToken);
     }
   } else {
     // must be a group
-    const { extracted: groupData, remainingProps: childNames } =
-      extractProperties(data, groupPropsToExtract);
-    const { group, addChild, contextForChildren } = parseGroupData(
-      groupData,
-      path,
-      contextFromParent
+    const { extracted: groupData, rest: children } = extractProperties(
+      data,
+      groupPropsToExtract
     );
 
-    groupOrToken = group;
-
-    if (addToParent && path.length > 0) {
-      addToParent(path[path.length - 1], groupOrToken);
+    let contextForChildren: T | undefined;
+    if (parseGroupData) {
+      const parseResult = parseGroupData(groupData, path, contextFromParent);
+      contextForChildren = parseResult.contextForChildren;
+      groupOrToken = parseResult.group;
     }
 
-    for (const childName of childNames) {
+    if (
+      addChildToGroup &&
+      path.length > 0 &&
+      parentGroup !== undefined &&
+      groupOrToken !== undefined
+    ) {
+      addChildToGroup(parentGroup, path[path.length - 1], groupOrToken);
+    }
+
+    for (const childName in children) {
       parseDataImpl(
-        data[childName],
+        children[childName],
         config,
         contextForChildren,
         [...path, childName],
-        addChild
+        groupOrToken
       );
     }
   }
@@ -266,6 +275,6 @@ export function parseData<ParsedDesignToken, ParsedGroup, T>(
   data: unknown,
   config: ParserConfig<ParsedDesignToken, ParsedGroup, T>,
   contextFromParent?: T
-): ParsedDesignToken | ParsedGroup {
+): ParsedDesignToken | ParsedGroup | undefined {
   return parseDataImpl(data, config, contextFromParent);
 }
