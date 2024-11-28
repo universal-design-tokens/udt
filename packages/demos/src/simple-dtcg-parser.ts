@@ -71,7 +71,6 @@ export function parseDtcg(data: unknown) {
     }
 
     return {
-      group: undefined,
       contextForChildren,
     };
   }

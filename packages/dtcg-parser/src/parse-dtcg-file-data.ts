@@ -21,6 +21,9 @@ export function parseDtcgFileData(dtcgData: unknown): RootGroup {
     groupPropsToExtract: [dtcgPropRegex],
     parseGroupData: parseGroup,
     parseDesignTokenData: parseToken,
+    addChildToGroup(group, _name, child) {
+      group.addChild(child);
+    },
   });
 
   if (!(result instanceof RootGroup)) {

@@ -19,10 +19,6 @@ interface TestDesignToken {
 
 interface TestParentContext {
   dummyData?: number;
-
-  // Used to pass in a mock addChild() function for
-  // mockParseGroupData() to use for testing
-  addChild?: AddChildFn<TestGroup, TestDesignToken>;
 }
 
 interface ParseDataCall {
@@ -53,7 +49,7 @@ const mockIsDesignTokenData = vi.fn<IsDesignTokenDataFn>(
 );
 
 const mockParseGroupData = vi.fn<
-  ParseGroupDataFn<TestGroup, TestDesignToken, TestParentContext>
+  ParseGroupDataFn<TestGroup, TestParentContext>
 >((_data, path, contextFromParent) => {
   parseDataCalls.push({
     type: "group",
@@ -65,11 +61,17 @@ const mockParseGroupData = vi.fn<
     },
     // pass through contextFromParent
     contextForChildren: contextFromParent,
-
-    // pass through addChild
-    addChild: contextFromParent?.addChild,
   };
 });
+
+const mockAddChildToGroup = vi.fn<AddChildFn<TestGroup, TestDesignToken>>(
+  (_parent, name, _child) => {
+    parseDataCalls.push({
+      type: "addChild",
+      name,
+    });
+  }
+);
 
 const mockParseDesignTokenData = vi.fn<
   ParseDesignTokenDataFn<TestDesignToken, TestParentContext>
@@ -81,20 +83,23 @@ const mockParseDesignTokenData = vi.fn<
   return result;
 });
 
+const defaultParserConfig: ParserConfig<
+  TestDesignToken,
+  TestGroup,
+  TestParentContext
+> = {
+  isDesignTokenData: mockIsDesignTokenData,
+  groupPropsToExtract: [],
+  parseGroupData: mockParseGroupData,
+  parseDesignTokenData: mockParseDesignTokenData,
+};
+
 describe("parseData()", () => {
-  const parserConfig: ParserConfig<
-    TestDesignToken,
-    TestGroup,
-    TestParentContext
-  > = {
-    isDesignTokenData: mockIsDesignTokenData,
-    groupPropsToExtract: [],
-    parseGroupData: mockParseGroupData,
-    parseDesignTokenData: mockParseDesignTokenData,
-  };
+  let parserConfig: ParserConfig<TestDesignToken, TestGroup, TestParentContext>;
 
   beforeEach(() => {
     // Reset stuff
+    parserConfig = defaultParserConfig;
     parseDataCalls = [];
     parserConfig.groupPropsToExtract = [];
     mockIsDesignTokenData.mockClear();
@@ -103,14 +108,14 @@ describe("parseData()", () => {
   });
 
   describe("parsing an empty group object", () => {
-    let parsedGroupOrToken: TestGroup | TestDesignToken;
+    let parsedGroupOrToken: TestGroup | TestDesignToken | undefined;
 
     beforeEach(() => {
       parsedGroupOrToken = parseData({}, parserConfig);
     });
 
     it("returns a group", () => {
-      expect(parsedGroupOrToken.type).toBe("group");
+      expect(parsedGroupOrToken?.type).toBe("group");
     });
 
     it("calls isDesignTokenData function once", () => {
@@ -141,14 +146,14 @@ describe("parseData()", () => {
       stuff: 123,
       notAGroup: {},
     };
-    let parsedGroupOrToken: TestGroup | TestDesignToken;
+    let parsedGroupOrToken: TestGroup | TestDesignToken | undefined;
 
     beforeEach(() => {
       parsedGroupOrToken = parseData(testTokenData, parserConfig);
     });
 
     it("returns a design token", () => {
-      expect(parsedGroupOrToken.type).toBe("token");
+      expect(parsedGroupOrToken?.type).toBe("token");
     });
 
     it("does not call parseGroupData function", () => {
@@ -320,32 +325,24 @@ describe("parseData()", () => {
     });
   });
 
-  describe("using addChild functions", () => {
+  describe("using addChildToGroup function", () => {
     const testData = {
       tokenA: { value: 1 },
       tokenB: { value: 2 },
       groupC: { tokenX: { value: 99 }, tokenY: { value: 100 } },
     };
-    const mockAddChild = vi.fn<AddChildFn<TestGroup, TestDesignToken>>(
-      (name, _child) => {
-        parseDataCalls.push({
-          type: "addChild",
-          name,
-        });
-      }
-    );
-    const testContext: TestParentContext = { addChild: mockAddChild };
 
     beforeEach(() => {
-      mockAddChild.mockClear();
-      parseData(testData, parserConfig, testContext);
+      mockAddChildToGroup.mockClear();
+      parserConfig.addChildToGroup = mockAddChildToGroup;
+      parseData(testData, parserConfig);
     });
 
-    it("calls addChild for every child of every group", () => {
+    it("calls addChildToGroup for every child of every group", () => {
       // Root group contains 3 children: "tokenA", "tokenB" and "groupC"
       // "groupC" contains 2 children: "tokenX" and "tokenY"
       // 3 + 2 = 5
-      expect(mockAddChild).toHaveBeenCalledTimes(5);
+      expect(mockAddChildToGroup).toHaveBeenCalledTimes(5);
     });
 
     it("adds a nested group to its parent before parsing its children", () => {

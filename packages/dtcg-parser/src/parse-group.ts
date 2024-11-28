@@ -1,11 +1,11 @@
-import { type DesignToken, Group, RootGroup } from "@udt/tom";
+import { Group, RootGroup } from "@udt/tom";
 import { type PlainObject, type ParseGroupResult } from "@udt/parser-utils";
 import { extractCommonProps } from "./extract-common-props.js";
 
 export function parseGroup(
   groupProps: PlainObject,
   path: string[]
-): ParseGroupResult<Group | RootGroup, DesignToken, never> {
+): ParseGroupResult<Group | RootGroup, never> {
   const { commonProps, rest } = extractCommonProps(groupProps);
 
   if (Object.keys(rest).length > 0) {
@@ -22,8 +22,5 @@ export function parseGroup(
 
   return {
     group,
-    addChild(_name, child: Group | DesignToken) {
-      group.addChild(child);
-    },
   };
 }

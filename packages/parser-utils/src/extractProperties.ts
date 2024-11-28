@@ -19,7 +19,7 @@ import { type PlainObject } from "./isJsonObject.js";
  */
 export function extractProperties(
   object: PlainObject,
-  propsToExtract: (string | RegExp)[]
+  propsToExtract: readonly (string | RegExp)[]
 ): {
   /**
    * Object containg the extract properties
@@ -28,10 +28,10 @@ export function extractProperties(
   extracted: PlainObject;
 
   /**
-   * Array of property names of the input
-   * object that were not extracted.
+   * Object containing the remaining, unextracted
+   * properties and their respective values.
    */
-  remainingProps: string[];
+  rest: PlainObject;
 } {
   const propNamesToExtract = propsToExtract.filter(
     (prop) => typeof prop === "string"
@@ -41,7 +41,7 @@ export function extractProperties(
   );
 
   const extracted: PlainObject = {};
-  const remainingProps: string[] = [];
+  const rest: PlainObject = {};
   Object.getOwnPropertyNames(object).forEach((prop) => {
     if (
       propNamesToExtract.some(
@@ -53,12 +53,12 @@ export function extractProperties(
     ) {
       extracted[prop] = object[prop];
     } else {
-      remainingProps.push(prop);
+      rest[prop] = object[prop];
     }
   });
 
   return {
     extracted,
-    remainingProps,
+    rest,
   };
 }
