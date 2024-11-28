@@ -1,7 +1,7 @@
 {
   "name": "@udt/demos",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Demos that use the @udt/* libraries",
   "type": "module",
   "scripts": {
@@ -20,9 +20,9 @@
   "author": "James Nash (https://cirrus.twiddles.com/)",
   "license": "ISC",
   "dependencies": {
-    "@udt/dtcg-parser": "^0.0.1",
+    "@udt/dtcg-parser": "^0.0.2",
     "@udt/dtcg-serializer": "^0.0.0",
-    "@udt/parser-utils": "^0.1.0",
+    "@udt/parser-utils": "^0.2.0",
     "@udt/tom": "^0.0.0",
     "chalk": "^5.3.0",
     "lodash.kebabcase": "^4.1.1"
