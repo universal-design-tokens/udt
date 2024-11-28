@@ -1,5 +1,15 @@
 # @udt/demos
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [7644f9a]
+- Updated dependencies [7644f9a]
+- Updated dependencies [7644f9a]
+  - @udt/parser-utils@0.2.0
+  - @udt/dtcg-parser@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
