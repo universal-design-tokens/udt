@@ -174,6 +174,25 @@ export class InvalidDataError extends Error {
 }
 
 /**
+ * Thrown when the outermost object in the data passed to `parseData()`
+ * is not a group.
+ */
+export class InvalidStructureError extends Error {
+  /**
+   * The offending value.
+   */
+  public data: unknown;
+
+  constructor(data: unknown) {
+    super(
+      `Expected a group at the root level, but encountered a design token instead`
+    );
+    this.name = "InvalidDataError";
+    this.data = data;
+  }
+}
+
+/**
  * The internal data parsing implementation.
  *
  * Recursively calls itself for nested group and
@@ -210,6 +229,10 @@ function parseDataImpl<ParsedDesignToken, ParsedGroup, T>(
   let groupOrToken: ParsedGroup | ParsedDesignToken | undefined = undefined;
   if (isDesignTokenData(data)) {
     // looks like a token
+    if (path.length === 0) {
+      throw new InvalidStructureError(data);
+    }
+
     groupOrToken = parseDesignTokenData(data, path, contextFromParent);
     if (addChildToGroup && path.length > 0 && parentGroup !== undefined) {
       addChildToGroup(parentGroup, path[path.length - 1], groupOrToken);
@@ -275,6 +298,10 @@ export function parseData<ParsedDesignToken, ParsedGroup, T>(
   data: unknown,
   config: ParserConfig<ParsedDesignToken, ParsedGroup, T>,
   contextFromParent?: T
-): ParsedDesignToken | ParsedGroup | undefined {
-  return parseDataImpl(data, config, contextFromParent);
+): ParsedGroup | undefined {
+  // parseDataImpl() called with an empty path will never return
+  // a ParsedDesignToken
+  return parseDataImpl(data, config, contextFromParent) as
+    | ParsedGroup
+    | undefined;
 }

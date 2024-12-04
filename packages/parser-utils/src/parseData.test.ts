@@ -7,6 +7,7 @@ import {
   type ParserConfig,
   InvalidDataError,
   AddChildFn,
+  InvalidStructureError,
 } from "./parseData.js";
 
 interface TestGroup {
@@ -108,14 +109,14 @@ describe("parseData()", () => {
   });
 
   describe("parsing an empty group object", () => {
-    let parsedGroupOrToken: TestGroup | TestDesignToken | undefined;
+    let parsedGroup: TestGroup | undefined;
 
     beforeEach(() => {
-      parsedGroupOrToken = parseData({}, parserConfig);
+      parsedGroup = parseData({}, parserConfig);
     });
 
     it("returns a group", () => {
-      expect(parsedGroupOrToken?.type).toBe("group");
+      expect(parsedGroup?.type).toBe("group");
     });
 
     it("calls isDesignTokenData function once", () => {
@@ -141,33 +142,26 @@ describe("parseData()", () => {
 
   describe("parsing a design token object", () => {
     const testTokenData = {
-      value: "whatever", // <-- this makes it a token
-      other: "thing",
-      stuff: 123,
-      notAGroup: {},
+      testToken: {
+        value: "whatever", // <-- this makes it a token
+        other: "thing",
+        stuff: 123,
+        notAGroup: {},
+      },
     };
-    let parsedGroupOrToken: TestGroup | TestDesignToken | undefined;
 
     beforeEach(() => {
-      parsedGroupOrToken = parseData(testTokenData, parserConfig);
-    });
-
-    it("returns a design token", () => {
-      expect(parsedGroupOrToken?.type).toBe("token");
-    });
-
-    it("does not call parseGroupData function", () => {
-      expect(mockParseGroupData).not.toHaveBeenCalled();
+      parseData(testTokenData, parserConfig);
     });
 
     it("calls parseDesignTokenData function once", () => {
       expect(mockParseDesignTokenData).toHaveBeenCalledOnce();
     });
 
-    it("calls parseDesignTokenData function with complete data and empty path array", () => {
+    it("calls parseDesignTokenData function with complete data and path array", () => {
       expect(mockParseDesignTokenData).toHaveBeenCalledWith(
-        testTokenData,
-        [],
+        testTokenData.testToken,
+        ["testToken"],
         undefined
       );
     });
@@ -431,5 +425,11 @@ describe("parseData()", () => {
       expect((error as InvalidDataError).path).toStrictEqual(["brokenThing"]);
       expect((error as InvalidDataError).data).toBe(123);
     }
+  });
+
+  it("throws an InvalidStructureError when there is no root group", () => {
+    expect(() =>
+      parseData({ value: "naughty anonymous token" }, parserConfig)
+    ).toThrowError(InvalidStructureError);
   });
 });
