@@ -1,5 +1,12 @@
 # @udt/parser-utils
 
+## 0.3.0
+
+### Minor Changes
+
+- fd5462f: BREAKING CHANGE: `parseData()` will now throw an `InvalidStructureError` if the top-level object in the input data is a design token.
+- fd5462f: BREAKING CHANGE: Specified minimum Node version of 18
+
 ## 0.2.0
 
 ### Minor Changes
