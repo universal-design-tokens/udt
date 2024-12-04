@@ -1,5 +1,13 @@
 # @udt/dtcg-parser
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [fd5462f]
+- Updated dependencies [fd5462f]
+  - @udt/parser-utils@0.3.0
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@udt/parser-utils",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Low-level logic and utilities for parsing DTCG and DTCG-like files",
   "type": "module",
   "exports": {
