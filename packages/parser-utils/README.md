@@ -16,7 +16,7 @@ const fileData = { /* ... */ };
 // relevant properties of each group and design token
 // object it encounters to the functions you provide in
 // the config:
-const parsedData = parseData(fileData, {
+const parsedGroup = parseData(fileData, {
   /* Parser config */
 
   // A function that checks whether an object is
