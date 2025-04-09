@@ -40,7 +40,7 @@
     "@types/node": "^18.19.64",
     "@vitest/coverage-v8": "^2.1.8",
     "del-cli": "^6.0.0",
-    "nx": "20.4.6",
+    "nx": "20.7.2",
     "typescript": "^5.7.3",
     "vitest": "^2.1.3"
   },
