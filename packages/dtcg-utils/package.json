@@ -1,0 +1,52 @@
+{
+  "name": "@udt/dtcg-utils",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Utility functions for working with DTCG values.",
+  "type": "module",
+  "scripts": {
+    "clean": "del-cli dist/*",
+    "build": "tsc -p tsconfig.build.json",
+    "watch": "tsc -p tsconfig.build.json --watch",
+    "test": "vitest run --coverage --passWithNoTests"
+  },
+  "exports": {
+    "./dimension.js": {
+      "import": "./dist/dimension.js",
+      "types": "./dist/dimension.d.ts"
+    },
+    "./1st-ed/*.js": {
+      "import": "./dist/1st-ed/*.js",
+      "types": "./dist/1st-ed/*.d.ts"
+    },
+    "./2nd-ed/*.js": {
+      "import": "./dist/2nd-ed/*.js",
+      "types": "./dist/2nd-ed/*.d.ts"
+    },
+    "./3rd-ed/*.js": {
+      "import": "./dist/3rd-ed/*.js",
+      "types": "./dist/3rd-ed/*.d.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/universal-design-tokens/udt.git"
+  },
+  "keywords": [
+    "design tokens",
+    "parser",
+    "read",
+    "load",
+    "tom",
+    "dtcg"
+  ],
+  "author": "James Nash (https://cirrus.twiddles.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/universal-design-tokens/udt/issues"
+  },
+  "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/dtcg-utils#readme",
+  "dependencies": {
+    "@udt/parser-utils": "^0.3.0"
+  }
+}
