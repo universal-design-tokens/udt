@@ -12,7 +12,14 @@ import {
  * Dimension value, as specified since the 3rd Editor's Draft.
  */
 export type DimensionValue3rdED = {
+  /**
+   * An integer or floating-point value representing the numeric value.
+   */
   value: number;
+
+  /**
+   * Unit of distance.
+   */
   unit: DimensionUnit1stED;
 };
 
@@ -40,7 +47,8 @@ export function isValidDimensionValue3rdED(
   return (
     // MUST be an object
     isPlainObject(value) &&
-    // MUST have both .value & .unit properties
+    // MUST NOT have additional properties, beyond
+    // .value & .unit
     Object.keys(value).length === 2 &&
     // .value MUST be number
     typeof value.value === "number" &&
