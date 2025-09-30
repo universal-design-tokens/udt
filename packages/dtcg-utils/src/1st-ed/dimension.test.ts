@@ -2,9 +2,9 @@ import { describe, it, expect } from "vitest";
 import {
   dimensionUnits1stED,
   isValidDimensionUnit1stED,
-  isValidDimensionValue1stED,
-  sanitizeDimensionValue1stED,
-  type DimensionValue1stED,
+  isValidDimension1stED,
+  sanitizeDimension1stED,
+  type Dimension1stED,
 } from "./dimension.js";
 import { DtcgValueParseException } from "../shared/exceptions.js";
 
@@ -32,11 +32,11 @@ describe("isValidDimensionUnit1stED()", () => {
   });
 });
 
-describe("isValidDimensionValue1stED()", () => {
-  it.each(["123px", "23.45rem"] as DimensionValue1stED[])(
+describe("isValidDimension1stED()", () => {
+  it.each(["123px", "23.45rem"] as Dimension1stED[])(
     'accepts valid value "%s"',
     (testVal) => {
-      expect(isValidDimensionValue1stED(testVal)).toBe(true);
+      expect(isValidDimension1stED(testVal)).toBe(true);
     }
   );
 
@@ -45,7 +45,7 @@ describe("isValidDimensionValue1stED()", () => {
     { testVal: "  123 px ", reason: "Contains whitespace" },
     { testVal: "123dp", reason: "Unsupported unit" },
   ])("rejects invalid value: $testVal ($reason)", ({ testVal }) => {
-    expect(isValidDimensionValue1stED(testVal)).toBe(false);
+    expect(isValidDimension1stED(testVal)).toBe(false);
   });
 
   it.each([
@@ -55,11 +55,11 @@ describe("isValidDimensionValue1stED()", () => {
     { testVal: [], type: "array" },
     { testVal: true, type: "boolean" },
   ])("rejects non-string, $type value: $testVal", ({ testVal }) => {
-    expect(isValidDimensionValue1stED(testVal)).toBe(false);
+    expect(isValidDimension1stED(testVal)).toBe(false);
   });
 });
 
-describe("sanitizeDimensionValue1stED()", () => {
+describe("sanitizeDimension1stED()", () => {
   const validValue = "1px";
 
   const sanitizableValues = [
@@ -79,7 +79,7 @@ describe("sanitizeDimensionValue1stED()", () => {
 
   describe("with normalization disabled", () => {
     it("passes through valid values", () => {
-      expect(sanitizeDimensionValue1stED(validValue)).toBe(validValue);
+      expect(sanitizeDimension1stED(validValue)).toBe(validValue);
     });
 
     it.each([
@@ -89,7 +89,7 @@ describe("sanitizeDimensionValue1stED()", () => {
       "throws an error for invalid value: $testVal ($description)",
       ({ testVal }) => {
         expect(() => {
-          sanitizeDimensionValue1stED(testVal);
+          sanitizeDimension1stED(testVal);
         }).toThrowError(DtcgValueParseException);
       }
     );
@@ -97,7 +97,7 @@ describe("sanitizeDimensionValue1stED()", () => {
 
   describe("with normalization enabled", () => {
     it("passes through valid values", () => {
-      expect(sanitizeDimensionValue1stED(validValue, { normalize: true })).toBe(
+      expect(sanitizeDimension1stED(validValue, { normalize: true })).toBe(
         validValue
       );
     });
@@ -105,16 +105,16 @@ describe("sanitizeDimensionValue1stED()", () => {
     it.each(sanitizableValues)(
       "sanitizes to valid dimension: $testVal ($description)",
       ({ testVal }) => {
-        const dimension = sanitizeDimensionValue1stED(testVal, {
+        const dimension = sanitizeDimension1stED(testVal, {
           normalize: true,
         });
-        expect(isValidDimensionValue1stED(dimension)).toBe(true);
+        expect(isValidDimension1stED(dimension)).toBe(true);
       }
     );
 
     it("throws an error for unsanitizable values", () => {
       expect(() => {
-        sanitizeDimensionValue1stED(invalidValue, { normalize: true });
+        sanitizeDimension1stED(invalidValue, { normalize: true });
       }).toThrowError(DtcgValueParseException);
     });
   });

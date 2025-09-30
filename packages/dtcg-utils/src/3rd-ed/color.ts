@@ -71,7 +71,7 @@ export function isValidColorComponents3rdED(
 /**
  * Color value, as specified since the 3rd Editor's Draft.
  */
-export type ColorValue3rdED = {
+export type Color3rdED = {
   /**
    * A string that specifies the color space or color model.
    */
@@ -112,9 +112,7 @@ const hexTripletRegex = /^#[\da-zA-Z]{6}$/;
  *
  * @returns `true` if `value` is a valid DTCG dimension value, `false` otherwise.
  */
-export function isValidColorValue3rdED(
-  value: unknown
-): value is ColorValue3rdED {
+export function isValidColor3rdED(value: unknown): value is Color3rdED {
   if (!isPlainObject(value)) {
     return false;
   }

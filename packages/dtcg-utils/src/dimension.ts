@@ -7,11 +7,11 @@ import {
   dimensionUnits1stED,
   isValidDimensionUnit1stED,
   type DimensionUnit1stED,
-  type DimensionValue1stED,
+  type Dimension1stED,
 } from "./1st-ed/dimension.js";
 import {
-  isValidDimensionValue3rdED,
-  type DimensionValue3rdED,
+  isValidDimension3rdED,
+  type Dimension3rdED,
 } from "./3rd-ed/dimensions.js";
 
 /**
@@ -40,7 +40,7 @@ export const isValidDimensionUnit: (unit: unknown) => unit is DimensionUnit =
  * Dimension value, as specified in the most recent, published
  * spec version.
  */
-export type DimensionValue = DimensionValue3rdED;
+export type Dimension = Dimension3rdED;
 
 /**
  * Checks if the value is a valid dimension value, as specified
@@ -60,9 +60,8 @@ export type DimensionValue = DimensionValue3rdED;
  *
  * @returns `true` if `value` is a valid DTCG dimension value, `false` otherwise.
  */
-export const isValidDimensionValue: (
-  value: unknown
-) => value is DimensionValue = isValidDimensionValue3rdED;
+export const isValidDimension: (value: unknown) => value is Dimension =
+  isValidDimension3rdED;
 
 /**
  * Converts a legacy dimension value that conforms to the syntax
@@ -72,9 +71,9 @@ export const isValidDimensionValue: (
  * @param legacyDimensionVal A legacy dimension value (e.g. `"123px"`)
  * @returns The equivalent, current spec dimension value (e.g. `{ value: 123, unit: 'px' }`)
  */
-export function fromDimensionValue1stED(
-  legacyDimensionVal: DimensionValue1stED
-): DimensionValue {
+export function fromDimension1stED(
+  legacyDimensionVal: Dimension1stED
+): Dimension {
   const value = parseFloat(legacyDimensionVal);
   const unit = legacyDimensionVal.substring(-2) as DimensionUnit1stED;
 
@@ -92,9 +91,9 @@ export function fromDimensionValue1stED(
  * @param dimensionVal A dimension value (e.g. `{ value: 123, unit: 'px' }`)
  * @returns The equivalent, legacy dimension value (e.g. `"123px"`)
  */
-export function toDimensionValue1stED(
-  dimensionVal: Readonly<DimensionValue>
-): DimensionValue1stED {
+export function toDimension1stED(
+  dimensionVal: Readonly<Dimension>
+): Dimension1stED {
   return `${dimensionVal.value}${dimensionVal.unit}`;
 }
 
@@ -119,9 +118,9 @@ export function toDimensionValue1stED(
  * @returns An equivalent dimension value with the unit set to `rem`.
  */
 export function toRemEquivalent(
-  input: DimensionValue,
+  input: Dimension,
   defaultPxFontSize: number = 16
-): DimensionValue {
+): Dimension {
   if (input.unit === "px") {
     return {
       value: input.value / defaultPxFontSize,
@@ -152,9 +151,9 @@ export function toRemEquivalent(
  * @returns An equivalent dimension value with the unit set to `rem`.
  */
 export function toPxEquivalent(
-  input: DimensionValue,
+  input: Dimension,
   defaultPxFontSize: number = 16
-): DimensionValue {
+): Dimension {
   if (input.unit === "rem") {
     return {
       value: input.value * defaultPxFontSize,

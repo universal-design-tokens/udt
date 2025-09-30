@@ -40,9 +40,9 @@ export function isValidDimensionUnit1stED(
  * @see https://www.designtokens.org/tr/first-editors-draft/format/#dimension
  * @see https://www.designtokens.org/tr/second-editors-draft/format/#dimension
  */
-export type DimensionValue1stED = `${number}${DimensionUnit1stED}`;
+export type Dimension1stED = `${number}${DimensionUnit1stED}`;
 
-// Used by `isValidDimensionValue1stED()`:
+// Used by `isValidDimension1stED()`:
 const dimensionValueRegex = /^\d+(\.\d+)?(px|rem)$/;
 
 /**
@@ -68,13 +68,11 @@ const dimensionValueRegex = /^\d+(\.\d+)?(px|rem)$/;
  *
  * @returns `true` if `value` is a valid DTCG dimension value, `false` otherwise.
  */
-export function isValidDimensionValue1stED(
-  value: unknown
-): value is DimensionValue1stED {
+export function isValidDimension1stED(value: unknown): value is Dimension1stED {
   return typeof value === "string" && dimensionValueRegex.test(value);
 }
 
-export interface SanitizeDimensionValue1stEDOptions {
+export interface SanitizeDimension1stEDOptions {
   /**
    * Whether to normalize the input, before checking validity.
    *
@@ -103,15 +101,15 @@ const whitespaceRegex = /\s+/g;
  *                  spec-compliant values will be accepted.
  * @returns A spec-compliant dimension value.
  */
-export function sanitizeDimensionValue1stED(
+export function sanitizeDimension1stED(
   input: unknown,
-  options?: SanitizeDimensionValue1stEDOptions
-): DimensionValue1stED {
+  options?: SanitizeDimension1stEDOptions
+): Dimension1stED {
   let output = options?.normalize
     ? String(input).replaceAll(whitespaceRegex, "").toLowerCase()
     : input;
 
-  if (isValidDimensionValue1stED(output)) {
+  if (isValidDimension1stED(output)) {
     return output;
   }
   throw new DtcgValueParseException("Invalid dimension value");

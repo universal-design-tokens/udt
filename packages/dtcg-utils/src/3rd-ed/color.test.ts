@@ -3,8 +3,8 @@ import {
   colorSpaces3rdED,
   isValidColorComponents3rdED,
   isValidColorSpace3rdED,
-  isValidColorValue3rdED,
-  type ColorValue3rdED,
+  isValidColor3rdED,
+  type Color3rdED,
 } from "./color.js";
 
 describe("isValidColorSpace3rdED()", () => {
@@ -41,7 +41,7 @@ describe("isValidColorComponents3rdED()", () => {
   });
 });
 
-describe("isValidColorValue3rdED()", () => {
+describe("isValidColor3rdED()", () => {
   it.each([
     {
       colorSpace: "a98-rgb",
@@ -67,8 +67,8 @@ describe("isValidColorValue3rdED()", () => {
       alpha: 0.5,
       hex: "#123456",
     },
-  ] as ColorValue3rdED[])("accepts valid color value: %o", (testVal) => {
-    expect(isValidColorValue3rdED(testVal)).toBe(true);
+  ] as Color3rdED[])("accepts valid color value: %o", (testVal) => {
+    expect(isValidColor3rdED(testVal)).toBe(true);
   });
 
   it.each([
@@ -124,7 +124,7 @@ describe("isValidColorValue3rdED()", () => {
       reason: "Invalid hex value",
     },
   ])("rejects invalid color value: $testVal ($reason)", ({ testVal }) => {
-    expect(isValidColorValue3rdED(testVal)).toBe(false);
+    expect(isValidColor3rdED(testVal)).toBe(false);
   });
 
   it.each([
@@ -134,6 +134,6 @@ describe("isValidColorValue3rdED()", () => {
     { testVal: [], type: "array" },
     { testVal: true, type: "boolean" },
   ])("rejects non-object, $type value: $testVal", ({ testVal }) => {
-    expect(isValidColorValue3rdED(testVal)).toBe(false);
+    expect(isValidColor3rdED(testVal)).toBe(false);
   });
 });

@@ -11,7 +11,7 @@ import {
 /**
  * Dimension value, as specified since the 3rd Editor's Draft.
  */
-export type DimensionValue3rdED = {
+export type Dimension3rdED = {
   /**
    * An integer or floating-point value representing the numeric value.
    */
@@ -42,9 +42,7 @@ export type DimensionValue3rdED = {
  *
  * @returns `true` if `value` is a valid DTCG dimension value, `false` otherwise.
  */
-export function isValidDimensionValue3rdED(
-  input: unknown
-): input is DimensionValue3rdED {
+export function isValidDimension3rdED(input: unknown): input is Dimension3rdED {
   return (
     // MUST be an object
     isPlainObject(input) &&
