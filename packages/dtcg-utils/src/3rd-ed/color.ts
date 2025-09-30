@@ -54,14 +54,16 @@ export type ColorComponents3rdED = [
   number | "none"
 ];
 
-export function isValidColorComponents(
+export function isValidColorComponents3rdED(
   components: unknown
 ): components is ColorComponents3rdED {
   return (
     Array.isArray(components) &&
     components.length === 3 &&
     components.every(
-      (component) => typeof component === "number" || component === "none"
+      (component) =>
+        (typeof component === "number" && !isNaN(component)) ||
+        component === "none"
     )
   );
 }
@@ -128,7 +130,7 @@ export function isValidColorValue3rdED(
     // MUST have a valid .colorSpace
     isValidColorSpace3rdED(value.colorSpace) &&
     // MUST have valid .components
-    isValidColorComponents(value.components) &&
+    isValidColorComponents3rdED(value.components) &&
     // If .alpha exists, it MUST be a number
     (alpha === undefined || typeof alpha === "number") &&
     // If .hex exists, it MUST be a hex triplet

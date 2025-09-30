@@ -35,24 +35,27 @@ export type DimensionValue3rdED = {
  * - `{ value: 123, unit: 'dp' }`: Invalid (unsupported unit)
  * - `{ value: 123 }`: Invalid (missing .unit property)
  * - `{ value: 123, unit: 'px', foo: 'bar' }`: Invalid (superfluous property)
- * - `{ value: '123', unit: 'px' }`: Invalid (.value is not a number)
+ * - `{ value: '123', unit: 'px' }`: Invalid (.value is not a JS number)
+ * - `{ value: NaN, unit: 'px'}`: Invalid (.value is NaN)
  *
- * @param value The value to be checked
+ * @param input The value to be checked
  *
  * @returns `true` if `value` is a valid DTCG dimension value, `false` otherwise.
  */
 export function isValidDimensionValue3rdED(
-  value: unknown
-): value is DimensionValue3rdED {
+  input: unknown
+): input is DimensionValue3rdED {
   return (
     // MUST be an object
-    isPlainObject(value) &&
+    isPlainObject(input) &&
     // MUST NOT have additional properties, beyond
     // .value & .unit
-    Object.keys(value).length === 2 &&
+    Object.keys(input).length === 2 &&
     // .value MUST be number
-    typeof value.value === "number" &&
+    typeof input.value === "number" &&
+    // .value MUST NOT be NaN
+    !isNaN(input.value) &&
     // .unit MUST be one of the supported ones
-    isValidDimensionUnit1stED(value.unit)
+    isValidDimensionUnit1stED(input.unit)
   );
 }
