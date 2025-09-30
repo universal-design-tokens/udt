@@ -4,6 +4,8 @@
  * specification.
  */
 
+import { DtcgValueParseException } from "../shared/exceptions.js";
+
 /**
  * All allowed units for dimension values, as specified since
  * the 1st Editor's Draft.
@@ -70,4 +72,47 @@ export function isValidDimensionValue1stED(
   value: unknown
 ): value is DimensionValue1stED {
   return typeof value === "string" && dimensionValueRegex.test(value);
+}
+
+export interface SanitizeDimensionValue1stEDOptions {
+  /**
+   * Whether to normalize the input, before checking validity.
+   *
+   * Normlization will:
+   * - Coerce to string (if needed)
+   * - Trim whitespace characters
+   * - Convert to lowercase
+   */
+  normalize?: boolean;
+}
+
+const whitespaceRegex = /\s+/g;
+
+/**
+ * Attempts to sanitize the input value to a valid dimension value,
+ * as specified in the 1st & 2nd Editors' Drafts.
+ *
+ * Tries to clean the input, to handle values that slightly
+ * deviate from the spec.
+ *
+ * @throws {DtcgValueParseException} if the input could not be
+ *                                    cleaned.
+ *
+ * @param input     The value to be sanitized.
+ * @param options   Options for sanitizing the input. If omitted, only
+ *                  spec-compliant values will be accepted.
+ * @returns A spec-compliant dimension value.
+ */
+export function sanitizeDimensionValue1stED(
+  input: unknown,
+  options?: SanitizeDimensionValue1stEDOptions
+): DimensionValue1stED {
+  let output = options?.normalize
+    ? String(input).replaceAll(whitespaceRegex, "").toLowerCase()
+    : input;
+
+  if (isValidDimensionValue1stED(output)) {
+    return output;
+  }
+  throw new DtcgValueParseException("Invalid dimension value");
 }
