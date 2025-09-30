@@ -3,6 +3,8 @@ import {
   colorSpaces3rdED,
   isValidColorComponents3rdED,
   isValidColorSpace3rdED,
+  isValidColorValue3rdED,
+  type ColorValue3rdED,
 } from "./color.js";
 
 describe("isValidColorSpace3rdED()", () => {
@@ -36,5 +38,102 @@ describe("isValidColorComponents3rdED()", () => {
     { testVal: ["1", "2", "3"], reason: "Non-number components" },
   ])("rejects invalid color components: $testVal ($reason)", ({ testVal }) => {
     expect(isValidColorComponents3rdED(testVal)).toBe(false);
+  });
+});
+
+describe("isValidColorValue3rdED()", () => {
+  it.each([
+    {
+      colorSpace: "a98-rgb",
+      components: [1, 2, 3],
+    },
+    {
+      colorSpace: "hsl",
+      components: ["none", 2, 3],
+    },
+    {
+      colorSpace: "a98-rgb",
+      components: [1, 2, 3],
+      alpha: 0.5,
+    },
+    {
+      colorSpace: "a98-rgb",
+      components: [1, 2, 3],
+      hex: "#123456",
+    },
+    {
+      colorSpace: "a98-rgb",
+      components: [1, 2, 3],
+      alpha: 0.5,
+      hex: "#123456",
+    },
+  ] as ColorValue3rdED[])("accepts valid color value: %o", (testVal) => {
+    expect(isValidColorValue3rdED(testVal)).toBe(true);
+  });
+
+  it.each([
+    {
+      testVal: {
+        components: [1, 2, 3],
+      },
+      reason: "Missing .colorSpace",
+    },
+    {
+      testVal: {
+        colorSpace: "a98-rgb",
+      },
+      reason: "Missing .components",
+    },
+    {
+      testVal: {
+        colorSpace: "a98-rgb",
+        components: [1, 2, 3],
+        foo: "bar",
+      },
+      reason: "Unsupported extra property",
+    },
+    {
+      testVal: {
+        colorSpace: "sbrg",
+        components: [1, 2, 3],
+      },
+      reason: "Invalid colorSpace",
+    },
+    {
+      testVal: {
+        colorSpace: "a98-rgb",
+        components: ["1", 2, 3],
+      },
+      reason: "Invalid components",
+    },
+    {
+      testVal: {
+        colorSpace: "a98-rgb",
+        components: [1, 2, 3],
+        alpha: "0.5",
+      },
+      reason: "Non-number alpha value",
+    },
+
+    {
+      testVal: {
+        colorSpace: "a98-rgb",
+        components: [1, 2, 3],
+        hex: "wrong",
+      },
+      reason: "Invalid hex value",
+    },
+  ])("rejects invalid color value: $testVal ($reason)", ({ testVal }) => {
+    expect(isValidColorValue3rdED(testVal)).toBe(false);
+  });
+
+  it.each([
+    { testVal: 123, type: "number" },
+    { testVal: undefined, type: "undefined" },
+    { testVal: "123px", type: "string" },
+    { testVal: [], type: "array" },
+    { testVal: true, type: "boolean" },
+  ])("rejects non-object, $type value: $testVal", ({ testVal }) => {
+    expect(isValidColorValue3rdED(testVal)).toBe(false);
   });
 });
