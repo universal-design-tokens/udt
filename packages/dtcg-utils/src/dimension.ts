@@ -75,7 +75,9 @@ export function fromDimension1stED(
   legacyDimensionVal: Dimension1stED
 ): Dimension {
   const value = parseFloat(legacyDimensionVal);
-  const unit = legacyDimensionVal.substring(-2) as DimensionUnit1stED;
+  const unit = legacyDimensionVal.substring(
+    legacyDimensionVal.length - 2
+  ) as DimensionUnit1stED;
 
   return {
     value,
