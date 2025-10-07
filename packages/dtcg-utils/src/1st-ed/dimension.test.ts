@@ -77,7 +77,7 @@ describe("sanitizeDimension1stED()", () => {
 
   const invalidValue = "foobar";
 
-  describe("with normalization disabled", () => {
+  describe("with all santization options disabled", () => {
     it("passes through valid values", () => {
       expect(sanitizeDimension1stED(validValue)).toBe(validValue);
     });
@@ -95,27 +95,191 @@ describe("sanitizeDimension1stED()", () => {
     );
   });
 
-  describe("with normalization enabled", () => {
+  describe("with coerceToString enabled", () => {
     it("passes through valid values", () => {
-      expect(sanitizeDimension1stED(validValue, { normalize: true })).toBe(
+      expect(sanitizeDimension1stED(validValue, { coerceToString: true })).toBe(
         validValue
       );
     });
 
-    it.each(sanitizableValues)(
-      "sanitizes to valid dimension: $testVal ($description)",
-      ({ testVal }) => {
-        const dimension = sanitizeDimension1stED(testVal, {
-          normalize: true,
-        });
-        expect(isValidDimension1stED(dimension)).toBe(true);
-      }
-    );
+    it("coerces non-strings to strings, before checking if they are a valid dimension", () => {
+      const dimension = sanitizeDimension1stED(
+        {
+          toString() {
+            return "1px";
+          },
+        },
+        {
+          coerceToString: true,
+        }
+      );
+      expect(isValidDimension1stED(dimension)).toBe(true);
+    });
 
-    it("throws an error for unsanitizable values", () => {
+    it("throws an error for values, that once coerced to strings, are not valid dimensions", () => {
       expect(() => {
-        sanitizeDimension1stED(invalidValue, { normalize: true });
+        sanitizeDimension1stED(
+          {
+            toString() {
+              return "invalid";
+            },
+          },
+          { coerceToString: true }
+        );
       }).toThrowError(DtcgValueParseException);
+    });
+  });
+
+  describe("with trimWhitespace enabled", () => {
+    it("passes through valid values", () => {
+      expect(sanitizeDimension1stED(validValue, { trimWhitespace: true })).toBe(
+        validValue
+      );
+    });
+
+    it("trims leading and trailing whitespace off strings, before checking if they are a valid dimension", () => {
+      const dimension = sanitizeDimension1stED("   1px   ", {
+        trimWhitespace: true,
+      });
+      expect(isValidDimension1stED(dimension)).toBe(true);
+    });
+
+    it("throws an error for values, that after trimming, are not valid dimensions", () => {
+      expect(() => {
+        sanitizeDimension1stED(" 1 px  ", { trimWhitespace: true });
+      }).toThrowError(DtcgValueParseException);
+    });
+
+    describe("and coerceToString", () => {
+      it("accepts non-string values that can be coerced to strings that are valid dimensions", () => {
+        const dimension = sanitizeDimension1stED(
+          {
+            toString() {
+              return "   1px    ";
+            },
+          },
+          {
+            coerceToString: true,
+            trimWhitespace: true,
+          }
+        );
+        expect(isValidDimension1stED(dimension)).toBe(true);
+      });
+
+      it("rejects non-string values that can be coerced to strings, but are not valid dimensions", () => {
+        expect(() => {
+          sanitizeDimension1stED(
+            {
+              toString() {
+                return "   1 px    ";
+              },
+            },
+            { coerceToString: true, trimWhitespace: true }
+          );
+        }).toThrowError(DtcgValueParseException);
+      });
+    });
+  });
+
+  describe("with removeInnerWhitespace enabled", () => {
+    it("passes through valid values", () => {
+      expect(
+        sanitizeDimension1stED(validValue, { removeInnerWhitespace: true })
+      ).toBe(validValue);
+    });
+
+    it("trims whitespace between value and unit, before checking if it is a valid dimension", () => {
+      const dimension = sanitizeDimension1stED("1 px", {
+        removeInnerWhitespace: true,
+      });
+      expect(isValidDimension1stED(dimension)).toBe(true);
+    });
+
+    it("throws an error for values, that after removing inner whitespace, are not valid dimensions", () => {
+      expect(() => {
+        sanitizeDimension1stED("  1 px  ", { removeInnerWhitespace: true });
+      }).toThrowError(DtcgValueParseException);
+    });
+
+    describe("and coerceToString", () => {
+      it("accepts non-string values that can be coerced to strings that are valid dimensions", () => {
+        const dimension = sanitizeDimension1stED(
+          {
+            toString() {
+              return "1 px";
+            },
+          },
+          {
+            coerceToString: true,
+            removeInnerWhitespace: true,
+          }
+        );
+        expect(isValidDimension1stED(dimension)).toBe(true);
+      });
+
+      it("rejects non-string values that can be coerced to strings, but are not valid dimensions", () => {
+        expect(() => {
+          sanitizeDimension1stED(
+            {
+              toString() {
+                return "   1 px    ";
+              },
+            },
+            { coerceToString: true, removeInnerWhitespace: true }
+          );
+        }).toThrowError(DtcgValueParseException);
+      });
+    });
+  });
+
+  describe("with lowercase enabled", () => {
+    it("passes through valid values", () => {
+      expect(sanitizeDimension1stED(validValue, { lowercase: true })).toBe(
+        validValue
+      );
+    });
+
+    it("lowercases the input, before checking if it is a valid dimension", () => {
+      const dimension = sanitizeDimension1stED("1PX", {
+        lowercase: true,
+      });
+      expect(isValidDimension1stED(dimension)).toBe(true);
+    });
+
+    it("throws an error for values, that after lowercasing, are not valid dimensions", () => {
+      expect(() => {
+        sanitizeDimension1stED("  1PX  ", { lowercase: true });
+      }).toThrowError(DtcgValueParseException);
+    });
+
+    describe("and coerceToString", () => {
+      it("accepts non-string values that can be coerced to strings that are valid dimensions", () => {
+        const dimension = sanitizeDimension1stED(
+          {
+            toString() {
+              return "1PX";
+            },
+          },
+          {
+            coerceToString: true,
+            lowercase: true,
+          }
+        );
+        expect(isValidDimension1stED(dimension)).toBe(true);
+      });
+
+      it("rejects non-string values that can be coerced to strings, but are not valid dimensions", () => {
+        expect(() => {
+          sanitizeDimension1stED(
+            {
+              toString() {
+                return "   1PX    ";
+              },
+            },
+            { coerceToString: true, lowercase: true }
+          );
+        }).toThrowError(DtcgValueParseException);
+      });
     });
   });
 });

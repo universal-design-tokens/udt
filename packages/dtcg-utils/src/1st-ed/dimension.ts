@@ -4,6 +4,7 @@
  * specification.
  */
 
+import { isNumberObject } from "util/types";
 import { DtcgValueParseException } from "../shared/exceptions.js";
 
 /**
@@ -74,17 +75,44 @@ export function isValidDimension1stED(value: unknown): value is Dimension1stED {
 
 export interface SanitizeDimension1stEDOptions {
   /**
-   * Whether to normalize the input, before checking validity.
+   * Whether to coerce the input to a string.
    *
-   * Normlization will:
-   * - Coerce to string (if needed)
-   * - Trim whitespace characters
-   * - Convert to lowercase
+   * @default false
    */
-  normalize?: boolean;
+  coerceToString?: boolean;
+
+  /**
+   * Whether to trim any leading and/or trailing whitespace.
+   *
+   * Not applied if the input is not a string an `coerceToString` is `false`.
+   *
+   * @default false
+   */
+  trimWhitespace?: boolean;
+
+  /**
+   * Whether to remove whitespace between value and unit.
+   *
+   * Not applied if the input is not a string an `coerceToString` is `false`.
+   *
+   * @default false
+   */
+  removeInnerWhitespace?: boolean;
+
+  /**
+   * Whether to force the input to be lowercase.
+   *
+   * Not applied if the input is not a string an `coerceToString` is `false`.
+   *
+   * @default false
+   */
+  lowercase?: boolean;
 }
 
-const whitespaceRegex = /\s+/g;
+/**
+ * Matches any whitespace between a digit and letter.
+ */
+const innerWhitespaceRegex = /(?<=\d)(\s*)(?=[a-z])/i;
 
 /**
  * Attempts to sanitize the input value to a valid dimension value,
@@ -105,9 +133,32 @@ export function sanitizeDimension1stED(
   input: unknown,
   options?: SanitizeDimension1stEDOptions
 ): Dimension1stED {
-  let output = options?.normalize
-    ? String(input).replaceAll(whitespaceRegex, "").toLowerCase()
-    : input;
+  const {
+    coerceToString = false,
+    trimWhitespace = false,
+    removeInnerWhitespace = false,
+    lowercase = false,
+  } = options ?? {};
+
+  let output = input;
+
+  if (typeof output !== "string" && coerceToString) {
+    output = String(output);
+  }
+
+  if (typeof output === "string") {
+    if (trimWhitespace) {
+      output = output.trim();
+    }
+
+    if (removeInnerWhitespace) {
+      output = (output as string).replace(innerWhitespaceRegex, "");
+    }
+
+    if (lowercase) {
+      output = (output as string).toLowerCase();
+    }
+  }
 
   if (isValidDimension1stED(output)) {
     return output;
