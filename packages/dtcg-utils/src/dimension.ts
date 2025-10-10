@@ -11,7 +11,10 @@ import {
 } from "./1st-ed/dimension.js";
 import {
   isValidDimension3rdED,
+  fromDimension1stEDTo3rdEd,
   type Dimension3rdED,
+  SanitizeDimension3rdEDOptions,
+  sanitizeDimension3rdED,
 } from "./3rd-ed/dimensions.js";
 
 /**
@@ -71,19 +74,33 @@ export const isValidDimension: (value: unknown) => value is Dimension =
  * @param legacyDimensionVal A legacy dimension value (e.g. `"123px"`)
  * @returns The equivalent, current spec dimension value (e.g. `{ value: 123, unit: 'px' }`)
  */
-export function fromDimension1stED(
+export const fromDimension1stED: (
   legacyDimensionVal: Dimension1stED
-): Dimension {
-  const value = parseFloat(legacyDimensionVal);
-  const unit = legacyDimensionVal.substring(
-    legacyDimensionVal.length - 2
-  ) as DimensionUnit1stED;
+) => Dimension = fromDimension1stEDTo3rdEd;
 
-  return {
-    value,
-    unit,
-  };
-}
+export type SanitizeDimensionOptions = SanitizeDimension3rdEDOptions;
+
+/**
+ * Attempts to sanitize the input value to a valid dimension value,
+ * as specified in the most recent, published spec version.
+ *
+ * Tries to clean the input, to handle values that slightly
+ * deviate from the spec.
+ *
+ * @throws {DtcgValueParseException} if the input could not be
+ *                                    cleaned.
+ *
+ * @param input     The value to be sanitized.
+ * @param options   Options for sanitizing the input. If omitted, only
+ *                  spec-compliant values will be accepted.
+ * @returns A spec-compliant dimension value.
+ */
+export const sanitizeDimension: (
+  input: unknown,
+  options?: SanitizeDimensionOptions
+) => Dimension = sanitizeDimension3rdED;
+
+// === Extra utilities for working with current-spec dimension values ===
 
 /**
  * Converts a dimension value that conforms to the syntax

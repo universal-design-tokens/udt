@@ -62,20 +62,34 @@ describe("isValidDimension1stED()", () => {
 describe("sanitizeDimension1stED()", () => {
   const validValue = "1px";
 
-  const sanitizableValues = [
-    { testVal: "1PX", description: "Incorrectly cased unit" },
-    { testVal: " 1  px  ", description: "Contains whitespace" },
-    {
-      testVal: {
-        toString() {
-          return "1px";
-        },
+  const sanitizableByCoerceToStringTest = {
+    testVal: {
+      toString() {
+        return "1px";
       },
-      description: "Object, but coercible to diemension",
     },
-  ];
+    description: "Object, but coercible to diemension",
+  };
 
-  const invalidValue = "foobar";
+  const sanitizableByTrimWhitespaceTest = {
+    testVal: " 1px  ",
+    description: "Has leading and trailing whitespace",
+  };
+
+  const sanitizableByRemoveInnerWhitespaceTest = {
+    testVal: "1  px",
+    description: "Whitespace between value and unit",
+  };
+
+  const sanitizableByLowercaseTest = {
+    testVal: "1PX",
+    description: "Incorrectly cased unit",
+  };
+
+  const invalidTest = {
+    testVal: "invalid",
+    description: "Not a dimension value",
+  };
 
   describe("with all santization options disabled", () => {
     it("passes through valid values", () => {
@@ -83,8 +97,11 @@ describe("sanitizeDimension1stED()", () => {
     });
 
     it.each([
-      ...sanitizableValues,
-      { testVal: invalidValue, description: "Not a dimension value" },
+      sanitizableByCoerceToStringTest,
+      sanitizableByTrimWhitespaceTest,
+      sanitizableByRemoveInnerWhitespaceTest,
+      sanitizableByLowercaseTest,
+      invalidTest,
     ])(
       "throws an error for invalid value: $testVal ($description)",
       ({ testVal }) => {
@@ -104,11 +121,7 @@ describe("sanitizeDimension1stED()", () => {
 
     it("coerces non-strings to strings, before checking if they are a valid dimension", () => {
       const dimension = sanitizeDimension1stED(
-        {
-          toString() {
-            return "1px";
-          },
-        },
+        sanitizableByCoerceToStringTest.testVal,
         {
           coerceToString: true,
         }
@@ -138,9 +151,12 @@ describe("sanitizeDimension1stED()", () => {
     });
 
     it("trims leading and trailing whitespace off strings, before checking if they are a valid dimension", () => {
-      const dimension = sanitizeDimension1stED("   1px   ", {
-        trimWhitespace: true,
-      });
+      const dimension = sanitizeDimension1stED(
+        sanitizableByTrimWhitespaceTest.testVal,
+        {
+          trimWhitespace: true,
+        }
+      );
       expect(isValidDimension1stED(dimension)).toBe(true);
     });
 
@@ -189,9 +205,12 @@ describe("sanitizeDimension1stED()", () => {
     });
 
     it("trims whitespace between value and unit, before checking if it is a valid dimension", () => {
-      const dimension = sanitizeDimension1stED("1 px", {
-        removeInnerWhitespace: true,
-      });
+      const dimension = sanitizeDimension1stED(
+        sanitizableByRemoveInnerWhitespaceTest.testVal,
+        {
+          removeInnerWhitespace: true,
+        }
+      );
       expect(isValidDimension1stED(dimension)).toBe(true);
     });
 
@@ -240,9 +259,12 @@ describe("sanitizeDimension1stED()", () => {
     });
 
     it("lowercases the input, before checking if it is a valid dimension", () => {
-      const dimension = sanitizeDimension1stED("1PX", {
-        lowercase: true,
-      });
+      const dimension = sanitizeDimension1stED(
+        sanitizableByLowercaseTest.testVal,
+        {
+          lowercase: true,
+        }
+      );
       expect(isValidDimension1stED(dimension)).toBe(true);
     });
 

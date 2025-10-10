@@ -9,11 +9,16 @@ import {
   fromDimension1stED,
   isValidDimension,
   isValidDimensionUnit,
+  sanitizeDimension,
   toDimension1stED,
   toPxEquivalent,
   toRemEquivalent,
 } from "./dimension.js";
-import { isValidDimension3rdED } from "./3rd-ed/dimensions.js";
+import {
+  fromDimension1stEDTo3rdEd,
+  isValidDimension3rdED,
+  sanitizeDimension3rdED,
+} from "./3rd-ed/dimensions.js";
 
 it("re-exports dimensionUnits from 1st ED", () => {
   expect(dimensionUnits).toBe(dimensionUnits1stED);
@@ -27,13 +32,12 @@ it("re-exports isValidDimension() from 3rd ED", () => {
   expect(isValidDimension).toBe(isValidDimension3rdED);
 });
 
-describe("fromDimension1stED()", () => {
-  it("converts 1st ED to current spec dimension correctly", () => {
-    expect(fromDimension1stED("123px")).toStrictEqual({
-      value: 123,
-      unit: "px",
-    });
-  });
+it("re-exports fromDimension1stED() from 3rd ED", () => {
+  expect(fromDimension1stED).toBe(fromDimension1stEDTo3rdEd);
+});
+
+it("re-exports sanitizeDimension3rdED() from 3rd ED", () => {
+  expect(sanitizeDimension).toBe(sanitizeDimension3rdED);
 });
 
 describe("toDimension1stED()", () => {
