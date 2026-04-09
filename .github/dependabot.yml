@@ -9,10 +9,4 @@ updates:
       interval: "daily"
     ignore:
       - dependency-name: "@types/node"
-        versions: [">=17"]
-      - dependency-name: "chalk"
-        versions: [">=5"]
-    commit-message:
-      prefix: fix
-      prefix-development: chore
-      include: "scope"
+        versions: [">22"]
