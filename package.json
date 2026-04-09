@@ -33,18 +33,16 @@
     "./packages/*"
   ],
   "engines": {
-    "node": ">= 20",
+    "node": ">= 22",
     "npm": ">= 11"
   },
   "devDependencies": {
-    "@types/node": "^20.19.17",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@changesets/cli": "^2.30.0",
+    "@types/node": "^22.19.17",
+    "@vitest/coverage-v8": "^4.1.4",
     "del-cli": "^7.0.0",
-    "nx": "21.5.3",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
-  },
-  "dependencies": {
-    "@changesets/cli": "^2.29.7"
+    "nx": "^22.6.4",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
   }
 }

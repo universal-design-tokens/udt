@@ -1,11 +1,15 @@
 import { describe, it, expect } from "vitest";
+import { type TestVal } from "../test/testVal.js";
 import {
   colorSpaces3rdED,
   isValidColorComponents3rdED,
   isValidColorSpace3rdED,
   isValidColor3rdED,
   type Color3rdED,
+  fromColor1stEDTo3rdEd,
+  sanitizeColor3rdED,
 } from "./color.js";
+import { DtcgValueParseException } from "../shared/exceptions.js";
 
 describe("isValidColorSpace3rdED()", () => {
   it.each(colorSpaces3rdED)('accepts valid color space key "%s"', (testVal) => {
@@ -135,5 +139,123 @@ describe("isValidColor3rdED()", () => {
     { testVal: true, type: "boolean" },
   ])("rejects non-object, $type value: $testVal", ({ testVal }) => {
     expect(isValidColor3rdED(testVal)).toBe(false);
+  });
+});
+
+describe("fromColor1stEDTo3rdEd()", () => {
+  it("converts 1st ED to current spec opaque color correctly", () => {
+    expect(fromColor1stEDTo3rdEd("#ff00ff")).toStrictEqual({
+      colorSpace: "srgb",
+      components: [1, 0, 1],
+      hex: "#ff00ff",
+    });
+  });
+
+  it("converts 1st ED to current spec trasparent color correctly", () => {
+    expect(fromColor1stEDTo3rdEd("#ff00ff33")).toStrictEqual({
+      colorSpace: "srgb",
+      components: [1, 0, 1],
+      alpha: 0.2,
+      hex: "#ff00ff",
+    });
+  });
+
+  it.each([
+    {
+      testVal: "",
+      description: "Empty string",
+    },
+    {
+      testVal: "#xxyyzz",
+      description: "Invalid hex digits",
+    },
+    {
+      testVal: undefined,
+      description: "undefined",
+    },
+    {
+      testVal: null,
+      description: "null",
+    },
+    {
+      testVal: 123,
+      description: "number",
+    },
+    {
+      testVal: {},
+      description: "object",
+    },
+  ])(
+    "throws an exception if provided with $testVal ($description)",
+    ({ testVal }) => {
+      expect(() => fromColor1stEDTo3rdEd(testVal as any)).toThrow(
+        DtcgValueParseException
+      );
+    }
+  );
+});
+
+describe("sanitizeColor3rdED()", () => {
+  const validValue: Color3rdED = {
+    colorSpace: "xyz-d50",
+    components: [1, 1, 1],
+    alpha: 0.5,
+  };
+
+  const sanitizableByTryAs1stEd: TestVal = {
+    testVal: "#123456",
+    description: "1st edition value",
+  };
+
+  const sanitizableByTryAs1stEDAndAddMissingHashTest: TestVal = {
+    testVal: "123456",
+    description: "1st edition value, with missing hash",
+  };
+
+  describe("with all sanitization options disabled", () => {
+    it("passes through value values", () => {
+      expect(sanitizeColor3rdED(validValue)).toBe(validValue);
+    });
+
+    it.each([
+      sanitizableByTryAs1stEd,
+      sanitizableByTryAs1stEDAndAddMissingHashTest,
+    ])(
+      "throws an error for invalid value: $testVal ($description)",
+      ({ testVal }) => {
+        expect(() => {
+          sanitizeColor3rdED(testVal);
+        }).toThrowError(DtcgValueParseException);
+      }
+    );
+  });
+
+  describe("with tryAs1stED enabled", () => {
+    it("passes through valid values", () => {
+      expect(sanitizeColor3rdED(validValue, { tryAs1stEd: true })).toBe(
+        validValue
+      );
+    });
+
+    it("accepts valid 1st ED values, and converts them to 3rd ED", () => {
+      const color = sanitizeColor3rdED(sanitizableByTryAs1stEd.testVal, {
+        tryAs1stEd: true,
+      });
+
+      expect(isValidColor3rdED(color)).toBe(true);
+    });
+
+    it("applies 1st ED sanitization options if provided", () => {
+      const color = sanitizeColor3rdED(
+        sanitizableByTryAs1stEDAndAddMissingHashTest.testVal,
+        {
+          tryAs1stEd: {
+            addMissingHash: true,
+          },
+        }
+      );
+
+      expect(isValidColor3rdED(color)).toBe(true);
+    });
   });
 });

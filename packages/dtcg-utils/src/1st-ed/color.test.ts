@@ -43,7 +43,7 @@ describe("isValidColor1stED()", () => {
 });
 
 describe("sanitizeColor1stED()", () => {
-  const validValue = "#123456";
+  const validValue: Color1stED = "#123456";
 
   const sanitizableByCoerceToStringTest = {
     testVal: {

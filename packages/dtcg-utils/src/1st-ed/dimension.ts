@@ -4,7 +4,6 @@
  * specification.
  */
 
-import { isNumberObject } from "util/types";
 import { DtcgValueParseException } from "../shared/exceptions.js";
 
 /**

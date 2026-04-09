@@ -4,6 +4,12 @@
  */
 
 import { isPlainObject } from "@udt/parser-utils";
+import { DtcgValueParseException } from "../shared/exceptions.js";
+import {
+  Color1stED,
+  sanitizeColor1stED,
+  type SanitizeColor1stEDOptions,
+} from "../1st-ed/color.js";
 
 /**
  * All support color space keys, as specified since the 3rd Editor's
@@ -135,4 +141,103 @@ export function isValidColor3rdED(value: unknown): value is Color3rdED {
     (hex === undefined ||
       (typeof hex === "string" && hexTripletRegex.test(hex)))
   );
+}
+
+const color1stEdComponentsRegex =
+  /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})([\da-f]{2})?$/i;
+
+function hexByteToFloat(hexByteVal: string): number {
+  const intVal = parseInt(hexByteVal, 16);
+  return intVal / 255;
+}
+
+/**
+ * Converts a legacy dimension value that conforms to the syntax
+ * of the 1st and 2nd Editor's Drafts to one that conforms to
+ * the 3rd Third Editors' Draft.
+ *
+ * @param legacyDimensionVal A legacy dimension value (e.g. `"123px"`)
+ * @returns The equivalent, 3rd Editor's Draft dimension value (e.g. `{ value: 123, unit: 'px' }`)
+ */
+export function fromColor1stEDTo3rdEd(
+  legacyDimensionVal: Color1stED
+): Color3rdED {
+  const matches = String(legacyDimensionVal).match(color1stEdComponentsRegex);
+
+  if (matches === null) {
+    throw new DtcgValueParseException("Invalid color value");
+  }
+
+  const [, r, g, b, a] = matches;
+
+  const output: Color3rdED = {
+    colorSpace: "srgb",
+    components: [hexByteToFloat(r), hexByteToFloat(g), hexByteToFloat(b)],
+    hex: `#${r}${g}${b}`,
+  };
+
+  if (a !== undefined) {
+    output.alpha = hexByteToFloat(a);
+  }
+
+  return output;
+}
+
+export interface SanitizeColor3rdEDOptions {
+  /**
+   * Attempt to sanitize invalid values (after all other santization
+   * options have been applied) as 1st Editor's Draft syntax.
+   */
+  tryAs1stEd?: boolean | SanitizeColor1stEDOptions;
+
+  /**
+   * Strip away properties other than `.colorSpace`, `.components`,
+   * `.alpha` and `.hex` from the input.
+   */
+  stripExtraneousProperties?: boolean;
+}
+
+/**
+ * Attempts to sanitize the input value to a valid color value,
+ * as specified in the 3rd Editors' Drafts.
+ *
+ * Tries to clean the input, to handle values that slightly
+ * deviate from the spec.
+ *
+ * @throws {DtcgValueParseException} if the input could not be
+ *                                    cleaned.
+ *
+ * @param input     The value to be sanitized.
+ * @param options   Options for sanitizing the input. If omitted, only
+ *                  spec-compliant values will be accepted.
+ * @returns A spec-compliant color value.
+ */
+export function sanitizeColor3rdED(
+  input: unknown,
+  options?: SanitizeColor3rdEDOptions
+): Color3rdED {
+  const { tryAs1stEd = false, stripExtraneousProperties = false } =
+    options ?? {};
+
+  let output = input;
+
+  if (output !== null && typeof output === "object") {
+    if (stripExtraneousProperties && Object.keys(output as object).length > 4) {
+      const { colorSpace, components, alpha, hex } = output as any;
+      output = { colorSpace, components, alpha, hex };
+    }
+  }
+
+  if (isValidColor3rdED(output)) {
+    return output;
+  }
+  // Fallback to attempt to parse as a 1st ED value, if allowed by the
+  // options
+  if (tryAs1stEd) {
+    return fromColor1stEDTo3rdEd(
+      sanitizeColor1stED(output, tryAs1stEd !== true ? tryAs1stEd : undefined)
+    );
+  }
+  // Give up
+  throw new DtcgValueParseException("Invalid color value");
 }

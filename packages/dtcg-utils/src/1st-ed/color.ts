@@ -140,5 +140,5 @@ export function sanitizeColor1stED(
   if (isValidColor1stED(output)) {
     return output;
   }
-  throw new DtcgValueParseException("Invalid dimension value");
+  throw new DtcgValueParseException("Invalid color value");
 }
