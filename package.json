@@ -34,7 +34,7 @@
   ],
   "engines": {
     "node": ">= 22",
-    "npm": ">= 11"
+    "npm": ">= 11.5.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
