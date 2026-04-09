@@ -9,6 +9,10 @@
     "watch": "tsc -p tsconfig.build.json --watch",
     "test": "vitest run --coverage --passWithNoTests"
   },
+  "sideEffects": false,
+  "files": [
+    "dist/"
+  ],
   "exports": {
     "./dimension.js": {
       "import": "./dist/dimension.js",
@@ -29,7 +33,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/universal-design-tokens/udt.git"
+    "url": "git+https://github.com/universal-design-tokens/udt.git",
+    "directory": "packages/dtcg-utils/"
   },
   "keywords": [
     "design tokens",
@@ -43,6 +48,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/universal-design-tokens/udt/issues"
+  },
+  "engines": {
+    "node": ">= 18"
   },
   "homepage": "https://github.com/universal-design-tokens/udt/tree/master/packages/dtcg-utils#readme",
   "dependencies": {
