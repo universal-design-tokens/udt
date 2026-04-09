@@ -1,5 +1,11 @@
 # @udt/parser-utils
 
+## 0.3.1
+
+### Patch Changes
+
+- 89dc834: Minor `package.json` tweak.
+
 ## 0.3.0
 
 ### Minor Changes
