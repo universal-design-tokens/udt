@@ -21,7 +21,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/universal-design-tokens/udt.git"
+    "url": "git+https://github.com/universal-design-tokens/udt.git",
+    "directory": "packages/parser-utils/"
   },
   "keywords": [
     "design tokens",
