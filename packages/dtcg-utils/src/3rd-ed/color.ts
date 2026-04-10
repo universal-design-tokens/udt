@@ -77,16 +77,19 @@ export function isValidColorComponents3rdED(
 /**
  * Color value, as specified since the 3rd Editor's Draft.
  */
-export type Color3rdED = {
+export type Color3rdED<
+  ColorSpaceType = ColorSpace3rdED,
+  ColorComponentsType = ColorComponents3rdED
+> = {
   /**
    * A string that specifies the color space or color model.
    */
-  colorSpace: ColorSpace3rdED;
+  colorSpace: ColorSpaceType;
 
   /**
    * An array representing the color components. The number of components depends on the color space.
    */
-  components: ColorComponents3rdED;
+  components: ColorComponentsType;
 
   /**
    * A number that represents the alpha value of the color. This value is between 0 and 1, where 0 is fully transparent and 1 is fully opaque. If omitted, the alpha value of the color MUST be assumed to be 1 (fully opaque).
@@ -152,17 +155,15 @@ function hexByteToFloat(hexByteVal: string): number {
 }
 
 /**
- * Converts a legacy dimension value that conforms to the syntax
+ * Converts a legacy color value that conforms to the syntax
  * of the 1st and 2nd Editor's Drafts to one that conforms to
  * the 3rd Third Editors' Draft.
  *
- * @param legacyDimensionVal A legacy dimension value (e.g. `"123px"`)
- * @returns The equivalent, 3rd Editor's Draft dimension value (e.g. `{ value: 123, unit: 'px' }`)
+ * @param legacyColorVal A legacy color value (e.g. `"#aabbcc"`)
+ * @returns The equivalent, 3rd Editor's Draft color value.
  */
-export function fromColor1stEDTo3rdEd(
-  legacyDimensionVal: Color1stED
-): Color3rdED {
-  const matches = String(legacyDimensionVal).match(color1stEdComponentsRegex);
+export function fromColor1stEDTo3rdEd(legacyColorVal: Color1stED): Color3rdED {
+  const matches = String(legacyColorVal).match(color1stEdComponentsRegex);
 
   if (matches === null) {
     throw new DtcgValueParseException("Invalid color value");

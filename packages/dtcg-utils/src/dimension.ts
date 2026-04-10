@@ -1,7 +1,7 @@
 /**
  * Utilities and types for working with DTCG dimension values, as
  * specified in the most recent, published spec version (currently
- * 3rd Editor's Draft).
+ * 2025.10).
  */
 import {
   dimensionUnits1stED,
