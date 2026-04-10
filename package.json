@@ -33,12 +33,12 @@
     "./packages/*"
   ],
   "engines": {
-    "node": ">= 22",
+    "node": ">= 24",
     "npm": ">= 11.5.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
-    "@types/node": "^22.19.17",
+    "@types/node": "^24.12.2",
     "@vitest/coverage-v8": "^4.1.4",
     "del-cli": "^7.0.0",
     "nx": "^22.6.3",

@@ -9,4 +9,4 @@ updates:
       interval: "daily"
     ignore:
       - dependency-name: "@types/node"
-        versions: [">22"]
+        versions: [">24"]
