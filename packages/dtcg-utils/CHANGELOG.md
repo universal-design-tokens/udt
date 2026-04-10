@@ -1,5 +1,11 @@
 # @udt/dtcg-utils
 
+## 0.1.1
+
+### Patch Changes
+
+- 51915c2: Fixed bug that treated negative dimension values as invalid
+
 ## 0.1.0
 
 ### Minor Changes
