@@ -1,5 +1,11 @@
 # @udt/dtcg-utils
 
+## 0.2.0
+
+### Minor Changes
+
+- c62e6cc: Added `color.js` module entrypoint, with functions for working with current spec version color values.
+
 ## 0.1.1
 
 ### Patch Changes
