@@ -89,12 +89,12 @@ describe("resolveReference()", () => {
         dereference,
         getValue
       )
-    ).toThrowError();
+    ).toThrow();
   });
 
   it("throws an error if a reference loop is encountered", () => {
     expect(() =>
       resolveReference(testNode5Ref, testNode4, dereference, getValue)
-    ).toThrowError();
+    ).toThrow();
   });
 });

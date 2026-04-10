@@ -42,8 +42,8 @@ describe("isValidDimension3rdED()", () => {
 
 describe("fromDimension1stEDTo3rdEd()", () => {
   it("converts 1st ED to current spec dimension correctly", () => {
-    expect(fromDimension1stEDTo3rdEd("123px")).toStrictEqual({
-      value: 123,
+    expect(fromDimension1stEDTo3rdEd("-123px")).toStrictEqual({
+      value: -123,
       unit: "px",
     });
   });
@@ -96,7 +96,7 @@ describe("sanitizeDimension3rdED()", () => {
       ({ testVal }) => {
         expect(() => {
           sanitizeDimension3rdED(testVal);
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       }
     );
   });

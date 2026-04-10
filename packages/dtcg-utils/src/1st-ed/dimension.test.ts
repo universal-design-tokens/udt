@@ -33,7 +33,7 @@ describe("isValidDimensionUnit1stED()", () => {
 });
 
 describe("isValidDimension1stED()", () => {
-  it.each(["123px", "23.45rem"] as Dimension1stED[])(
+  it.each(["123px", "23.45rem", "-1px"] as Dimension1stED[])(
     'accepts valid value "%s"',
     (testVal) => {
       expect(isValidDimension1stED(testVal)).toBe(true);
@@ -68,7 +68,7 @@ describe("sanitizeDimension1stED()", () => {
         return "1px";
       },
     },
-    description: "Object, but coercible to diemension",
+    description: "Object, but coercible to dimension",
   };
 
   const sanitizableByTrimWhitespaceTest = {
@@ -77,8 +77,8 @@ describe("sanitizeDimension1stED()", () => {
   };
 
   const sanitizableByRemoveInnerWhitespaceTest = {
-    testVal: "1  px",
-    description: "Whitespace between value and unit",
+    testVal: "-  1  px",
+    description: "Whitespace between minus, value and unit",
   };
 
   const sanitizableByLowercaseTest = {
@@ -107,7 +107,7 @@ describe("sanitizeDimension1stED()", () => {
       ({ testVal }) => {
         expect(() => {
           sanitizeDimension1stED(testVal);
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       }
     );
   });
@@ -139,7 +139,7 @@ describe("sanitizeDimension1stED()", () => {
           },
           { coerceToString: true }
         );
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
   });
 
@@ -163,7 +163,7 @@ describe("sanitizeDimension1stED()", () => {
     it("throws an error for values, that after trimming, are not valid dimensions", () => {
       expect(() => {
         sanitizeDimension1stED(" 1 px  ", { trimWhitespace: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
 
     describe("and coerceToString", () => {
@@ -192,7 +192,7 @@ describe("sanitizeDimension1stED()", () => {
             },
             { coerceToString: true, trimWhitespace: true }
           );
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       });
     });
   });
@@ -217,7 +217,7 @@ describe("sanitizeDimension1stED()", () => {
     it("throws an error for values, that after removing inner whitespace, are not valid dimensions", () => {
       expect(() => {
         sanitizeDimension1stED("  1 px  ", { removeInnerWhitespace: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
 
     describe("and coerceToString", () => {
@@ -246,7 +246,7 @@ describe("sanitizeDimension1stED()", () => {
             },
             { coerceToString: true, removeInnerWhitespace: true }
           );
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       });
     });
   });
@@ -271,7 +271,7 @@ describe("sanitizeDimension1stED()", () => {
     it("throws an error for values, that after lowercasing, are not valid dimensions", () => {
       expect(() => {
         sanitizeDimension1stED("  1PX  ", { lowercase: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
 
     describe("and coerceToString", () => {
@@ -300,7 +300,7 @@ describe("sanitizeDimension1stED()", () => {
             },
             { coerceToString: true, lowercase: true }
           );
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       });
     });
   });

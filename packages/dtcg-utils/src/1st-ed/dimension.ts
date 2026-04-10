@@ -43,7 +43,7 @@ export function isValidDimensionUnit1stED(
 export type Dimension1stED = `${number}${DimensionUnit1stED}`;
 
 // Used by `isValidDimension1stED()`:
-const dimensionValueRegex = /^\d+(\.\d+)?(px|rem)$/;
+const dimensionValueRegex = /^-?\d+(\.\d+)?(px|rem)$/;
 
 /**
  * Checks if the value is a valid dimension value, as specified
@@ -54,6 +54,7 @@ const dimensionValueRegex = /^\d+(\.\d+)?(px|rem)$/;
  *
  * - `123px`: Valid
  * - `23.45rem`: Valid
+ * - `-1px`: Valid
  * - `123PX`: Invalid (unit is not lowercase)
  * - `  123 px `: Invalid (contains whitespace)
  * - `123dp`: Invalid (unsupported unit)
@@ -109,9 +110,10 @@ export interface SanitizeDimension1stEDOptions {
 }
 
 /**
- * Matches any whitespace between a digit and letter.
+ * Matches any whitespace between a minus sign and a digit,
+ * or a digit and a letter.
  */
-const innerWhitespaceRegex = /(?<=\d)(\s*)(?=[a-z])/i;
+const innerWhitespaceRegex = /(?<=-)(\s+)(?=\d)|(?<=\d)(\s+)(?=[a-z])/gi;
 
 /**
  * Attempts to sanitize the input value to a valid dimension value,
@@ -151,7 +153,7 @@ export function sanitizeDimension1stED(
     }
 
     if (removeInnerWhitespace) {
-      output = (output as string).replace(innerWhitespaceRegex, "");
+      output = (output as string).replaceAll(innerWhitespaceRegex, "");
     }
 
     if (lowercase) {

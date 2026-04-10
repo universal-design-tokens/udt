@@ -225,7 +225,7 @@ describe("sanitizeColor3rdED()", () => {
       ({ testVal }) => {
         expect(() => {
           sanitizeColor3rdED(testVal);
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       }
     );
   });

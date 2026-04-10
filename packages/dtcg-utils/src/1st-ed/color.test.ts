@@ -90,7 +90,7 @@ describe("sanitizeColor1stED()", () => {
       ({ testVal }) => {
         expect(() => {
           sanitizeColor1stED(testVal);
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       }
     );
   });
@@ -115,7 +115,7 @@ describe("sanitizeColor1stED()", () => {
     it("throws an error for values, that once coerced to strings, are not valid colors", () => {
       expect(() => {
         sanitizeColor1stED(invalidTest.testVal, { coerceToString: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
   });
 
@@ -139,7 +139,7 @@ describe("sanitizeColor1stED()", () => {
     it("throws an error for values, that after trimming, are not valid colors", () => {
       expect(() => {
         sanitizeColor1stED(" invalid  ", { trimWhitespace: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
 
     describe("and coerceToString", () => {
@@ -168,7 +168,7 @@ describe("sanitizeColor1stED()", () => {
             },
             { coerceToString: true, trimWhitespace: true }
           );
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       });
     });
   });
@@ -193,7 +193,7 @@ describe("sanitizeColor1stED()", () => {
     it("throws an error for values, that after adding a hash, are not valid colors", () => {
       expect(() => {
         sanitizeColor1stED(invalidTest.testVal, { addMissingHash: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
 
     describe("and coerceToString", () => {
@@ -222,7 +222,7 @@ describe("sanitizeColor1stED()", () => {
             },
             { coerceToString: true, addMissingHash: true }
           );
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       });
     });
   });
@@ -247,7 +247,7 @@ describe("sanitizeColor1stED()", () => {
     it("throws an error for values, that after expanding shorthand hex, are not valid colors", () => {
       expect(() => {
         sanitizeColor1stED(invalidTest.testVal, { expandShorthand: true });
-      }).toThrowError(DtcgValueParseException);
+      }).toThrow(DtcgValueParseException);
     });
 
     describe("and coerceToString", () => {
@@ -276,7 +276,7 @@ describe("sanitizeColor1stED()", () => {
             },
             { coerceToString: true, expandShorthand: true }
           );
-        }).toThrowError(DtcgValueParseException);
+        }).toThrow(DtcgValueParseException);
       });
     });
   });
