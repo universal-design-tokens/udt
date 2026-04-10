@@ -409,11 +409,11 @@ describe("parseData()", () => {
   });
 
   it("throws an InvalidDataError when given a non-object input", () => {
-    expect(() => parseData(123, parserConfig)).toThrowError(InvalidDataError);
+    expect(() => parseData(123, parserConfig)).toThrow(InvalidDataError);
   });
 
   it("throws an InvalidDataError when encountering a non-object child", () => {
-    expect(() => parseData({ brokenThing: 123 }, parserConfig)).toThrowError(
+    expect(() => parseData({ brokenThing: 123 }, parserConfig)).toThrow(
       InvalidDataError
     );
   });
@@ -430,6 +430,6 @@ describe("parseData()", () => {
   it("throws an InvalidStructureError when there is no root group", () => {
     expect(() =>
       parseData({ value: "naughty anonymous token" }, parserConfig)
-    ).toThrowError(InvalidStructureError);
+    ).toThrow(InvalidStructureError);
   });
 });

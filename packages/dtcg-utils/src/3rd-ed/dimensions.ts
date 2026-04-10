@@ -35,6 +35,7 @@ export type Dimension3rdED = {
  *
  * - `{ value: 123, unit: 'px' }`: Valid
  * - `{ value: 23.45, unit: 'rem' }`: Valid
+ * - `{ value: -1, unit: 'px' }`: Valid
  * - `{ value: 123, unit: 'PX' }`: Invalid (unit is not lowercase)
  * - `{ value: 123, unit: 'dp' }`: Invalid (unsupported unit)
  * - `{ value: 123 }`: Invalid (missing .unit property)
