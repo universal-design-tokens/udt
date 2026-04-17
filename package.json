@@ -42,7 +42,7 @@
     "@vitest/coverage-v8": "^4.1.4",
     "del-cli": "^7.0.0",
     "nx": "^22.6.3",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.4"
   }
 }
